@@ -147,11 +147,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const gameScreen2 = document.createElement("div");
   gameScreen2.id = "game-screen2";
   gameScreen2.className = "scene";
-  // 背景画像はCSSで設定済み（#game-screen2）
   gameScreen2.style.position = "relative";
   gameScreen2.style.width = "100%";
   gameScreen2.style.height = "100%";
   document.body.appendChild(gameScreen2);
+
+  // 背景はCSSで #game-screen2 { background-size: contain; ... } を設定
 
   // タップ領域：デスクエリア（エリア2）
   const deskArea2 = document.createElement("div");
@@ -193,7 +194,7 @@ document.addEventListener("DOMContentLoaded", () => {
   driveOverlay.style.height = "100%";
   driveArea2.appendChild(driveOverlay);
 
-  /* ------------- パズルクリアフラグ管理（エリア2） ------------- */
+  // パズルフラグ
   let puzzleDeskCleared = false;
   let puzzleDriveCleared = false;
 
@@ -212,8 +213,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!puzzleModal) {
       puzzleModal = document.createElement("div");
       puzzleModal.id = "puzzle-modal";
-      // モーダル背景を白に変更
-      puzzleModal.style.backgroundColor = "rgba(255,255,255,1)";
+      // 白背景
+      puzzleModal.style.backgroundColor = "#fff";
       puzzleModal.style.position = "fixed";
       puzzleModal.style.top = "0";
       puzzleModal.style.left = "0";
@@ -223,46 +224,39 @@ document.addEventListener("DOMContentLoaded", () => {
       puzzleModal.style.flexDirection = "column";
       puzzleModal.style.justifyContent = "center";
       puzzleModal.style.alignItems = "center";
+      puzzleModal.style.zIndex = "3000";
       document.body.appendChild(puzzleModal);
     }
     puzzleModal.innerHTML = "";
 
-    // パズルボード（上部：2×2グリッド）
+    // ボード200×200, セル100×100
+    const boardSize = 200;
     const boardContainer = document.createElement("div");
     boardContainer.id = "puzzle-board";
-    boardContainer.style.width = "400px";
-    boardContainer.style.height = "400px";
+    boardContainer.style.width = boardSize + "px";
+    boardContainer.style.height = boardSize + "px";
     boardContainer.style.display = "grid";
     boardContainer.style.gridTemplateColumns = "repeat(2, 1fr)";
     boardContainer.style.gridTemplateRows = "repeat(2, 1fr)";
     boardContainer.style.gap = "2px";
     boardContainer.style.border = "2px solid #000";
     puzzleModal.appendChild(boardContainer);
-    // 各セルは自動的に 200×200px になる（gridで均等割り当て）
+
     for (let i = 0; i < 4; i++) {
       const cell = document.createElement("div");
       cell.className = "puzzle-cell";
       cell.dataset.cellIndex = i;
       cell.style.border = "1px dashed #aaa";
-      cell.style.position = "relative";
       cell.style.width = "100%";
       cell.style.height = "100%";
-      // ドロップイベント（タッチも対応）
+      cell.style.position = "relative";
+      // ドロップ処理
       cell.addEventListener("dragover", (e) => { e.preventDefault(); });
       cell.addEventListener("drop", (e) => {
         e.preventDefault();
         if (draggedPiece) {
           cell.appendChild(draggedPiece);
-          // 自動でサイズ合わせ
-          draggedPiece.style.width = "100%";
-          draggedPiece.style.height = "100%";
-          draggedPiece.style.position = "relative";
-          checkPuzzleBoardCompletion(puzzleType);
-        }
-      });
-      cell.addEventListener("touchend", (e) => {
-        if (draggedPiece) {
-          cell.appendChild(draggedPiece);
+          // ドロップ時にピースをセルサイズ(100%)に合わせる
           draggedPiece.style.width = "100%";
           draggedPiece.style.height = "100%";
           draggedPiece.style.position = "relative";
@@ -272,7 +266,7 @@ document.addEventListener("DOMContentLoaded", () => {
       boardContainer.appendChild(cell);
     }
 
-    // ピーストレイ（下部：横スクロール可能）
+    // ピーストレイ
     const trayContainer = document.createElement("div");
     trayContainer.id = "puzzle-tray";
     trayContainer.style.width = "100%";
@@ -281,7 +275,7 @@ document.addEventListener("DOMContentLoaded", () => {
     trayContainer.style.justifyContent = "flex-start";
     trayContainer.style.alignItems = "center";
     trayContainer.style.overflowX = "auto";
-    trayContainer.style.backgroundColor = "#fff";
+    trayContainer.style.backgroundColor = "#eee";
     trayContainer.style.marginTop = "20px";
     puzzleModal.appendChild(trayContainer);
 
@@ -289,12 +283,10 @@ document.addEventListener("DOMContentLoaded", () => {
       ? "images/noa_puzzle.png"
       : "images/roberia_puzzle.png";
 
-    // ピースはトレイ内では100×100pxに（後でドロップ時にセルサイズに合わせる）
     for (let i = 0; i < 4; i++) {
       const piece = document.createElement("div");
       piece.className = "puzzle-piece";
       piece.dataset.correctIndex = i;
-      piece.dataset.rotation = "0";
       piece.style.width = "100px";
       piece.style.height = "100px";
       piece.style.boxSizing = "border-box";
@@ -305,11 +297,15 @@ document.addEventListener("DOMContentLoaded", () => {
       let posY = (i < 2) ? "0%" : "100%";
       piece.style.backgroundPosition = `${posX} ${posY}`;
       piece.draggable = true;
+
+      // ★ ランダム回転させたい場合
+      const rotations = [0, 90, 180, 270];
+      const randomRot = rotations[Math.floor(Math.random() * rotations.length)];
+      piece.dataset.rotation = randomRot.toString();
+      piece.style.transform = `rotate(${randomRot}deg)`;
+
       piece.addEventListener("dragstart", onDragStart);
       piece.addEventListener("dragend", onDragEnd);
-      piece.addEventListener("touchstart", onTouchStart, {passive: false});
-      piece.addEventListener("touchmove", onTouchMove, {passive: false});
-      piece.addEventListener("touchend", onTouchEnd, {passive: false});
 
       const rotateBtn = document.createElement("button");
       rotateBtn.textContent = "回転";
@@ -327,6 +323,7 @@ document.addEventListener("DOMContentLoaded", () => {
         checkPuzzleBoardCompletion(puzzleType);
       });
       piece.appendChild(rotateBtn);
+
       trayContainer.appendChild(piece);
     }
 
@@ -344,7 +341,7 @@ document.addEventListener("DOMContentLoaded", () => {
     puzzleModal.style.display = "flex";
   }
 
-  /* ------------- ドラッグ＆タッチ ------------- */
+  /* ------------- ドラッグ処理 ------------- */
   let draggedPiece = null;
   function onDragStart(e) {
     draggedPiece = this;
@@ -354,32 +351,6 @@ document.addEventListener("DOMContentLoaded", () => {
   function onDragEnd(e) {
     this.style.opacity = "1";
     draggedPiece = null;
-  }
-  let touchOffsetX = 0, touchOffsetY = 0;
-  function onTouchStart(e) {
-    e.preventDefault();
-    draggedPiece = this;
-    const touch = e.touches[0];
-    const rect = this.getBoundingClientRect();
-    touchOffsetX = touch.clientX - rect.left;
-    touchOffsetY = touch.clientY - rect.top;
-    this.style.opacity = "0.5";
-  }
-  function onTouchMove(e) {
-    e.preventDefault();
-    if (!draggedPiece) return;
-    const touch = e.touches[0];
-    draggedPiece.style.position = "absolute";
-    draggedPiece.style.left = (touch.clientX - touchOffsetX) + "px";
-    draggedPiece.style.top = (touch.clientY - touchOffsetY) + "px";
-  }
-  function onTouchEnd(e) {
-    e.preventDefault();
-    if (draggedPiece) {
-      draggedPiece.style.opacity = "1";
-      // タッチの場合、ドロップ先判定は座標判定等が必要ですが、ここではシンプルにリセット
-      draggedPiece = null;
-    }
   }
 
   /* ------------- 完成判定 ------------- */
@@ -391,37 +362,33 @@ document.addEventListener("DOMContentLoaded", () => {
         isComplete = false;
       } else {
         let piece = cell.firstElementChild;
-        if (piece.dataset.correctIndex !== cell.dataset.cellIndex || parseInt(piece.dataset.rotation) !== 0) {
+        const correctIdx = piece.dataset.correctIndex;
+        const currentRot = parseInt(piece.dataset.rotation);
+        if (correctIdx !== cell.dataset.cellIndex || currentRot !== 0) {
           isComplete = false;
         }
       }
     });
     if (isComplete) {
-      // パズル完成時は、下記で最終画像に置き換えます
       alert(`${puzzleType}パズルクリア！`);
       if (puzzleType === "desk") {
         puzzleDeskCleared = true;
-        // 対応するエリア2のデスクオーバーレイ画像を正しい画像に変更
-        deskOverlay.src = "images/noa.png";
       } else if (puzzleType === "drive") {
         puzzleDriveCleared = true;
-        driveOverlay.src = "images/roberia.png";
       }
       document.getElementById("puzzle-modal").style.display = "none";
       checkAllPuzzlesCleared();
     }
   }
-
   function checkAllPuzzlesCleared() {
     if (puzzleDeskCleared && puzzleDriveCleared) {
       console.log("エリア2クリア!");
       startArea3Narration();
     }
   }
-
   function startArea3Narration() {
     alert("エリア2クリア! エリア3のナレーションを開始します。");
-    // エリア3以降の処理はここに実装してください
+    // エリア3以降の処理をここに実装
   }
 
 });

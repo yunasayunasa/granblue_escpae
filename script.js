@@ -2,50 +2,111 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("JavaScript 読み込み完了");
 
   // ================================
-  //  シーン管理
+  // シーン管理
   // ================================
   const scenes = document.querySelectorAll('.scene');
   function showScene(sceneId) {
-    scenes.forEach(scene => scene.style.display = "none");
-    document.getElementById(sceneId).style.display = "block";
+    scenes.forEach(scene => (scene.style.display = "none"));
+    const scene = document.getElementById(sceneId);
+    if (scene) {
+      scene.style.display = "block";
+    } else {
+      console.error(`Scene with ID "${sceneId}" が見つかりません`);
+    }
   }
 
   // 最初はタイトル画面
   showScene("title-screen");
 
-  // タイトル画面をクリック → ナレーションシーン
+  // タイトル画面をクリック → ナレーション画面（エリア1）へ
   document.getElementById("title-screen").addEventListener("click", () => {
     showScene("narration-screen");
   });
 
   // ================================
-  //  ナレーション進行
+  // ナレーション管理
   // ================================
-  const narrationTexts = [
+  const narrationScreen = document.getElementById("narration-screen");
+  const narrationContent = document.getElementById("narration-content");
+
+  // エリア1のナレーション（1行ずつ表示）
+  const narrationTextsArea1 = [
     "君は目を覚ますと、自分の部屋にいた…",
     "部屋から出ようとするが、鍵がかかっている…",
     "どうやらこの鍵を開けないと出られないようだ。"
   ];
+
+  // エリア2のナレーション（グループで3行ずつ表示）
+  const narrationTextsArea2 = [
+    "無事部屋を脱出した君は、操舵室にたどり着いた。",
+    "なぜ自分の部屋にあんな鍵が...？考えても答えは出ない...",
+    "その時ふと、あることに気がついた。",
+    "━操舵室に、ノアが居ない。",
+    "どこに行ったのだろう？探しに行こうとすると、声が聞こえた。",
+    "団長さん！ここだよ！聞こえるかい！？",
+    "声はするが、姿は見えず━、君はこの部屋を探すことにした。"
+  ];
+
+  // 現在のエリア状態（"area1" または "area2"）とナレーション進行用インデックス
+  let currentArea = "area1";
   let narrationIndex = 0;
 
-  document.getElementById("narration-screen").addEventListener("click", () => {
-    narrationIndex++;
-    if (narrationIndex < narrationTexts.length) {
-      document.getElementById("narration-content").innerHTML =
-        `<p>${narrationTexts[narrationIndex]}</p>`;
-    } else {
-      showScene("game-screen");
+  // ※エリア1の最初のナレーションはHTMLに記述済みと仮定（narrationIndex = 0）
+  narrationScreen.addEventListener("click", () => {
+    if (currentArea === "area1") {
+      narrationIndex++;
+      if (narrationIndex < narrationTextsArea1.length) {
+        narrationContent.innerHTML = `<p>${narrationTextsArea1[narrationIndex]}</p>`;
+      } else {
+        // エリア1のナレーション終了 → エリア1ゲーム画面へ
+        showScene("game-screen");
+      }
+    } else if (currentArea === "area2") {
+      // エリア2は3行ずつ表示
+      if (narrationIndex < narrationTextsArea2.length) {
+        let groupHTML = "";
+        for (let i = 0; i < 3 && narrationIndex < narrationTextsArea2.length; i++) {
+          groupHTML += `<p>${narrationTextsArea2[narrationIndex]}</p>`;
+          narrationIndex++;
+        }
+        narrationContent.innerHTML = groupHTML;
+      } else {
+        alert("エリア2のナレーション終了。ゲームシーンは未実装です。");
+      }
     }
   });
 
+  // エリア2ナレーション開始用の関数
+  function startArea2Narration() {
+    currentArea = "area2";
+    narrationIndex = 0;
+    // エリア2用の背景やフレームを変更（必要に応じて画像パスを調整）
+    const narrationBackground = document.querySelector('#narration-screen .narration-background');
+    const narrationFrame = document.querySelector('#narration-screen .narration-frame');
+    if (narrationBackground) {
+      narrationBackground.src = "images/bg2.jpg";
+    }
+    if (narrationFrame) {
+      narrationFrame.src = "images/log.png";
+    }
+    // 最初のグループ（最大3行）を表示
+    let groupHTML = "";
+    for (let i = 0; i < 3 && narrationIndex < narrationTextsArea2.length; i++) {
+      groupHTML += `<p>${narrationTextsArea2[narrationIndex]}</p>`;
+      narrationIndex++;
+    }
+    narrationContent.innerHTML = groupHTML;
+    showScene("narration-screen");
+  }
+
   // ================================
-  //  ゲーム進行（ベッド・キャスターなど）
+  // エリア1ゲームシーンの処理
   // ================================
   const bedArea    = document.getElementById("bed-area");
   const casterArea = document.getElementById("caster-area");
   const exitButton = document.getElementById("exit-button");
 
-  // ベッド/キャスター用モーダル
+  // ヒント用モーダル
   const hintModal        = document.getElementById("hint-modal");
   const hintImage        = document.getElementById("hint-image");
   const hintTextInModal  = document.getElementById("hint-text-in-modal");
@@ -58,9 +119,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // ベッドをタップ
   bedArea.addEventListener("click", (e) => {
     e.stopPropagation();
-    hintImage.src = "images/bg1_hint1.jpg"; // ヒント画像を差し替え
+    hintImage.src = "images/bg1_hint1.jpg"; // ヒント画像の切り替え
     hintTextInModal.textContent = "ベッドには謎の紙片が残されている…";
-    hintModal.style.display = "flex";       // モーダル表示
+    hintModal.style.display = "flex";
   });
 
   // キャスターをタップ
@@ -71,33 +132,35 @@ document.addEventListener("DOMContentLoaded", () => {
     hintModal.style.display = "flex";
   });
 
-  // モーダルをクリック → 閉じる
+  // ヒントモーダルをクリックで閉じる
   hintModal.addEventListener("click", () => {
     hintModal.style.display = "none";
   });
 
-  // 「部屋から出る」ボタン → 4桁入力モーダルを開く
+  // 「部屋から出る」ボタン → 4桁入力モーダル表示
   exitButton.addEventListener("click", (e) => {
     e.stopPropagation();
     exitModal.style.display = "flex";
     passwordInput.value = "";
   });
 
-  // 4桁入力モーダル外をクリック → 閉じる
+  // 4桁入力モーダル外をクリックで閉じる
   exitModal.addEventListener("click", (event) => {
     if (event.target === exitModal) {
       exitModal.style.display = "none";
     }
   });
 
-  // 4桁入力の判定
+  // 4桁入力の判定（エリア1ゲームクリア）
   passwordSubmit.addEventListener("click", () => {
     const input = passwordInput.value.trim();
     const correctPassword = "4593";
     if (/^\d{4}$/.test(input)) {
       if (input === correctPassword) {
-        alert("鍵が開いた！\n本編は4/1実装予定！お楽しみに！");
+        alert("鍵が開いた！\nエリア1クリア！\n次はエリア2のナレーションです。");
         exitModal.style.display = "none";
+        // エリア1ゲームクリア後 → エリア2ナレーション開始
+        startArea2Narration();
       } else {
         alert("間違っているようだ...");
         passwordInput.value = "";
@@ -109,7 +172,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // ================================
-  //  ヒントボタン（画面右上）と一時表示テキスト
+  // ゲーム画面内のヒントボタン
   // ================================
   const hintButton = document.createElement("button");
   hintButton.textContent = "ヒント";
@@ -123,98 +186,17 @@ document.addEventListener("DOMContentLoaded", () => {
   hintText.style.display = "none";
   document.getElementById("game-screen").appendChild(hintText);
 
-  // ヒントボタンを押す → テキスト表示、3秒後に消える
   hintButton.addEventListener("click", () => {
     hintText.textContent = "くはっ！数字は別のヒントの色と連動しているよ！";
     hintText.style.display = "block";
-
-    // 3秒後に自動で消える
     setTimeout(() => {
       hintText.style.display = "none";
     }, 3000);
   });
 
-  // 画面のどこかをタップするとヒントテキストを消す
   document.addEventListener("click", (event) => {
-    // ヒントボタン自身をクリックした場合は除外
     if (event.target !== hintButton) {
       hintText.style.display = "none";
     }
   });
-});
-
-
-  
-  // 例：エリア１クリア後に次の処理として第二エリアのナレーションを開始する
-  // ※エリア１クリア時に以下を呼び出す（例：onArea1Clear()内）
-  // startArea2Narration();
-
-  // ================================
-  // 第二エリアナレーション（新規）
-  // ================================
-  // セリフは「*」で囲まれた各ブロックを1行として、グループで最大3行ずつ表示
-  const narrationTextsArea2 = [
-    "無事部屋を脱出した君は、操舵室にたどり着いた。",
-    "なぜ自分の部屋にあんな鍵が...？考えても答えは出ない...",
-    "その時ふと、あることに気がついた。",
-    "━操舵室に、ノアが居ない。",
-    "どこに行ったのだろう？探しに行こうとすると、声が聞こえた。",
-    "団長さん！ここだよ！聞こえるかい！？",
-    "声はするが、姿は見えず━、君はこの部屋を探すことにした。"
-  ];
-  let currentNarrationIndex = 0;
-  const narrationGroupSize = 3; // 一度に表示する行数
-
-  // グループ分けしてナレーション画面を更新する関数
-  function updateNarrationGroup() {
-    let groupHTML = "";
-    // 最大3行分（残っている分だけ）を表示
-    for (let i = 0; i < narrationGroupSize; i++) {
-      if (currentNarrationIndex < narrationTextsArea2.length) {
-        groupHTML += `<p>${narrationTextsArea2[currentNarrationIndex]}</p>`;
-        currentNarrationIndex++;
-      }
-    }
-    document.getElementById("narration-content").innerHTML = groupHTML;
-  }
-
-  // 第二エリアナレーション開始用関数
-  function startArea2Narration() {
-    currentNarrationIndex = 0; // 初期化
-    updateNarrationGroup();
-    showScene("narration-screen");
-  }
-
-  // ナレーション画面のタップイベント（第二エリア用）
-  // ※このイベントリスナーは、startArea2Narration() を呼んだ後に有効になります。
-  document.getElementById("narration-screen").addEventListener("click", () => {
-    if (currentNarrationIndex < narrationTextsArea2.length) {
-      // 次のグループを表示
-      updateNarrationGroup();
-    } else {
-      // ナレーション終了 → 次のゲームシーンへ移行
-      showScene("game-screen2");
-    }
-  });
-  
-  function startArea2Narration() {
-  currentNarrationIndex = 0; // ナレーションインデックス初期化
-
-  // 第二エリア用の背景画像とテキストフレームを設定
-  document.querySelector('#narration-screen .narration-background').src = "images/bg2.jpg"; // 仮パス
-  document.querySelector('#narration-screen .narration-frame').src = "images/log.png";       // 仮パス
-
-  updateNarrationGroup();
-  showScene("narration-screen");
-}
-
-  // ================================
-  // 第二エリアゲームシーンなど（新規）
-  // ================================
-  // ※「game-screen2」は第二エリア用のゲームシーンのIDです。
-  // ここに第二エリアのゲーム処理を追加してください。
-
-  // ================================
-  // ※また、既存のエリア１のナレーションやゲーム部分のコードと混ざらないよう、
-  // 状態管理やシーンIDで分けることで、後から追加・変更がしやすくなります。
 });

@@ -1,9 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
   console.log("JavaScript 読み込み完了");
 
-  // ================================
-  // シーン管理（全体で利用）
-  // ================================
+  // -------------------------------
+  // シーン管理（最新のシーン一覧を毎回取得）
+  // -------------------------------
   function showScene(sceneId) {
     const scenes = document.querySelectorAll('.scene');
     scenes.forEach(scene => (scene.style.display = "none"));
@@ -15,10 +15,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // ================================
-  // 既存シーンの初期設定
-  // ================================
-  // タイトル、ナレーション、エリア1ゲームシーンはすでにHTML側にある前提
+  // -------------------------------
+  // 初期シーン設定
+  // -------------------------------
   showScene("title-screen");
 
   // タイトル画面クリック → エリア1ナレーション開始
@@ -26,9 +25,9 @@ document.addEventListener("DOMContentLoaded", () => {
     showScene("narration-screen");
   });
 
-  // ================================
-  // ナレーション管理
-  // ================================
+  // -------------------------------
+  // ナレーション管理（エリア1 / エリア2）
+  // -------------------------------
   const narrationScreen = document.getElementById("narration-screen");
   const narrationContent = document.getElementById("narration-content");
 
@@ -65,6 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
         narrationContent.innerHTML = `<p>${narrationTextsArea2[narrationIndex]}</p>`;
         narrationIndex++;
       } else {
+        // エリア2ナレーション終了 → エリア2ゲームシーンへ
         showScene("game-screen2");
       }
     }
@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function startArea2Narration() {
     currentArea = "area2";
     narrationIndex = 0;
-    // 背景やフレームの差し替え（必要に応じて）
+    // 差し替え：エリア2用背景、フレーム（必要に応じて調整）
     const narrationBackground = document.querySelector('#narration-screen .narration-background');
     const narrationFrame = document.querySelector('#narration-screen .narration-frame');
     if (narrationBackground) narrationBackground.src = "images/bg2.jpg";
@@ -83,20 +83,20 @@ document.addEventListener("DOMContentLoaded", () => {
     showScene("narration-screen");
   }
 
-  // ================================
+  // -------------------------------
   // エリア1ゲームシーン処理
-  // ================================
-  const bedArea    = document.getElementById("bed-area");
+  // -------------------------------
+  const bedArea = document.getElementById("bed-area");
   const casterArea = document.getElementById("caster-area");
   const exitButton = document.getElementById("exit-button");
 
-  const hintModal        = document.getElementById("hint-modal");
-  const hintImage        = document.getElementById("hint-image");
-  const hintTextInModal  = document.getElementById("hint-text-in-modal");
+  const hintModal = document.getElementById("hint-modal");
+  const hintImage = document.getElementById("hint-image");
+  const hintTextInModal = document.getElementById("hint-text-in-modal");
 
-  const exitModal        = document.getElementById("exit-modal");
-  const passwordInput    = document.getElementById("password-input");
-  const passwordSubmit   = document.getElementById("password-submit");
+  const exitModal = document.getElementById("exit-modal");
+  const passwordInput = document.getElementById("password-input");
+  const passwordSubmit = document.getElementById("password-submit");
 
   bedArea.addEventListener("click", (e) => {
     e.stopPropagation();
@@ -141,6 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // ヒントボタン（ゲームシーン内）
   const hintButton = document.createElement("button");
   hintButton.textContent = "ヒント";
   hintButton.id = "hint-button";
@@ -164,9 +165,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // ================================
-  // エリア2ゲームシーンの作成
-  // ================================
+  // -------------------------------
+  // エリア2ゲームシーンの作成（動的生成）
+  // -------------------------------
   const gameScreen2 = document.createElement("div");
   gameScreen2.id = "game-screen2";
   gameScreen2.className = "scene";
@@ -177,7 +178,7 @@ document.addEventListener("DOMContentLoaded", () => {
   gameScreen2.style.height = "100%";
   document.body.appendChild(gameScreen2);
 
-  // タップ可能領域（デスクエリア）
+  // タップ可能領域：デスクエリア（エリア2）
   const deskArea2 = document.createElement("div");
   deskArea2.id = "desk-area2";
   deskArea2.style.position = "absolute";
@@ -197,7 +198,7 @@ document.addEventListener("DOMContentLoaded", () => {
   deskOverlay.style.height = "100%";
   deskArea2.appendChild(deskOverlay);
 
-  // タップ可能領域（ドライブエリア）
+  // タップ可能領域：ドライブエリア（エリア2）
   const driveArea2 = document.createElement("div");
   driveArea2.id = "drive-area2";
   driveArea2.style.position = "absolute";
@@ -218,7 +219,7 @@ document.addEventListener("DOMContentLoaded", () => {
   driveArea2.appendChild(driveOverlay);
 
   // -------------------------------
-  // パズルクリアのフラグ管理
+  // パズルクリアフラグ管理（エリア2）
   // -------------------------------
   let puzzleDeskCleared = false;
   let puzzleDriveCleared = false;
@@ -373,7 +374,7 @@ document.addEventListener("DOMContentLoaded", () => {
       } else if (puzzleType === "drive") {
         puzzleDriveCleared = true;
       }
-      puzzleModal.style.display = "none";
+      document.getElementById("puzzle-modal").style.display = "none";
       checkPuzzleCompletionForBoth();
     }
   }
@@ -385,6 +386,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   function startArea3Narration() {
     alert("エリア2クリア! エリア3のナレーションを開始します。");
-    // エリア3ナレーション開始処理をここに実装
+    // ここでエリア3ナレーション開始処理を実装してください
   }
 });

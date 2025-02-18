@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // 最初はタイトル画面
   showScene("title-screen");
 
-  // タイトル画面をクリック → ナレーション画面（エリア1）へ
+  // タイトル画面クリック → ナレーション画面（エリア1）へ
   document.getElementById("title-screen").addEventListener("click", () => {
     showScene("narration-screen");
   });
@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "どうやらこの鍵を開けないと出られないようだ。"
   ];
 
-  // エリア2のナレーション（グループで3行ずつ表示）
+  // エリア2のナレーション（1行ずつ表示）
   const narrationTextsArea2 = [
     "無事部屋を脱出した君は、操舵室にたどり着いた。",
     "なぜ自分の部屋にあんな鍵が...？考えても答えは出ない...",
@@ -51,25 +51,24 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentArea = "area1";
   let narrationIndex = 0;
 
-  // ※エリア1の最初のナレーションはHTMLに記述済みと仮定（narrationIndex = 0）
-  narrationScreen.addEventListener("click", () => {
+  // ナレーション画面のクリックイベント（1クリックで1行表示）
+  narrationScreen.addEventListener("click", (event) => {
+    // 子要素からのクリックがあっても、親要素での処理だけ行う
+    event.stopPropagation();
+
     if (currentArea === "area1") {
       narrationIndex++;
       if (narrationIndex < narrationTextsArea1.length) {
+        // 前の内容を上書き
         narrationContent.innerHTML = `<p>${narrationTextsArea1[narrationIndex]}</p>`;
       } else {
         // エリア1のナレーション終了 → エリア1ゲーム画面へ
         showScene("game-screen");
       }
     } else if (currentArea === "area2") {
-      // エリア2は3行ずつ表示
       if (narrationIndex < narrationTextsArea2.length) {
-        let groupHTML = "";
-        for (let i = 0; i < 3 && narrationIndex < narrationTextsArea2.length; i++) {
-          groupHTML += `<p>${narrationTextsArea2[narrationIndex]}</p>`;
-          narrationIndex++;
-        }
-        narrationContent.innerHTML = groupHTML;
+        narrationContent.innerHTML = `<p>${narrationTextsArea2[narrationIndex]}</p>`;
+        narrationIndex++;
       } else {
         alert("エリア2のナレーション終了。ゲームシーンは未実装です。");
       }
@@ -89,13 +88,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (narrationFrame) {
       narrationFrame.src = "images/log.png";
     }
-    // 最初のグループ（最大3行）を表示
-    let groupHTML = "";
-    for (let i = 0; i < 1 && narrationIndex < narrationTextsArea2.length; i++) {
-      groupHTML += `<p>${narrationTextsArea2[narrationIndex]}</p>`;
-      narrationIndex++;
-    }
-    narrationContent.innerHTML = groupHTML;
+    // 最初の1文を表示
+    narrationContent.innerHTML = `<p>${narrationTextsArea2[narrationIndex]}</p>`;
+    narrationIndex++;
     showScene("narration-screen");
   }
 

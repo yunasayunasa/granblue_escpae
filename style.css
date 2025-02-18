@@ -10,15 +10,91 @@ body {
   font-family: sans-serif;
 }
 
-/* ゲームコンテナ：画面全体 */
-#game-container {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
+/* シーン全体 */
+.scene {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
 }
 
-/* 背景画像 */
+/* タイトル画面 */
+#title-screen {
+  z-index: 100;
+}
+#title-screen .background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+#title-screen .overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #fff;
+  background: rgba(0,0,0,0.5);
+  padding: 20px;
+  border-radius: 8px;
+}
+
+/* ナレーションシーン */
+#narration-screen {
+  z-index: 100;
+}
+.narration-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+.narration-character {
+  position: absolute;
+  bottom: -40%; /* 必要に応じて調整 */
+  left: 50%;
+  transform: translateX(-50%);
+  height: 150%;
+  width: auto;
+  z-index: 2;
+}
+.narration-frame {
+  position: absolute;
+  bottom: -20;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: auto;
+  z-index: 3;
+}
+.narration-text {
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  z-index: 4;
+  color: #fff;
+  font-size: 1.5rem;
+  text-align: center;
+  padding: 20px;
+}
+
+/* ゲーム画面 */
+#game-screen {
+  z-index: 100;
+}
+#game-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
 #background {
   position: absolute;
   top: 50%;
@@ -30,13 +106,11 @@ body {
   z-index: 0;
 }
 
-/* 共通の光るアニメーション */
+/* アニメーション（お好みで） */
 @keyframes glow {
   0%   { filter: brightness(1); }
   100% { filter: brightness(1.5); }
 }
-
-/* ベッド画像（すぐに光る） */
 #bed {
   position: absolute;
   top: 50%;
@@ -48,8 +122,6 @@ body {
   z-index: 1;
   animation: glow 2s infinite alternate;
 }
-
-/* キャスター画像（1秒遅れで光る） */
 #caster {
   position: absolute;
   top: 50%;
@@ -63,44 +135,28 @@ body {
   animation-delay: 1s;
 }
 
-/* クリック領域（透明） */
-#bed-area {
+/* タップ範囲 */
+#bed-area,
+#caster-area {
   position: absolute;
+  z-index: 999;
+  background: transparent;
+  cursor: pointer;
+}
+#bed-area {
   top: 50%;
   left: 40%;
   width: 45%;
   height: 10%;
-  z-index: 999;
-  background: transparent;
-  cursor: pointer;
 }
-
 #caster-area {
-  position: absolute;
   top: 50%;
   left: 15%;
   width: 20%;
   height: 10%;
-  z-index: 999;
-  background: transparent;
-  cursor: pointer;
 }
 
-/* ヒント表示ボックス（背景下部中央） */
-#hint-box {
-  position: absolute;
-  bottom: 20%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.5);
-  color: #fff;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-size: 1.2rem;
-  z-index: 1000;
-}
-
-/* 部屋から出るボタン（背景右上） */
+/* 部屋から出るボタン */
 #exit-button {
   position: absolute;
   top: 28%;
@@ -111,29 +167,58 @@ body {
   cursor: pointer;
 }
 
-/* モーダル共通スタイル */
+/* モーダル */
 .modal {
-  display: none; /* 初期は非表示 */
+  display: none;
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   background: rgba(0,0,0,0.7);
   z-index: 2000;
   justify-content: center;
   align-items: center;
 }
-
+.modal-content {
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  text-align: center;
+}
 .modal img {
   max-width: 90%;
   max-height: 90%;
 }
 
-/* 謎解きモーダルのコンテンツ */
-.modal .modal-content {
-  background: #fff;
-  padding: 20px;
+/* ヒントボタン */
+#hint-button {
+  position: absolute;
+  top: 10%;
+  right: 5%;
+  padding: 10px;
+  background: #ffcc00;
+  color: black;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+#hint-button:hover {
+  background: #ffdb4d;
+}
+
+/* ヒントテキスト（画面上に一時表示） */
+#hint-text {
+  position: absolute;
+  bottom: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 10px;
   border-radius: 8px;
+  font-size: 1.2rem;
   text-align: center;
+  display: none;
 }

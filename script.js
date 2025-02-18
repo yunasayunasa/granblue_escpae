@@ -135,9 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => { hintText.style.display = "none"; }, 3000);
   });
   document.addEventListener("click", (e) => {
-    if (e.target !== hintButton) {
-      hintText.style.display = "none";
-    }
+    if (e.target !== hintButton) { hintText.style.display = "none"; }
   });
 
   /* ------------- エリア2ゲームシーンの作成（動的生成） ------------- */
@@ -148,7 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
   gameScreen2.style.width = "100%";
   gameScreen2.style.height = "100%";
   document.body.appendChild(gameScreen2);
-  // 背景は CSS で設定済み
+  // 背景は CSS により設定済み
 
   // タップ領域：デスクエリア（エリア2）
   const deskArea2 = document.createElement("div");
@@ -202,7 +200,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   /* ------------- シルエットパズルモーダル ------------- */
-  // グローバル回転ボタンは別に1つ配置
+  // グローバル回転ボタンはモーダル内とは別に配置
   function showPuzzleModal(puzzleType) {
     puzzleModal.innerHTML = "";
     puzzleModal.style.display = "flex";
@@ -215,7 +213,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const cell = document.createElement("div");
       cell.className = "puzzle-cell";
       cell.dataset.cellIndex = i.toString();
-      // セルタップで、選択中のパネルを配置
+      // セルをタップで、選択中のパネルを配置
       cell.addEventListener("click", () => {
         if (selectedContainer) {
           cell.appendChild(selectedContainer);
@@ -241,7 +239,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ? "images/noa_puzzle.png"
       : "images/roberia_puzzle.png";
 
-    // 4つのピース生成
+    // ピースを4つ生成
     for (let i = 0; i < 4; i++) {
       const container = document.createElement("div");
       container.className = "piece-container";
@@ -258,7 +256,7 @@ document.addEventListener("DOMContentLoaded", () => {
       let posY = (i < 2) ? "0%" : "100%";
       silhouette.style.backgroundPosition = `${posX} ${posY}`;
 
-      // タップで選択: コンテナを選択状態に
+      // タップで選択：選択状態のコンテナがグローバル変数 selectedContainer に記憶
       container.addEventListener("click", (e) => {
         e.stopPropagation();
         if (selectedContainer && selectedContainer !== container) {
@@ -338,17 +336,15 @@ document.addEventListener("DOMContentLoaded", () => {
       checkAllPuzzlesCleared();
     }
   }
-
   function checkAllPuzzlesCleared() {
     if (puzzleDeskCleared && puzzleDriveCleared) {
       console.log("エリア2クリア!");
       startArea3Narration();
     }
   }
-
   function startArea3Narration() {
     alert("エリア2クリア! エリア3のナレーションを開始します。");
-    // エリア3以降の処理をここに実装
+    // エリア3以降の処理を実装
   }
 
   // グローバル変数：現在選択中のピースコンテナ
@@ -362,7 +358,7 @@ document.addEventListener("DOMContentLoaded", () => {
   gameScreen2.style.width = "100%";
   gameScreen2.style.height = "100%";
   document.body.appendChild(gameScreen2);
-  // 背景は CSS により設定済み
+  // 背景は CSS で設定済み
 
   // タップ領域：デスクエリア（エリア2）
   const deskArea2 = document.createElement("div");

@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
         narrationContent.innerHTML = `<p>${narrationTextsArea2[narrationIndex]}</p>`;
         narrationIndex++;
       } else {
-        alert("エリア2のナレーション終了。ゲームシーンは未実装です。");
+        showScene("game-screen2");
       }
     }
   });
@@ -194,4 +194,260 @@ document.addEventListener("DOMContentLoaded", () => {
       hintText.style.display = "none";
     }
   });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("JavaScript 読み込み完了");
+
+  // ================================
+  // エリア2ゲームシーンの作成
+  // ================================
+  const gameScreen2 = document.createElement("div");
+  gameScreen2.id = "game-screen2";
+  gameScreen2.className = "scene";
+  gameScreen2.style.backgroundImage = "url('images/bg2.jpg')";
+  gameScreen2.style.backgroundSize = "cover";
+  gameScreen2.style.position = "relative";
+  gameScreen2.style.width = "100%";
+  gameScreen2.style.height = "100%";
+  document.body.appendChild(gameScreen2);
+
+  // タップ可能領域（デスクエリア）
+  const deskArea2 = document.createElement("div");
+  deskArea2.id = "desk-area2";
+  deskArea2.style.position = "absolute";
+  deskArea2.style.width = "200px"; // 仮サイズ。後で調整可
+  deskArea2.style.height = "200px";
+  deskArea2.style.top = "40%";
+  deskArea2.style.left = "30%";
+  deskArea2.style.backgroundColor = "rgba(255,0,0,0.3)"; // 半透明の赤
+  deskArea2.style.cursor = "pointer";
+  gameScreen2.appendChild(deskArea2);
+
+  // デスクエリアにオーバーレイ画像（bg2_desk.png）
+  const deskOverlay = document.createElement("img");
+  deskOverlay.src = "images/bg2_desk.png";
+  deskOverlay.style.position = "absolute";
+  deskOverlay.style.top = "0";
+  deskOverlay.style.left = "0";
+  deskOverlay.style.width = "100%";
+  deskOverlay.style.height = "100%";
+  deskArea2.appendChild(deskOverlay);
+
+  // タップ可能領域（ドライブエリア）
+  const driveArea2 = document.createElement("div");
+  driveArea2.id = "drive-area2";
+  driveArea2.style.position = "absolute";
+  driveArea2.style.width = "200px"; // 仮サイズ
+  driveArea2.style.height = "200px";
+  driveArea2.style.top = "40%";
+  driveArea2.style.left = "60%";
+  driveArea2.style.backgroundColor = "rgba(0,0,255,0.3)"; // 半透明の青
+  driveArea2.style.cursor = "pointer";
+  gameScreen2.appendChild(driveArea2);
+
+  // ドライブエリアにオーバーレイ画像（bg2_drive.png）
+  const driveOverlay = document.createElement("img");
+  driveOverlay.src = "images/bg2_drive.png";
+  driveOverlay.style.position = "absolute";
+  driveOverlay.style.top = "0";
+  driveOverlay.style.left = "0";
+  driveOverlay.style.width = "100%";
+  driveOverlay.style.height = "100%";
+  driveArea2.appendChild(driveOverlay);
+
+  // -------------------------------
+  // パズルクリアのフラグ管理
+  // -------------------------------
+  let puzzleDeskCleared = false;
+  let puzzleDriveCleared = false;
+
+  // タップ領域クリックでそれぞれのシルエットパズル開始
+  deskArea2.addEventListener("click", (e) => {
+    e.stopPropagation();
+    showPuzzleModal("desk");
+  });
+  driveArea2.addEventListener("click", (e) => {
+    e.stopPropagation();
+    showPuzzleModal("drive");
+  });
+
+  // ================================
+  // シルエットパズル用モーダルとパズル処理
+  // ================================
+  function showPuzzleModal(puzzleType) {
+    // モーダルがなければ作成
+    let puzzleModal = document.getElementById("puzzle-modal");
+    if (!puzzleModal) {
+      puzzleModal = document.createElement("div");
+      puzzleModal.id = "puzzle-modal";
+      puzzleModal.style.position = "fixed";
+      puzzleModal.style.top = "0";
+      puzzleModal.style.left = "0";
+      puzzleModal.style.width = "100%";
+      puzzleModal.style.height = "100%";
+      puzzleModal.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
+      puzzleModal.style.display = "flex";
+      puzzleModal.style.justifyContent = "center";
+      puzzleModal.style.alignItems = "center";
+      document.body.appendChild(puzzleModal);
+    }
+    // クリア済みのモーダル内容をクリア
+    puzzleModal.innerHTML = "";
+
+    // パズル用コンテナ（固定サイズ例：400×400px）
+    const puzzleContainer = document.createElement("div");
+    puzzleContainer.id = "puzzle-container";
+    puzzleContainer.style.position = "relative";
+    puzzleContainer.style.width = "400px";
+    puzzleContainer.style.height = "400px";
+    puzzleContainer.style.backgroundColor = "#fff";
+    puzzleContainer.style.display = "flex";
+    puzzleContainer.style.flexWrap = "wrap";
+    puzzleContainer.style.border = "2px solid #000";
+    puzzleModal.appendChild(puzzleContainer);
+
+    // パズル画像のパス設定（deskならnoa_puzzle.png、driveならroberia_puzzle.png）
+    let puzzleImageSrc = "";
+    if (puzzleType === "desk") {
+      puzzleImageSrc = "images/noa_puzzle.png";
+    } else if (puzzleType === "drive") {
+      puzzleImageSrc = "images/roberia_puzzle.png";
+    }
+
+    // 4分割して各ピースを作成（2×2グリッド）
+    for (let i = 0; i < 4; i++) {
+      const piece = document.createElement("div");
+      piece.className = "puzzle-piece";
+      piece.dataset.index = i; // 正しい配置位置（0～3）
+      piece.dataset.rotation = "0"; // 初期回転角度
+      piece.style.width = "50%";
+      piece.style.height = "50%";
+      piece.style.boxSizing = "border-box";
+      piece.style.border = "1px solid #ccc";
+      piece.style.position = "relative";
+      piece.style.backgroundImage = `url(${puzzleImageSrc})`;
+      // 背景サイズを2倍にして、各ピースごとに表示する部分を調整（例：0～100%）
+      piece.style.backgroundSize = "200% 200%";
+      // 各ピースの背景位置（0:左上、1:右上、2:左下、3:右下）
+      let posX = (i % 2 === 0) ? "0%" : "100%";
+      let posY = (i < 2) ? "0%" : "100%";
+      piece.style.backgroundPosition = `${posX} ${posY}`;
+
+      // ドラッグ＆ドロップのための設定
+      piece.draggable = true;
+      piece.addEventListener("dragstart", onDragStart);
+      piece.addEventListener("dragend", onDragEnd);
+      piece.addEventListener("dragover", onDragOver);
+      piece.addEventListener("drop", onDrop);
+
+      // 各ピースに回転ボタンを配置
+      const rotateBtn = document.createElement("button");
+      rotateBtn.textContent = "回転";
+      rotateBtn.style.position = "absolute";
+      rotateBtn.style.bottom = "5px";
+      rotateBtn.style.right = "5px";
+      rotateBtn.style.zIndex = "10";
+      rotateBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        let currentRotation = parseInt(piece.dataset.rotation);
+        currentRotation = (currentRotation + 90) % 360;
+        piece.dataset.rotation = currentRotation.toString();
+        piece.style.transform = `rotate(${currentRotation}deg)`;
+        checkPuzzleCompletion(puzzleType);
+      });
+      piece.appendChild(rotateBtn);
+
+      puzzleContainer.appendChild(piece);
+    }
+
+    // モーダルを閉じるためのボタン
+    const closeBtn = document.createElement("button");
+    closeBtn.textContent = "閉じる";
+    closeBtn.style.position = "absolute";
+    closeBtn.style.top = "10px";
+    closeBtn.style.right = "10px";
+    closeBtn.addEventListener("click", () => {
+      puzzleModal.style.display = "none";
+    });
+    puzzleModal.appendChild(closeBtn);
+
+    puzzleModal.style.display = "flex";
+
+    // 初期配置をランダム化（単純なシャッフル）
+    randomizePuzzlePieces(puzzleContainer);
+  }
+
+  // ドラッグ＆ドロップ用イベントハンドラー
+  let draggedPiece = null;
+  function onDragStart(e) {
+    draggedPiece = this;
+    e.dataTransfer.setData("text/plain", this.dataset.index);
+    setTimeout(() => {
+      this.style.opacity = "0.5";
+    }, 0);
+  }
+  function onDragEnd(e) {
+    this.style.opacity = "1";
+    draggedPiece = null;
+  }
+  function onDragOver(e) {
+    e.preventDefault();
+  }
+  function onDrop(e) {
+    e.preventDefault();
+    if (draggedPiece && draggedPiece !== this) {
+      // ピース同士を入れ替え（シンプルなスワップ処理）
+      let temp = document.createElement("div");
+      this.parentNode.insertBefore(temp, this);
+      draggedPiece.parentNode.insertBefore(this, draggedPiece);
+      temp.parentNode.insertBefore(draggedPiece, temp);
+      temp.parentNode.removeChild(temp);
+      checkPuzzleCompletionForBoth();
+    }
+  }
+  function randomizePuzzlePieces(container) {
+    let pieces = Array.from(container.getElementsByClassName("puzzle-piece"));
+    pieces.sort(() => Math.random() - 0.5);
+    pieces.forEach(piece => {
+      container.appendChild(piece);
+    });
+  }
+
+  // 各パズルのクリア判定：各ピースが正しい順（グリッド順）かつ回転が0°ならクリア
+  function checkPuzzleCompletion(puzzleType) {
+    const puzzleModal = document.getElementById("puzzle-modal");
+    if (!puzzleModal) return;
+    const puzzleContainer = document.getElementById("puzzle-container");
+    const pieces = Array.from(puzzleContainer.getElementsByClassName("puzzle-piece"));
+    let isComplete = true;
+    pieces.forEach((piece, index) => {
+      if (piece.dataset.index != index || parseInt(piece.dataset.rotation) !== 0) {
+        isComplete = false;
+      }
+    });
+    if (isComplete) {
+      alert(`${puzzleType}パズルクリア！`);
+      if (puzzleType === "desk") {
+        puzzleDeskCleared = true;
+      } else if (puzzleType === "drive") {
+        puzzleDriveCleared = true;
+      }
+      puzzleModal.style.display = "none";
+      checkPuzzleCompletionForBoth();
+    }
+  }
+  function checkPuzzleCompletionForBoth() {
+    if (puzzleDeskCleared && puzzleDriveCleared) {
+      console.log("エリア2クリア!");
+      startArea3Narration();
+    }
+  }
+  function startArea3Narration() {
+    alert("エリア2クリア! エリア3のナレーションを開始します。");
+    // ここでエリア3のナレーション開始処理を実装してください
+  }
+
+  // ※エリア2ゲームシーンへ移行するタイミングは、既存のフローに合わせて showScene("game-screen2") 等で呼び出してください。
 });

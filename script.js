@@ -40,8 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let currentArea = "area1";
   let narrationIndex = 0;
-  narrationScreen.addEventListener("click", (e) => {
-    e.stopPropagation();
+  narrationScreen.addEventListener("click", () => {
     if (currentArea === "area1") {
       narrationIndex++;
       if (narrationIndex < narrationTextsArea1.length) {
@@ -50,9 +49,9 @@ document.addEventListener("DOMContentLoaded", () => {
         showScene("game-screen");
       }
     } else if (currentArea === "area2") {
+      narrationIndex++;
       if (narrationIndex < narrationTextsArea2.length) {
         narrationContent.innerHTML = `<p>${narrationTextsArea2[narrationIndex]}</p>`;
-        narrationIndex++;
       } else {
         showScene("game-screen2");
       }
@@ -67,7 +66,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (narrationBackground) narrationBackground.src = "images/bg2.jpg";
     if (narrationFrame) narrationFrame.src = "images/log.png";
     narrationContent.innerHTML = `<p>${narrationTextsArea2[narrationIndex]}</p>`;
-    narrationIndex++;
     showScene("narration-screen");
   }
 
@@ -82,21 +80,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const passwordInput = document.getElementById("password-input");
   const passwordSubmit = document.getElementById("password-submit");
 
-  bedArea.addEventListener("click", (e) => {
-    e.stopPropagation();
+  bedArea.addEventListener("click", () => {
     hintImage.src = "images/bg1_hint1.jpg";
     hintTextInModal.textContent = "ベッドには謎の紙片が残されている…";
     hintModal.style.display = "flex";
   });
-  casterArea.addEventListener("click", (e) => {
-    e.stopPropagation();
+  casterArea.addEventListener("click", () => {
     hintImage.src = "images/bg1_hint2.jpg";
     hintTextInModal.textContent = "キャスターに妙な跡がある…";
     hintModal.style.display = "flex";
   });
   hintModal.addEventListener("click", () => { hintModal.style.display = "none"; });
-  exitButton.addEventListener("click", (e) => {
-    e.stopPropagation();
+
+  exitButton.addEventListener("click", () => {
     exitModal.style.display = "flex";
     passwordInput.value = "";
   });
@@ -123,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // ヒントボタン（ゲームシーン内）
+  // ヒントボタン（エリア1ゲームシーン内）
   const hintButton = document.createElement("button");
   hintButton.textContent = "ヒント";
   hintButton.id = "hint-button";
@@ -151,7 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
   gameScreen2.style.width = "100%";
   gameScreen2.style.height = "100%";
   document.body.appendChild(gameScreen2);
-  // 背景は CSS (#game-screen2) で設定済み
+  // 背景は CSS で設定済み
 
   // タップ領域：デスクエリア（エリア2）
   const deskArea2 = document.createElement("div");
@@ -197,154 +193,116 @@ document.addEventListener("DOMContentLoaded", () => {
   let puzzleDeskCleared = false;
   let puzzleDriveCleared = false;
 
-  deskArea2.addEventListener("click", (e) => {
-    e.stopPropagation();
+  deskArea2.addEventListener("click", () => {
     showPuzzleModal("desk");
   });
-  driveArea2.addEventListener("click", (e) => {
-    e.stopPropagation();
+  driveArea2.addEventListener("click", () => {
     showPuzzleModal("drive");
   });
 
   /* ------------- シルエットパズルモーダル ------------- */
-  const puzzleModal = document.getElementById("puzzle-modal");
+  // ※rotateボタンはグローバル配置で、選択中のパネルを回転させる
   function showPuzzleModal(puzzleType) {
     puzzleModal.innerHTML = "";
     puzzleModal.style.display = "flex";
 
-    // パズルボード (200×200, 2×2グリッド; セルは100×100)
+    // パズルボード (200×200, 2×2)
     const board = document.createElement("div");
     board.id = "puzzle-board";
     puzzleModal.appendChild(board);
     for (let i = 0; i < 4; i++) {
       const cell = document.createElement("div");
       cell.className = "puzzle-cell";
-      cell.dataset.cellIndex = i;
-      board.appendChild(cell);
-      // ドロップイベント
-      cell.addEventListener("dragover", (e) => { e.preventDefault(); });
-      cell.addEventListener("drop", (e) => {
-        e.preventDefault();
-        if (dragTarget) {
-          cell.appendChild(dragTarget);
-          dragTarget.style.position = "relative";
-          dragTarget.style.left = "0px";
-          dragTarget.style.top = "0px";
-          dragTarget.style.width = "100%";
-          dragTarget.style.height = "100%";
+      cell.dataset.cellIndex = i.toString();
+      // セルタップで、選択中のパネルを配置
+      cell.addEventListener("click", () => {
+        if (selectedContainer) {
+          cell.appendChild(selectedContainer);
+          selectedContainer.style.position = "relative";
+          selectedContainer.style.left = "0";
+          selectedContainer.style.top = "0";
+          selectedContainer.style.width = "100%";
+          selectedContainer.style.height = "100%";
+          selectedContainer.classList.remove("selected");
           checkBoardCompletion(puzzleType);
+          selectedContainer = null;
         }
       });
+      board.appendChild(cell);
     }
 
     // ピーストレイ
     const tray = document.createElement("div");
     tray.id = "puzzle-tray";
     puzzleModal.appendChild(tray);
+
     let puzzleImageSrc = (puzzleType === "desk")
       ? "images/noa_puzzle.png"
       : "images/roberia_puzzle.png";
+
+    // ピースを4つ生成
     for (let i = 0; i < 4; i++) {
       const container = document.createElement("div");
       container.className = "piece-container";
+      container.dataset.correctIndex = i.toString();
+      container.dataset.rotation = "0"; // 初期は0°
 
-      const piece = document.createElement("div");
-      piece.className = "puzzle-piece";
-      piece.dataset.correctIndex = i;
-      // ランダムな初期回転
-      const rotations = [0, 90, 180, 270];
-      const r = rotations[Math.floor(Math.random() * rotations.length)];
-      piece.dataset.rotation = r.toString();
-      piece.style.transform = `rotate(${r}deg)`;
-      piece.style.backgroundImage = `url(${puzzleImageSrc})`;
+      // ピース本体
+      const silhouette = document.createElement("div");
+      silhouette.className = "puzzle-silhouette";
+      silhouette.dataset.correctIndex = i.toString();
+      silhouette.dataset.rotation = "0";
+      silhouette.style.backgroundImage = `url(${puzzleImageSrc})`;
+      silhouette.style.backgroundSize = "200% 200%";
       let posX = (i % 2 === 0) ? "0%" : "100%";
       let posY = (i < 2) ? "0%" : "100%";
-      piece.style.backgroundSize = "200% 200%";
-      piece.style.backgroundPosition = `${posX} ${posY}`;
-      // 独自ドラッグ (pointerイベント)
-      piece.addEventListener("pointerdown", onPointerDown);
-      
-      // 回転ボタン（ボタンはコンテナに固定）
-      const rotateBtn = document.createElement("button");
-      rotateBtn.textContent = "回転";
-      rotateBtn.className = "rotate-btn";
-      rotateBtn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        e.preventDefault();
-        let currentRot = parseInt(piece.dataset.rotation);
-        currentRot = (currentRot + 90) % 360;
-        piece.dataset.rotation = currentRot.toString();
-        piece.style.transform = `rotate(${currentRot}deg)`;
-        checkBoardCompletion(puzzleType);
-      });
-      container.appendChild(piece);
-      container.appendChild(rotateBtn);
-      tray.appendChild(container);
+      silhouette.style.backgroundPosition = `${posX} ${posY}`;
 
-      // タッチ対応： pointerdownで十分なら追加不要（iOS Safariはpointerイベント対応済み）
+      // タップで選択
+      container.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (selectedContainer && selectedContainer !== container) {
+          selectedContainer.classList.remove("selected");
+        }
+        if (selectedContainer === container) {
+          container.classList.remove("selected");
+          selectedContainer = null;
+        } else {
+          container.classList.add("selected");
+          selectedContainer = container;
+        }
+      });
+
+      container.appendChild(silhouette);
+      tray.appendChild(container);
     }
 
+    // グローバル回転ボタンをモーダル内に追加（常に固定表示）
+    let rotateBtn = document.getElementById("global-rotate-btn");
+    if (!rotateBtn) {
+      rotateBtn = document.createElement("button");
+      rotateBtn.id = "global-rotate-btn";
+      rotateBtn.textContent = "回転";
+      rotateBtn.addEventListener("click", () => {
+        if (selectedContainer) {
+          let currentRot = parseInt(selectedContainer.dataset.rotation);
+          currentRot = (currentRot + 90) % 360;
+          selectedContainer.dataset.rotation = currentRot.toString();
+          selectedContainer.style.transform = `rotate(${currentRot}deg)`;
+          checkBoardCompletion(puzzleType);
+        }
+      });
+      document.body.appendChild(rotateBtn);
+    }
     // 閉じるボタン
     const closeBtn = document.createElement("button");
     closeBtn.textContent = "閉じる";
-    closeBtn.style.position = "absolute";
-    closeBtn.style.top = "10px";
-    closeBtn.style.right = "10px";
-    closeBtn.addEventListener("click", () => { puzzleModal.style.display = "none"; });
+    closeBtn.className = "close-btn";
+    closeBtn.addEventListener("click", () => {
+      puzzleModal.style.display = "none";
+      selectedContainer = null;
+    });
     puzzleModal.appendChild(closeBtn);
-  }
-
-  /* ------------- 独自ドラッグ (pointerイベント) ------------- */
-  let dragTarget = null;
-  let offsetX = 0, offsetY = 0;
-  function onPointerDown(e) {
-    dragTarget = e.currentTarget;
-    dragTarget.setPointerCapture(e.pointerId);
-    const rect = dragTarget.getBoundingClientRect();
-    offsetX = e.clientX - rect.left;
-    offsetY = e.clientY - rect.top;
-    dragTarget.style.position = "absolute";
-    dragTarget.style.zIndex = "9999";
-    dragTarget.style.cursor = "grabbing";
-    dragTarget.addEventListener("pointermove", onPointerMove);
-    dragTarget.addEventListener("pointerup", onPointerUp);
-  }
-  function onPointerMove(e) {
-    if (!dragTarget) return;
-    dragTarget.style.left = (e.clientX - offsetX) + "px";
-    dragTarget.style.top = (e.clientY - offsetY) + "px";
-  }
-  function onPointerUp(e) {
-    if (!dragTarget) return;
-    dragTarget.releasePointerCapture(e.pointerId);
-    dragTarget.removeEventListener("pointermove", onPointerMove);
-    dragTarget.removeEventListener("pointerup", onPointerUp);
-    snapToCell(dragTarget);
-    dragTarget.style.cursor = "grab";
-    dragTarget = null;
-  }
-  function snapToCell(piece) {
-    const pieceRect = piece.getBoundingClientRect();
-    const centerX = pieceRect.left + pieceRect.width / 2;
-    const centerY = pieceRect.top + pieceRect.height / 2;
-    const cells = document.querySelectorAll(".puzzle-cell");
-    for (const cell of cells) {
-      const cellRect = cell.getBoundingClientRect();
-      if (
-        centerX >= cellRect.left && centerX <= cellRect.right &&
-        centerY >= cellRect.top && centerY <= cellRect.bottom
-      ) {
-        cell.appendChild(piece);
-        piece.style.position = "relative";
-        piece.style.left = "0px";
-        piece.style.top = "0px";
-        piece.style.width = "100%";
-        piece.style.height = "100%";
-        checkBoardCompletion();
-        return;
-      }
-    }
-    // ドロップ先が見つからなければ、そのままの位置に留める
   }
 
   /* ------------- 完成判定 ------------- */
@@ -357,9 +315,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!cell.firstElementChild) {
         isComplete = false;
       } else {
-        const piece = cell.firstElementChild;
-        const correctIdx = piece.dataset.correctIndex;
-        const rot = parseInt(piece.dataset.rotation);
+        const container = cell.firstElementChild;
+        const correctIdx = container.dataset.correctIndex;
+        const rot = parseInt(container.dataset.rotation);
         if (correctIdx !== cell.dataset.cellIndex || rot !== 0) {
           isComplete = false;
         }
@@ -368,9 +326,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (isComplete) {
       alert(`${puzzleType}パズルクリア！`);
       puzzleModal.style.display = "none";
+      selectedContainer = null;
       if (puzzleType === "desk") {
         puzzleDeskCleared = true;
-        // 正解画像に差し替え
         deskOverlay.src = "images/noa.png";
       } else {
         puzzleDriveCleared = true;
@@ -379,14 +337,74 @@ document.addEventListener("DOMContentLoaded", () => {
       checkAllPuzzlesCleared();
     }
   }
+
   function checkAllPuzzlesCleared() {
     if (puzzleDeskCleared && puzzleDriveCleared) {
       console.log("エリア2クリア!");
       startArea3Narration();
     }
   }
+
   function startArea3Narration() {
     alert("エリア2クリア! エリア3のナレーションを開始します。");
-    // エリア3以降の処理をここに実装
+    // エリア3以降の処理を実装
   }
+
+  // グローバル変数：現在選択中のピースコンテナ
+  let selectedContainer = null;
+
+  /* ------------- エリア2ゲームシーン生成 ------------- */
+  const gameScreen2 = document.createElement("div");
+  gameScreen2.id = "game-screen2";
+  gameScreen2.className = "scene";
+  gameScreen2.style.position = "relative";
+  gameScreen2.style.width = "100%";
+  gameScreen2.style.height = "100%";
+  document.body.appendChild(gameScreen2);
+  // 背景はCSSで設定済み
+
+  // タップ領域：デスクエリア（エリア2）
+  const deskArea2 = document.createElement("div");
+  deskArea2.id = "desk-area2";
+  deskArea2.style.position = "absolute";
+  deskArea2.style.width = "200px";
+  deskArea2.style.height = "200px";
+  deskArea2.style.top = "40%";
+  deskArea2.style.left = "30%";
+  deskArea2.style.backgroundColor = "rgba(255,0,0,0.3)";
+  deskArea2.style.cursor = "pointer";
+  gameScreen2.appendChild(deskArea2);
+  const deskOverlay = document.createElement("img");
+  deskOverlay.src = "images/bg2_desk.png";
+  deskOverlay.style.position = "absolute";
+  deskOverlay.style.top = "0";
+  deskOverlay.style.left = "0";
+  deskOverlay.style.width = "100%";
+  deskOverlay.style.height = "100%";
+  deskArea2.appendChild(deskOverlay);
+
+  // タップ領域：ドライブエリア（エリア2）
+  const driveArea2 = document.createElement("div");
+  driveArea2.id = "drive-area2";
+  driveArea2.style.position = "absolute";
+  driveArea2.style.width = "200px";
+  driveArea2.style.height = "200px";
+  driveArea2.style.top = "40%";
+  driveArea2.style.left = "60%";
+  driveArea2.style.backgroundColor = "rgba(0,0,255,0.3)";
+  driveArea2.style.cursor = "pointer";
+  gameScreen2.appendChild(driveArea2);
+  const driveOverlay = document.createElement("img");
+  driveOverlay.src = "images/bg2_drive.png";
+  driveOverlay.style.position = "absolute";
+  driveOverlay.style.top = "0";
+  driveOverlay.style.left = "0";
+  driveOverlay.style.width = "100%";
+  driveOverlay.style.height = "100%";
+  driveArea2.appendChild(driveOverlay);
+
+  /* ------------- パズルクリアフラグ管理（エリア2） ------------- */
+  let puzzleDeskCleared = false;
+  let puzzleDriveCleared = false;
+
 });

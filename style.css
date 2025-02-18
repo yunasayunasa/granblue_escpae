@@ -44,6 +44,7 @@ body {
   background: rgba(0,0,0,0.5);
   padding: 20px;
   border-radius: 8px;
+  pointer-events: none; /* これにより、タップが下のタイトル画面に届く */
 }
 
 /* ナレーションシーン */
@@ -234,7 +235,7 @@ body {
   align-items: center;
 }
 
-/* パズルボード: 2×2グリッド (200×200px, セル 100×100px) */
+/* パズルボード: 2×2グリッド (200×200px, 各セル100×100px) */
 #puzzle-board {
   width: 200px;
   height: 200px;
@@ -271,7 +272,6 @@ body {
   height: 100px;
   margin: 0 10px;
   cursor: pointer;
-  /* 回転の基準は中央 */
   transform-origin: center center;
 }
 
@@ -279,18 +279,18 @@ body {
 .puzzle-silhouette {
   position: absolute;
   top: 0; left: 0;
-  width: 100%; height: 100%;
+  width: 100%;
+  height: 100%;
   background-size: 200% 200%;
   background-position: center center;
   cursor: pointer;
-  /* タップで選択状態を示すため */
   transition: outline 0.2s;
 }
 .puzzle-silhouette.selected {
   outline: 2px solid red;
 }
 
-/* グローバル回転ボタン（固定配置） */
+/* グローバル回転ボタン（パネル選択中のものを回転させる） */
 #global-rotate-btn {
   position: fixed;
   bottom: 20px;

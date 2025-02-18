@@ -32,15 +32,12 @@
       <img src="images/bg1.jpg" id="background" alt="背景">
       <img src="images/bg1_bed.png" id="bed" alt="ベッド">
       <img src="images/bg1_caster.png" id="caster" alt="キャスター">
-
-      <!-- ベッドとキャスターのタップ範囲 -->
+      <!-- タップ可能領域 -->
       <div id="bed-area"></div>
       <div id="caster-area"></div>
-
       <!-- 部屋から出るボタン -->
       <button id="exit-button">部屋から出る</button>
     </div>
-
     <!-- ヒント用モーダル -->
     <div id="hint-modal" class="modal">
       <div class="modal-content">
@@ -48,7 +45,6 @@
         <p id="hint-text-in-modal">ここにヒントが表示されます</p>
       </div>
     </div>
-
     <!-- 4桁入力モーダル -->
     <div id="exit-modal" class="modal">
       <div class="modal-content">
@@ -60,9 +56,8 @@
     </div>
   </div>
 
-  <!-- 今回はエリア2ゲームシーンまで動的に生成する -->
-  <!-- 今後、エリア3以降のシーンはHTML側に用意するか、同様にJSで追加してください -->
-
+  <!-- エリア2ゲームシーン（動的生成） -->
+  <!-- ゲームシーン1の背景表示方法に合わせ、背景画像は横長がそのまま表示されるようにします -->
   <script src="script.js" defer></script>
 </body>
 </html>

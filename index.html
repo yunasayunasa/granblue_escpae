@@ -16,7 +16,7 @@
     </div>
   </div>
 
-  <!-- ナレーションシーン -->
+  <!-- ナレーションシーン（エリア1用） -->
   <div id="narration-screen" class="scene" style="display:none;">
     <img src="images/bg1.jpg" alt="背景" class="narration-background">
     <img src="images/gran.png" alt="キャラクター" class="narration-character">
@@ -26,7 +26,7 @@
     </div>
   </div>
 
-  <!-- ゲーム画面 -->
+  <!-- エリア1ゲームシーン -->
   <div id="game-screen" class="scene" style="display:none;">
     <div id="game-container">
       <img src="images/bg1.jpg" id="background" alt="背景">
@@ -41,7 +41,7 @@
       <button id="exit-button">部屋から出る</button>
     </div>
 
-    <!-- ベッドやキャスターのヒント用モーダル -->
+    <!-- ヒント用モーダル -->
     <div id="hint-modal" class="modal">
       <div class="modal-content">
         <img id="hint-image" src="" alt="ヒント">
@@ -49,7 +49,7 @@
       </div>
     </div>
 
-    <!-- 4桁入力のモーダル -->
+    <!-- 4桁入力モーダル -->
     <div id="exit-modal" class="modal">
       <div class="modal-content">
         <img id="exit-image" src="images/bg1_exit.jpg" alt="謎解き">
@@ -59,6 +59,9 @@
       </div>
     </div>
   </div>
+
+  <!-- 今回はエリア2ゲームシーンまで動的に生成する -->
+  <!-- 今後、エリア3以降のシーンはHTML側に用意するか、同様にJSで追加してください -->
 
   <script src="script.js" defer></script>
 </body>

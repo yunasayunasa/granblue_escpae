@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>脱出ゲーム</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>脱出ゲームサンプル</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -17,7 +17,7 @@
   </div>
 
   <!-- ナレーションシーン（エリア1用） -->
-  <div id="narration-screen" class="scene" style="display:none;">
+  <div id="narration-screen" class="scene">
     <img src="images/bg1.jpg" alt="背景" class="narration-background">
     <img src="images/gran.png" alt="キャラクター" class="narration-character">
     <img src="images/log.png" alt="会話フレーム" class="narration-frame">
@@ -27,12 +27,12 @@
   </div>
 
   <!-- エリア1ゲームシーン -->
-  <div id="game-screen" class="scene" style="display:none;">
+  <div id="game-screen" class="scene">
     <div id="game-container">
       <img src="images/bg1.jpg" id="background" alt="背景">
       <img src="images/bg1_bed.png" id="bed" alt="ベッド">
       <img src="images/bg1_caster.png" id="caster" alt="キャスター">
-      <!-- タップ可能領域 -->
+      <!-- タップ領域 -->
       <div id="bed-area"></div>
       <div id="caster-area"></div>
       <!-- 部屋から出るボタン -->
@@ -56,7 +56,8 @@
     </div>
   </div>
 
-  <!-- 今回はエリア2ゲームシーンまでJSで動的生成 -->
+  <!-- パズルモーダル（エリア2ゲームシーン用、JSで利用） -->
+  <div id="puzzle-modal"></div>
 
   <script src="script.js" defer></script>
 </body>

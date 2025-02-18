@@ -159,7 +159,7 @@ body {
   cursor: pointer;
 }
 
-/* モーダル */
+/* モーダル（共通） */
 .modal {
   display: none;
   position: fixed;
@@ -199,7 +199,6 @@ body {
 #hint-button:hover {
   background: #ffdb4d;
 }
-
 /* ヒントテキスト */
 #hint-text {
   position: absolute;
@@ -215,7 +214,7 @@ body {
   display: none;
 }
 
-/* エリア2ゲームシーン（動的生成）の背景設定（ゲームシーン1と同様の横長表示） */
+/* エリア2ゲームシーンの背景（ゲームシーン1と同様横長表示） */
 #game-screen2 {
   background-image: url('images/bg2.jpg');
   background-size: contain;

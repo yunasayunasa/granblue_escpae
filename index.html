@@ -59,6 +59,56 @@
       </div>
     </div>
   </div>
+  
+  
+  // ================================
+  // 第二エリアナレーション
+  // ================================
+  // セリフは「*」で囲まれた各ブロックを1行として、グループで最大3行ずつ表示
+  const narrationTextsArea2 = [
+    "無事部屋を脱出した君は、操舵室にたどり着いた。",
+    "なぜ自分の部屋にあんな鍵が...？考えても答えは出ない...",
+    "その時ふと、あることに気がついた。",
+    "━操舵室に、ノアが居ない。",
+    "どこに行ったのだろう？探しに行こうとすると、声が聞こえた。",
+    "団長さん！ここだよ！聞こえるかい！？",
+    "声はするが、姿は見えず━、君はこの部屋を探すことにした。"
+  ];
+  let currentNarrationIndex = 0;
+  const narrationGroupSize = 3; // 一度に表示する行数
+
+  // グループ分けしてナレーション画面を更新する関数
+  function updateNarrationGroup() {
+    let groupHTML = "";
+    // 最大3行分（残っている分だけ）を表示
+    for (let i = 0; i < narrationGroupSize; i++) {
+      if (currentNarrationIndex < narrationTextsArea2.length) {
+        groupHTML += `<p>${narrationTextsArea2[currentNarrationIndex]}</p>`;
+        currentNarrationIndex++;
+      }
+    }
+    document.getElementById("narration-content").innerHTML = groupHTML;
+  }
+
+  // 第二エリアナレーション開始用関数
+  function startArea2Narration() {
+    currentNarrationIndex = 0; // 初期化
+    updateNarrationGroup();
+    showScene("narration-screen");
+  }
+
+  // ナレーション画面のタップイベント（第二エリア用）
+  // ※このイベントリスナーは、startArea2Narration() を呼んだ後に有効になります。
+  document.getElementById("narration-screen").addEventListener("click", () => {
+    if (currentNarrationIndex < narrationTextsArea2.length) {
+      // 次のグループを表示
+      updateNarrationGroup();
+    } else {
+      // ナレーション終了 → 次のゲームシーンへ移行
+      showScene("game-screen2");
+    }
+  });
+
 
   <script src="script.js" defer></script>
 </body>

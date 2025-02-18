@@ -225,3 +225,10 @@ body {
   text-align: center;
   display: none;
 }
+
+#game-screen2 {
+  background-image: url('images/bg2.jpg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}

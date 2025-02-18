@@ -1,4 +1,4 @@
-/* リセット */
+/* リセット・html,bodyの高さ指定 */
 html, body {
   height: 100%;
 }
@@ -60,7 +60,7 @@ body {
 }
 .narration-character {
   position: absolute;
-  bottom: -40%; /* 必要に応じて調整 */
+  bottom: -40%; /* 調整可能 */
   left: 50%;
   transform: translateX(-50%);
   height: 150%;
@@ -89,7 +89,7 @@ body {
   padding: 20px;
 }
 
-/* ゲーム画面 */
+/* ゲーム画面（エリア1） */
 #game-screen {
   z-index: 100;
 }
@@ -98,42 +98,31 @@ body {
   width: 100%;
   height: 100%;
 }
-#background {
+#background, #bed, #caster {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  object-fit: contain;
+}
+#background {
   width: 100%;
   height: auto;
-  object-fit: contain;
   z-index: 0;
 }
-
-/* アニメーション（お好みで） */
+#bed, #caster {
+  width: 100%;
+  height: auto;
+  z-index: 1;
+}
 @keyframes glow {
   0%   { filter: brightness(1); }
   100% { filter: brightness(1.5); }
 }
 #bed {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  z-index: 1;
   animation: glow 2s infinite alternate;
 }
 #caster {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  z-index: 1;
   animation: glow 2s infinite alternate;
   animation-delay: 1s;
 }
@@ -211,7 +200,7 @@ body {
   background: #ffdb4d;
 }
 
-/* ヒントテキスト（画面上に一時表示） */
+/* ヒントテキスト */
 #hint-text {
   position: absolute;
   bottom: 15%;
@@ -226,6 +215,7 @@ body {
   display: none;
 }
 
+/* エリア2ゲームシーン（動的生成）の背景設定（ゲームシーン1と同様の横長表示） */
 #game-screen2 {
   background-image: url('images/bg2.jpg');
   background-size: contain;

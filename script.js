@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     // 最初のグループ（最大3行）を表示
     let groupHTML = "";
-    for (let i = 0; i < 3 && narrationIndex < narrationTextsArea2.length; i++) {
+    for (let i = 0; i < 1 && narrationIndex < narrationTextsArea2.length; i++) {
       groupHTML += `<p>${narrationTextsArea2[narrationIndex]}</p>`;
       narrationIndex++;
     }

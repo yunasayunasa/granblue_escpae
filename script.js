@@ -91,7 +91,6 @@ document.addEventListener("DOMContentLoaded", () => {
     hintModal.style.display = "flex";
   });
   hintModal.addEventListener("click", () => { hintModal.style.display = "none"; });
-
   exitButton.addEventListener("click", () => {
     exitModal.style.display = "flex";
     passwordInput.value = "";
@@ -136,7 +135,9 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => { hintText.style.display = "none"; }, 3000);
   });
   document.addEventListener("click", (e) => {
-    if (e.target !== hintButton) { hintText.style.display = "none"; }
+    if (e.target !== hintButton) {
+      hintText.style.display = "none";
+    }
   });
 
   /* ------------- エリア2ゲームシーンの作成（動的生成） ------------- */
@@ -201,12 +202,12 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   /* ------------- シルエットパズルモーダル ------------- */
-  // ※rotateボタンはグローバル配置で、選択中のパネルを回転させる
+  // グローバル回転ボタンは別に1つ配置
   function showPuzzleModal(puzzleType) {
     puzzleModal.innerHTML = "";
     puzzleModal.style.display = "flex";
 
-    // パズルボード (200×200, 2×2)
+    // パズルボード (200×200, 2×2グリッド; 各セル100×100)
     const board = document.createElement("div");
     board.id = "puzzle-board";
     puzzleModal.appendChild(board);
@@ -240,14 +241,13 @@ document.addEventListener("DOMContentLoaded", () => {
       ? "images/noa_puzzle.png"
       : "images/roberia_puzzle.png";
 
-    // ピースを4つ生成
+    // 4つのピース生成
     for (let i = 0; i < 4; i++) {
       const container = document.createElement("div");
       container.className = "piece-container";
       container.dataset.correctIndex = i.toString();
-      container.dataset.rotation = "0"; // 初期は0°
+      container.dataset.rotation = "0";
 
-      // ピース本体
       const silhouette = document.createElement("div");
       silhouette.className = "puzzle-silhouette";
       silhouette.dataset.correctIndex = i.toString();
@@ -258,7 +258,7 @@ document.addEventListener("DOMContentLoaded", () => {
       let posY = (i < 2) ? "0%" : "100%";
       silhouette.style.backgroundPosition = `${posX} ${posY}`;
 
-      // タップで選択
+      // タップで選択: コンテナを選択状態に
       container.addEventListener("click", (e) => {
         e.stopPropagation();
         if (selectedContainer && selectedContainer !== container) {
@@ -277,13 +277,13 @@ document.addEventListener("DOMContentLoaded", () => {
       tray.appendChild(container);
     }
 
-    // グローバル回転ボタンをモーダル内に追加（常に固定表示）
-    let rotateBtn = document.getElementById("global-rotate-btn");
-    if (!rotateBtn) {
-      rotateBtn = document.createElement("button");
-      rotateBtn.id = "global-rotate-btn";
-      rotateBtn.textContent = "回転";
-      rotateBtn.addEventListener("click", () => {
+    // グローバル回転ボタン（モーダル内、常に固定）
+    let globalRotateBtn = document.getElementById("global-rotate-btn");
+    if (!globalRotateBtn) {
+      globalRotateBtn = document.createElement("button");
+      globalRotateBtn.id = "global-rotate-btn";
+      globalRotateBtn.textContent = "回転";
+      globalRotateBtn.addEventListener("click", () => {
         if (selectedContainer) {
           let currentRot = parseInt(selectedContainer.dataset.rotation);
           currentRot = (currentRot + 90) % 360;
@@ -292,8 +292,9 @@ document.addEventListener("DOMContentLoaded", () => {
           checkBoardCompletion(puzzleType);
         }
       });
-      document.body.appendChild(rotateBtn);
+      document.body.appendChild(globalRotateBtn);
     }
+
     // 閉じるボタン
     const closeBtn = document.createElement("button");
     closeBtn.textContent = "閉じる";
@@ -347,7 +348,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function startArea3Narration() {
     alert("エリア2クリア! エリア3のナレーションを開始します。");
-    // エリア3以降の処理を実装
+    // エリア3以降の処理をここに実装
   }
 
   // グローバル変数：現在選択中のピースコンテナ
@@ -361,7 +362,7 @@ document.addEventListener("DOMContentLoaded", () => {
   gameScreen2.style.width = "100%";
   gameScreen2.style.height = "100%";
   document.body.appendChild(gameScreen2);
-  // 背景はCSSで設定済み
+  // 背景は CSS により設定済み
 
   // タップ領域：デスクエリア（エリア2）
   const deskArea2 = document.createElement("div");

@@ -93,6 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
     hintModal.style.display = "flex";
   });
   hintModal.addEventListener("click", () => { hintModal.style.display = "none"; });
+
   exitButton.addEventListener("click", () => {
     exitModal.style.display = "flex";
     passwordInput.value = "";
@@ -151,7 +152,7 @@ document.addEventListener("DOMContentLoaded", () => {
   gameScreen2.style.height = "100%";
   document.body.appendChild(gameScreen2);
 
-  // 背景は CSS で設定済み
+  // 背景は CSS により設定済み
 
   // タップ領域：デスクエリア（エリア2）
   const deskArea2 = document.createElement("div");
@@ -220,7 +221,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const cell = document.createElement("div");
       cell.className = "puzzle-cell";
       cell.dataset.cellIndex = i.toString();
-      // セルタップで、選択中のパネルを配置・交換
+      // セルタップで、選択中のパネルを配置・入れ替え
       cell.addEventListener("click", () => {
         if (selectedContainer) {
           if (cell.firstElementChild && cell.firstElementChild !== selectedContainer) {
@@ -257,7 +258,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ? "images/noa_puzzle.png"
       : "images/roberia_puzzle.png";
 
-    // ピースを4つ生成
+    // 4つのピース生成
     for (let i = 0; i < 4; i++) {
       const container = document.createElement("div");
       container.className = "piece-container";
@@ -274,7 +275,7 @@ document.addEventListener("DOMContentLoaded", () => {
       let posY = (i < 2) ? "0%" : "100%";
       silhouette.style.backgroundPosition = `${posX} ${posY}`;
 
-      // タップで選択：選択中ならグローバル変数 selectedContainer に記憶
+      // タップで選択（グローバル変数 selectedContainer に記憶）
       container.addEventListener("click", (e) => {
         e.stopPropagation();
         if (selectedContainer && selectedContainer !== container) {
@@ -294,7 +295,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // グローバル回転ボタン（モーダル外に固定済み）
-    // ※すでに存在していれば何もしない
+    let globalRotateBtn = document.getElementById("global-rotate-btn");
+    if (!globalRotateBtn) {
+      globalRotateBtn = document.createElement("button");
+      globalRotateBtn.id = "global-rotate-btn";
+      globalRotateBtn.textContent = "回転";
+      globalRotateBtn.addEventListener("click", () => {
+        if (selectedContainer) {
+          let currentRot = parseInt(selectedContainer.dataset.rotation);
+          currentRot = (currentRot + 90) % 360;
+          selectedContainer.dataset.rotation = currentRot.toString();
+          selectedContainer.style.transform = `rotate(${currentRot}deg)`;
+          checkBoardCompletion(puzzleType);
+        }
+      });
+      document.body.appendChild(globalRotateBtn);
+    }
 
     // 閉じるボタン
     const closeBtn = document.createElement("button");
@@ -327,17 +343,16 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     if (isComplete) {
       alert(`${puzzleType}パズルクリア！`);
-      // 完成したら、パズルボードをクリアし完成画像を表示する
+      // 完成時、パズルボードをクリアして完成画像を表示
       board.innerHTML = "";
       const finalImg = document.createElement("img");
-      // puzzleType が "desk" なら "noa.png"、"drive" なら "robera.png" を表示
-      finalImg.src = (puzzleType === "desk") ? "images/noa.png" : "images/roberia.png";
       finalImg.style.width = "200px";
       finalImg.style.height = "200px";
+      // puzzleType が "desk" の場合は "noa.png"、"drive" の場合は "roberia.png"
+      finalImg.src = (puzzleType === "desk") ? "images/noa.png" : "images/roberia.png";
       board.appendChild(finalImg);
       puzzleModal.style.display = "none";
       selectedContainer = null;
-      // フラグ管理（必要なら）
     }
   }
 
@@ -394,5 +409,4 @@ document.addEventListener("DOMContentLoaded", () => {
   /* ------------- パズルクリアフラグ管理（エリア2） ------------- */
   let puzzleDeskCleared = false;
   let puzzleDriveCleared = false;
-
 });

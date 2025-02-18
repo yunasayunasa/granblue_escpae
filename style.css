@@ -1,9 +1,4 @@
-/* リセット・html,bodyの高さ指定 */
-html, body {
-  height: 100%;
-}
-* {/* リセット・html,bodyの高さ指定 */
-html, body {/* 1. リセット・基本設定 */
+/* 1. リセット・基本設定 */
 html, body {
   height: 100%;
 }
@@ -226,20 +221,20 @@ body {
   background-position: center;
 }
 
-/* パズルモーダル */
+/* パズルモーダル (白背景) */
 #puzzle-modal {
   display: none;
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  background-color: #fff; /* 白背景 */
+  background-color: #fff;
   z-index: 3000;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-/* パズルボード：2×2グリッド (ボード 200×200px, 各セル 100×100px) */
+/* パズルボード: 2×2グリッド (200×200px, セル 100×100px) */
 #puzzle-board {
   width: 200px;
   height: 200px;
@@ -254,6 +249,7 @@ body {
   height: 100%;
   border: 1px dashed #aaa;
   position: relative;
+  cursor: pointer;
 }
 
 /* ピーストレイ */
@@ -268,470 +264,53 @@ body {
   margin-top: 20px;
 }
 
-/* ピースコンテナ: 固定 100×100px */
+/* ピースコンテナ (固定 100×100px) */
 .piece-container {
   position: relative;
   width: 100px;
   height: 100px;
   margin: 0 10px;
+  cursor: pointer;
+  /* 回転の基準は中央 */
+  transform-origin: center center;
 }
 
-/* ピース本体 (回転対象) */
-.puzzle-piece {
+/* ピース本体 (シルエット) */
+.puzzle-silhouette {
   position: absolute;
   top: 0; left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100%; height: 100%;
   background-size: 200% 200%;
   background-position: center center;
-  touch-action: none;
-  cursor: grab;
-}
-
-/* 回転ボタン (コンテナ固定) */
-.rotate-btn {
-  position: absolute;
-  bottom: 2px;
-  right: 2px;
-  z-index: 10;
   cursor: pointer;
+  /* タップで選択状態を示すため */
+  transition: outline 0.2s;
 }
-  height: 100%;
-}
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+.puzzle-silhouette.selected {
+  outline: 2px solid red;
 }
 
-body {
-  background-color: #ccc;
-  font-family: sans-serif;
-}
-
-/* シーン全体 */
-.scene {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-
-/* タイトル画面 */
-#title-screen {
-  z-index: 100;
-}
-#title-screen .background {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-#title-screen .overlay {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  color: #fff;
-  background: rgba(0,0,0,0.5);
-  padding: 20px;
-  border-radius: 8px;
-}
-
-/* ナレーションシーン */
-#narration-screen {
-  z-index: 100;
-}
-.narration-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 1;
-}
-.narration-character {
-  position: absolute;
-  bottom: -40%; /* 調整可能 */
-  left: 50%;
-  transform: translateX(-50%);
-  height: 150%;
-  width: auto;
-  z-index: 2;
-}
-.narration-frame {
-  position: absolute;
-  bottom: -20;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  height: auto;
-  z-index: 3;
-}
-.narration-text {
-  position: absolute;
-  bottom: 10%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80%;
-  z-index: 4;
-  color: #fff;
-  font-size: 1.5rem;
-  text-align: center;
-  padding: 20px;
-}
-
-/* ゲーム画面（エリア1） */
-#game-screen {
-  z-index: 100;
-}
-#game-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-#background, #bed, #caster {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  object-fit: contain;
-}
-#background {
-  width: 100%;
-  height: auto;
-  z-index: 0;
-}
-#bed, #caster {
-  width: 100%;
-  height: auto;
-  z-index: 1;
-}
-@keyframes glow {
-  0%   { filter: brightness(1); }
-  100% { filter: brightness(1.5); }
-}
-#bed {
-  animation: glow 2s infinite alternate;
-}
-#caster {
-  animation: glow 2s infinite alternate;
-  animation-delay: 1s;
-}
-
-/* タップ範囲 */
-#bed-area,
-#caster-area {
-  position: absolute;
-  z-index: 999;
-  background: transparent;
-  cursor: pointer;
-}
-#bed-area {
-  top: 50%;
-  left: 40%;
-  width: 45%;
-  height: 10%;
-}
-#caster-area {
-  top: 50%;
-  left: 15%;
-  width: 20%;
-  height: 10%;
-}
-
-/* 部屋から出るボタン */
-#exit-button {
-  position: absolute;
-  top: 28%;
-  right: 5%;
-  z-index: 1000;
-  padding: 8px 12px;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-/* モーダル（共通） */
-.modal {
-  display: none;
+/* グローバル回転ボタン（固定配置） */
+#global-rotate-btn {
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.7);
-  z-index: 2000;
-  justify-content: center;
-  align-items: center;
-}
-.modal-content {
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 10px;
-  border-radius: 8px;
-  font-size: 1.2rem;
-  text-align: center;
-}
-.modal img {
-  max-width: 90%;
-  max-height: 90%;
-}
-
-/* ヒントボタン */
-#hint-button {
-  position: absolute;
-  top: 10%;
-  right: 5%;
-  padding: 10px;
+  bottom: 20px;
+  right: 20px;
+  z-index: 3500;
+  padding: 10px 15px;
   background: #ffcc00;
-  color: black;
-  font-size: 1rem;
   border: none;
   border-radius: 5px;
+  font-size: 1rem;
   cursor: pointer;
 }
-#hint-button:hover {
-  background: #ffdb4d;
-}
-/* ヒントテキスト */
-#hint-text {
+
+/* 閉じるボタン */
+.close-btn {
   position: absolute;
-  bottom: 15%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.7);
-  color: white;
-  padding: 10px;
-  border-radius: 8px;
-  font-size: 1.2rem;
-  text-align: center;
-  display: none;
-}
-
-/* エリア2ゲームシーンの背景（ゲームシーン1と同様横長表示） */
-#game-screen2 {
-  background-image: url('images/bg2.jpg');
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
+  top: 10px; right: 10px;
+  cursor: pointer;
+  padding: 5px 10px;
   background-color: #ccc;
-  font-family: sans-serif;
-}
-
-/* シーン全体 */
-.scene {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-
-/* タイトル画面 */
-#title-screen {
-  z-index: 100;
-}
-#title-screen .background {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-#title-screen .overlay {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  color: #fff;
-  background: rgba(0,0,0,0.5);
-  padding: 20px;
-  border-radius: 8px;
-}
-
-/* ナレーションシーン */
-#narration-screen {
-  z-index: 100;
-}
-.narration-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 1;
-}
-.narration-character {
-  position: absolute;
-  bottom: -40%; /* 調整可能 */
-  left: 50%;
-  transform: translateX(-50%);
-  height: 150%;
-  width: auto;
-  z-index: 2;
-}
-.narration-frame {
-  position: absolute;
-  bottom: -20;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  height: auto;
-  z-index: 3;
-}
-.narration-text {
-  position: absolute;
-  bottom: 10%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80%;
-  z-index: 4;
-  color: #fff;
-  font-size: 1.5rem;
-  text-align: center;
-  padding: 20px;
-}
-
-/* ゲーム画面（エリア1） */
-#game-screen {
-  z-index: 100;
-}
-#game-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-#background, #bed, #caster {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  object-fit: contain;
-}
-#background {
-  width: 100%;
-  height: auto;
-  z-index: 0;
-}
-#bed, #caster {
-  width: 100%;
-  height: auto;
-  z-index: 1;
-}
-@keyframes glow {
-  0%   { filter: brightness(1); }
-  100% { filter: brightness(1.5); }
-}
-#bed {
-  animation: glow 2s infinite alternate;
-}
-#caster {
-  animation: glow 2s infinite alternate;
-  animation-delay: 1s;
-}
-
-/* タップ範囲 */
-#bed-area,
-#caster-area {
-  position: absolute;
-  z-index: 999;
-  background: transparent;
-  cursor: pointer;
-}
-#bed-area {
-  top: 50%;
-  left: 40%;
-  width: 45%;
-  height: 10%;
-}
-#caster-area {
-  top: 50%;
-  left: 15%;
-  width: 20%;
-  height: 10%;
-}
-
-/* 部屋から出るボタン */
-#exit-button {
-  position: absolute;
-  top: 28%;
-  right: 5%;
-  z-index: 1000;
-  padding: 8px 12px;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-/* モーダル（共通） */
-.modal {
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.7);
-  z-index: 2000;
-  justify-content: center;
-  align-items: center;
-}
-.modal-content {
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 10px;
-  border-radius: 8px;
-  font-size: 1.2rem;
-  text-align: center;
-}
-.modal img {
-  max-width: 90%;
-  max-height: 90%;
-}
-
-/* ヒントボタン */
-#hint-button {
-  position: absolute;
-  top: 10%;
-  right: 5%;
-  padding: 10px;
-  background: #ffcc00;
-  color: black;
-  font-size: 1rem;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-#hint-button:hover {
-  background: #ffdb4d;
-}
-/* ヒントテキスト */
-#hint-text {
-  position: absolute;
-  bottom: 15%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.7);
-  color: white;
-  padding: 10px;
-  border-radius: 8px;
-  font-size: 1.2rem;
-  text-align: center;
-  display: none;
-}
-
-/* エリア2ゲームシーンの背景（ゲームシーン1と同様横長表示） */
-#game-screen2 {
-  background-image: url('images/bg2.jpg');
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
+  border: 1px solid #999;
+  border-radius: 4px;
 }

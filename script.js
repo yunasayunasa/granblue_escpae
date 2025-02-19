@@ -215,4 +215,12 @@ document.addEventListener("DOMContentLoaded", () => {
   driveOverlay.style.height = "100%";
   driveArea2.appendChild(driveOverlay);
 
- 
+ const titleScreen = document.getElementById("title-screen");
+titleScreen.addEventListener("click", () => {
+  alert("タイトルタップ (click)");
+  showScene("narration-screen");
+});
+titleScreen.addEventListener("touchstart", () => {
+  alert("タイトルタップ (touchstart)");
+  showScene("narration-screen");
+});

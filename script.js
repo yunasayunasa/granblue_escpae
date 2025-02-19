@@ -229,40 +229,26 @@ document.addEventListener("DOMContentLoaded", () => {
   /* =============================
      パズルモーダル (タップ式)
      ============================= */
- // --- グローバル変数（パズル関連）
-let selectedPiece = null; // 現在タップで選択中のパネル（.piece-container またはその内部の .puzzle-piece）
-let puzzleDeskCleared = false;
-let puzzleDriveCleared = false;
-
-// --- シルエットパズルモーダルの表示・操作関数
-function showPuzzleModal(puzzleType) {
-  // puzzleModal は HTML に <div id="puzzle-modal"></div> がある前提
   const puzzleModal = document.getElementById("puzzle-modal");
-  puzzleModal.innerHTML = "";
-  puzzleModal.style.display = "flex";
+  let selectedPiece = null; // 現在選択中のピース
 
-  // --- パズルボードの作成 (200×200, 2×2グリッド: 各セル 100×100) ---
-  const board = document.createElement("div");
-  board.id = "puzzle-board";
-  puzzleModal.appendChild(board);
+  function showPuzzleModal(puzzleType) {
+    puzzleModal.innerHTML = "";
+    puzzleModal.style.display = "flex";
 
-  for (let i = 0; i < 4; i++) {
-    const cell = document.createElement("div");
-    cell.className = "puzzle-cell";
-    cell.dataset.cellIndex = i.toString();
-    // セルタップ時：既に選択中のパネルがあれば配置またはスワップ
-    cell.addEventListener("click", () => {
-      if (selectedPiece) {
-        if (cell.firstElementChild && cell.firstElementChild !== selectedPiece) {
-          // 交換する場合
-          let existing = cell.firstElementChild;
-          let parentOfSelected = selectedPiece.parentNode;
-          cell.replaceChild(selectedPiece, existing);
-          parentOfSelected.appendChild(existing);
-          selectedPiece.classList.remove("selected");
-          selectedPiece = null;
-        } else {
-          // セルが空の場合：配置する
+    // パズルボード (200×200, 2×2)
+    const board = document.createElement("div");
+    board.id = "puzzle-board";
+    puzzleModal.appendChild(board);
+
+    // 4つのセル
+    for (let i = 0; i < 4; i++) {
+      const cell = document.createElement("div");
+      cell.className = "puzzle-cell";
+      cell.dataset.cellIndex = i.toString();
+      // セルをタップすると、選択中のピースがあれば配置
+      cell.addEventListener("click", () => {
+        if (selectedPiece) {
           cell.appendChild(selectedPiece);
           selectedPiece.style.position = "relative";
           selectedPiece.style.left = "0";
@@ -273,132 +259,125 @@ function showPuzzleModal(puzzleType) {
           checkBoardCompletion(puzzleType);
           selectedPiece = null;
         }
-      }
-    });
-    board.appendChild(cell);
-  }
-
-  // --- ピーストレイの作成 ---
-  const tray = document.createElement("div");
-  tray.id = "puzzle-tray";
-  puzzleModal.appendChild(tray);
-
-  // ピース画像のパス（puzzleType により分岐）
-  let puzzleImageSrc = (puzzleType === "desk")
-    ? "images/noa_puzzle.png"
-    : "images/roberia_puzzle.png";
-
-  // 4つのピース（パネル）を生成
-  for (let i = 0; i < 4; i++) {
-    const container = document.createElement("div");
-    container.className = "piece-container";
-    container.dataset.correctIndex = i.toString();
-    container.dataset.rotation = "0";
-
-    // パネル本体（シルエット）
-    const silhouette = document.createElement("div");
-    silhouette.className = "puzzle-silhouette";
-    silhouette.dataset.correctIndex = i.toString();
-    silhouette.dataset.rotation = "0";
-    silhouette.style.backgroundImage = `url(${puzzleImageSrc})`;
-    silhouette.style.backgroundSize = "200% 200%";
-    // 分割表示：i=0→左上、i=1→右上、i=2→左下、i=3→右下
-    let posX = (i % 2 === 0) ? "0%" : "100%";
-    let posY = (i < 2) ? "0%" : "100%";
-    silhouette.style.backgroundPosition = `${posX} ${posY}`;
-
-    // タップで選択状態の切替
-    container.addEventListener("click", (e) => {
-      e.stopPropagation();
-      if (selectedPiece && selectedPiece !== container) {
-        selectedPiece.classList.remove("selected");
-      }
-      if (selectedPiece === container) {
-        container.classList.remove("selected");
-        selectedPiece = null;
-      } else {
-        container.classList.add("selected");
-        selectedPiece = container;
-      }
-    });
-
-    container.appendChild(silhouette);
-    tray.appendChild(container);
-  }
-
-  // --- グローバル回転ボタン（モーダル外、既に存在していなければ生成） ---
-  let globalRotateBtn = document.getElementById("global-rotate-btn");
-  if (!globalRotateBtn) {
-    globalRotateBtn = document.createElement("button");
-    globalRotateBtn.id = "global-rotate-btn";
-    globalRotateBtn.textContent = "回転";
-    globalRotateBtn.addEventListener("click", () => {
-      if (selectedPiece) {
-        let currentRot = parseInt(selectedPiece.dataset.rotation);
-        currentRot = (currentRot + 90) % 360;
-        selectedPiece.dataset.rotation = currentRot.toString();
-        selectedPiece.style.transform = `rotate(${currentRot}deg)`;
-        checkBoardCompletion(puzzleType);
-      }
-    });
-    document.body.appendChild(globalRotateBtn);
-  }
-
-  // --- 閉じるボタン ---
-  const closeBtn = document.createElement("button");
-  closeBtn.textContent = "閉じる";
-  closeBtn.className = "close-btn";
-  closeBtn.addEventListener("click", () => {
-    puzzleModal.style.display = "none";
-    selectedPiece = null;
-  });
-  puzzleModal.appendChild(closeBtn);
-}
-
-/**
- * checkBoardCompletion(puzzleType)
- * パズルボード内の各セルに正しいパネルが配置され、
- * かつ回転が 0° ならパズルクリアと判定し、完成画像を表示する
- */
-function checkBoardCompletion(puzzleType) {
-  const board = document.getElementById("puzzle-board");
-  if (!board) return;
-  let isComplete = true;
-  const cells = board.querySelectorAll(".puzzle-cell");
-  cells.forEach(cell => {
-    if (!cell.firstElementChild) {
-      isComplete = false;
-    } else {
-      const container = cell.firstElementChild;
-      const correctIdx = container.dataset.correctIndex;
-      const rot = parseInt(container.dataset.rotation);
-      if (correctIdx !== cell.dataset.cellIndex || rot !== 0) {
-        isComplete = false;
-      }
+      });
+      board.appendChild(cell);
     }
-  });
-  if (isComplete) {
-    alert(`${puzzleType}パズルクリア！`);
-    // パズル完成時、パズルボードをクリアして完成画像を表示
-    board.innerHTML = "";
-    const finalImg = document.createElement("img");
-    finalImg.style.width = "200px";
-    finalImg.style.height = "200px";
-    finalImg.src = (puzzleType === "desk") ? "images/noa.png" : "images/roberia.png";
-    board.appendChild(finalImg);
-    document.getElementById("puzzle-modal").style.display = "none";
-    selectedPiece = null;
-  }
-}
 
-/**
- * checkAllPuzzlesCleared()
- * 必要に応じて、デスクとドライブ両方のパズルがクリアしたか管理
- */
-function checkAllPuzzlesCleared() {
-  // この例では、各パズルクリア時に puzzleDeskCleared / puzzleDriveCleared を設定している前提
-  if (puzzleDeskCleared && puzzleDriveCleared) {
-    console.log("エリア2クリア!");
-    alert("エリア2クリア！ エリア3へ…");
+    // ピーストレイ
+    const tray = document.createElement("div");
+    tray.id = "puzzle-tray";
+    puzzleModal.appendChild(tray);
+
+    let puzzleImageSrc = (puzzleType === "desk")
+      ? "images/noa_puzzle.png"
+      : "images/roberia_puzzle.png";
+
+    // ピースを4つ
+    for (let i = 0; i < 4; i++) {
+      const container = document.createElement("div");
+      container.className = "piece-container";
+
+      const piece = document.createElement("div");
+      piece.className = "puzzle-piece";
+      piece.dataset.correctIndex = i.toString();
+
+      // ランダム回転 (0,90,180,270)
+      const rotations = [0, 90, 180, 270];
+      const r = rotations[Math.floor(Math.random() * rotations.length)];
+      piece.dataset.rotation = r.toString();
+      piece.style.transform = `rotate(${r}deg)`;
+
+      piece.style.backgroundImage = `url(${puzzleImageSrc})`;
+      piece.style.backgroundSize = "200% 200%";
+      let posX = (i % 2 === 0) ? "0%" : "100%";
+      let posY = (i < 2) ? "0%" : "100%";
+      piece.style.backgroundPosition = `${posX} ${posY}`;
+
+      // ピースをタップすると選択状態を切り替え
+      piece.addEventListener("click", (e) => {
+        e.stopPropagation();
+        // 既に他のピースが選択されていたら解除
+        if (selectedPiece && selectedPiece !== piece) {
+          selectedPiece.classList.remove("selected");
+        }
+        // 同じピースを再度タップで解除
+        if (selectedPiece === piece) {
+          piece.classList.remove("selected");
+          selectedPiece = null;
+        } else {
+          piece.classList.add("selected");
+          selectedPiece = piece;
+        }
+      });
+
+      // 回転ボタン (ピースコンテナに固定)
+      const rotateBtn = document.createElement("button");
+      rotateBtn.textContent = "回転";
+      rotateBtn.className = "rotate-btn";
+      rotateBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        let currentRot = parseInt(piece.dataset.rotation);
+        currentRot = (currentRot + 90) % 360;
+        piece.dataset.rotation = currentRot.toString();
+        piece.style.transform = `rotate(${currentRot}deg)`;
+        checkBoardCompletion(puzzleType);
+      });
+
+      container.appendChild(piece);
+      container.appendChild(rotateBtn);
+      tray.appendChild(container);
+    }
+
+    // 閉じるボタン
+    const closeBtn = document.createElement("button");
+    closeBtn.textContent = "閉じる";
+    closeBtn.className = "close-btn";
+    closeBtn.addEventListener("click", () => {
+      puzzleModal.style.display = "none";
+      selectedPiece = null;
+    });
+    puzzleModal.appendChild(closeBtn);
   }
-}
+
+  // 完成判定
+  function checkBoardCompletion(puzzleType) {
+    const board = document.getElementById("puzzle-board");
+    if (!board) return;
+    let isComplete = true;
+    const cells = board.querySelectorAll(".puzzle-cell");
+    cells.forEach(cell => {
+      if (!cell.firstElementChild) {
+        isComplete = false;
+      } else {
+        const piece = cell.firstElementChild;
+        const correctIdx = piece.dataset.correctIndex;
+        const rot = parseInt(piece.dataset.rotation);
+        // 正しいセルかつ回転が0°
+        if (correctIdx !== cell.dataset.cellIndex || rot !== 0) {
+          isComplete = false;
+        }
+      }
+    });
+    if (isComplete) {
+      alert(`${puzzleType}パズルクリア！`);
+      puzzleModal.style.display = "none";
+      // フラグ立て
+      if (puzzleType === "desk") {
+        puzzleDeskCleared = true;
+      } else {
+        puzzleDriveCleared = true;
+      }
+      selectedPiece = null;
+      checkAllPuzzlesCleared();
+    }
+  }
+  function checkAllPuzzlesCleared() {
+    if (puzzleDeskCleared && puzzleDriveCleared) {
+      console.log("エリア2クリア!");
+      // ここでエリア3ナレーションへ移行
+      alert("エリア2クリア！ エリア3へ…");
+    }
+  }
+});
+

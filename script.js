@@ -123,7 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const correctPassword = "4593";
     if (/^\d{4}$/.test(input)) {
       if (input === correctPassword) {
-        alert("鍵が開いた！\nエリア1クリア！\n次はエリア2のナレーションです。");
+        alert("鍵が開いた！\nエリア1クリア！");
         exitModal.style.display = "none";
         startArea2Narration();
       } else {
@@ -248,8 +248,8 @@ deskArea2.id = "desk-area2";
 deskArea2.style.position = "absolute";
 // 背景画像を中央基準 (top=50%, left=50%) にするなら transform する or パーセント指定
 // ここでは例として top=40%, left=30%
-deskArea2.style.top = "60%";
-deskArea2.style.left = "60%";
+deskArea2.style.top = "50%";
+deskArea2.style.left = "50%";
 deskArea2.style.width = "35%";
 deskArea2.style.height = "15%";
 deskArea2.style.backgroundColor = "rgba(255,0,0,0.3)";
@@ -261,10 +261,10 @@ gameContainer2.appendChild(deskArea2);
 const driveArea2 = document.createElement("div");
 driveArea2.id = "drive-area2";
 driveArea2.style.position = "absolute";
-driveArea2.style.top = "40%";
-driveArea2.style.left = "30%";
+driveArea2.style.top = "45%";
+driveArea2.style.left = "20%";
 driveArea2.style.width = "10%";
-driveArea2.style.height = "15%";
+driveArea2.style.height = "10%";
 driveArea2.style.backgroundColor = "rgba(0,0,255,0.3)";
 driveArea2.style.cursor = "pointer";
 driveArea2.style.zIndex = "2";
@@ -372,7 +372,7 @@ driveArea2.addEventListener("click", () => {
 
   function checkSilhouetteQuizCleared() {
     if (deskQuizCleared && driveQuizCleared) {
-      alert("正解！ エリア2クリア！ エリア3のナレーションを開始します。");
+      alert("正解！ エリア2クリア！ ");
       // ここでエリア3ナレーション開始処理を呼び出す
       // 例: startArea3Narration();
     }

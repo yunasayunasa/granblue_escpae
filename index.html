@@ -3,24 +3,68 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>タイトルテスト</title>
+  <title>タップ式パズルサンプル</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
   <!-- タイトル画面 -->
   <div id="title-screen" class="scene">
     <img src="images/title.jpg" alt="タイトル背景" class="background">
     <div class="overlay">
       <h1>GRANBLUE ESCAPE</h1>
-      <p>タップしてスタート!</p>
+      <p>画面をタップしてスタート!</p>
     </div>
   </div>
 
-  <!-- ナレーション画面（シンプルなテスト用） -->
+  <!-- ナレーションシーン -->
   <div id="narration-screen" class="scene">
-    <p style="text-align:center; margin-top:50%;">ナレーション画面です</p>
+    <img src="images/bg1.jpg" alt="背景" class="narration-background">
+    <img src="images/gran.png" alt="キャラクター" class="narration-character">
+    <img src="images/log.png" alt="会話フレーム" class="narration-frame">
+    <div class="narration-text" id="narration-content">
+      <p>君は目を覚ますと、自分の部屋にいた…</p>
+    </div>
   </div>
 
-  <script src="script.js"></script>
+  <!-- エリア1ゲームシーン -->
+  <div id="game-screen" class="scene">
+    <div id="game-container">
+      <img src="images/bg1.jpg" id="background" alt="背景">
+      <img src="images/bg1_bed.png" id="bed" alt="ベッド">
+      <img src="images/bg1_caster.png" id="caster" alt="キャスター">
+
+      <!-- タップ範囲 -->
+      <div id="bed-area"></div>
+      <div id="caster-area"></div>
+      <!-- 部屋から出るボタン -->
+      <button id="exit-button">部屋から出る</button>
+    </div>
+
+    <!-- ヒント用モーダル -->
+    <div id="hint-modal" class="modal">
+      <div class="modal-content">
+        <img id="hint-image" src="" alt="ヒント">
+        <p id="hint-text-in-modal">ここにヒントが表示されます</p>
+      </div>
+    </div>
+
+    <!-- 4桁入力モーダル -->
+    <div id="exit-modal" class="modal">
+      <div class="modal-content">
+        <img id="exit-image" src="images/bg1_exit.jpg" alt="謎解き">
+        <p>4桁の数字を入力してください：</p>
+        <input type="text" id="password-input" maxlength="4">
+        <button id="password-submit">鍵を開ける</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- エリア2ゲームシーン（動的生成） -->
+
+  <!-- パズルモーダル（白背景、タップ式パズル用） -->
+  <div id="puzzle-modal"></div>
+
+  <script src="script.js" defer></script>
 </body>
 </html>

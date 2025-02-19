@@ -208,13 +208,14 @@ deskArea2.appendChild(deskOverlay);
   gameScreen2.appendChild(driveArea2);
 
   const driveOverlay = document.createElement("img");
-  driveOverlay.src = "images/bg2_drive.png";
-  driveOverlay.style.position = "absolute";
-  driveOverlay.style.top = "0";
-  driveOverlay.style.left = "0";
-  driveOverlay.style.width = "100%";
-  driveOverlay.style.height = "100%";
-  driveArea2.appendChild(driveOverlay);
+driveOverlay.src = "images/bg2_drive.png";
+driveOverlay.style.position = "absolute";
+driveOverlay.style.top = "50%";
+driveOverlay.style.left = "50%";
+driveOverlay.style.transform = "translate(-50%, -50%)";
+driveOverlay.style.width = "100%";
+driveOverlay.style.height = "auto";
+driveArea2.appendChild(driveOverlay);
 
   // フラグ管理（エリア2シルエットクイズ用）
   let deskQuizCleared = false;

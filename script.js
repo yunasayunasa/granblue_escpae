@@ -17,10 +17,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 初期はタイトル画面
   showScene("title-screen");
-  document.getElementById("title-screen").addEventListener("click", () => {
-    showScene("narration-screen");
-  });
-
+ document.getElementById("title-screen").addEventListener("click", () => {
+  alert("タイトル画面がタップされました");
+  showScene("narration-screen");
+});
   /* =============================
      ナレーション管理
      ============================= */

@@ -215,11 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
   driveOverlay.style.height = "100%";
   driveArea2.appendChild(driveOverlay);
 
-  // フラグ管理
-  let puzzleDeskCleared = false;
-  let puzzleDriveCleared = false;
-
-  deskArea2.addEventListener("click", () => {
+   deskArea2.addEventListener("click", () => {
     showPuzzleModal("desk");
   });
   driveArea2.addEventListener("click", () => {

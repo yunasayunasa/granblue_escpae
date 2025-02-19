@@ -371,13 +371,14 @@ driveArea2.addEventListener("click", () => {
 }
 
   function checkSilhouetteQuizCleared() {
-    if (deskQuizCleared && driveQuizCleared) {
-      alert("正解！ エリア2クリア！ ");
-      // ここでエリア3ナレーション開始処理を呼び出す
-     startArea3Narration(); 
-       }
-      }
-    function startArea3Narration() {
+  if (deskQuizCleared && driveQuizCleared) {
+    alert("正解！ エリア2クリア！ ");
+    startArea3Narration();
+  }
+}
+
+// エリア3ナレーションシーンを生成する関数（checkSilhouetteQuizCleared() の外に定義）
+function startArea3Narration() {
   // エリア3ナレーションシーンを動的に作成
   const narrationScreen3 = document.createElement("div");
   narrationScreen3.id = "narration-screen3";
@@ -408,7 +409,7 @@ driveArea2.addEventListener("click", () => {
   characterContainer.style.alignItems = "center";
   narrationScreen3.appendChild(characterContainer);
 
-  // 4キャラクターの作成（初期状態では、例として noa.png と roberia.png を表示）
+  // 4キャラクターの作成（例として noa.png と roberia.png を表示）
   const characters = {};
   const characterFiles = ["noa.png", "roberia.png", "noa_negative.png", "roberia_negative.png"];
   characterFiles.forEach(filename => {
@@ -440,7 +441,7 @@ driveArea2.addEventListener("click", () => {
   // 初期ナレーションテキスト
   narrationTextContainer.innerHTML = "<p>ここに封印されているのは誰？</p>";
 
-  // 選択肢ボタンを配置するコンテナ
+  // 選択肢ボタンの配置
   const choiceContainer = document.createElement("div");
   choiceContainer.id = "choice-container";
   choiceContainer.style.position = "absolute";
@@ -452,30 +453,23 @@ driveArea2.addEventListener("click", () => {
   choiceContainer.style.gap = "20px";
   narrationScreen3.appendChild(choiceContainer);
 
-  // 選択肢Aボタン
   const choiceAButton = document.createElement("button");
   choiceAButton.textContent = "選択肢A";
   choiceContainer.appendChild(choiceAButton);
 
-  // 選択肢Bボタン
   const choiceBButton = document.createElement("button");
   choiceBButton.textContent = "選択肢B";
   choiceContainer.appendChild(choiceBButton);
 
-  // 選択肢Aを選んだ場合
   choiceAButton.addEventListener("click", () => {
     narrationTextContainer.innerHTML = "<p>選択肢Aが選ばれました。パズルゲームが始まります。</p>";
-    // ここでキャラクターの表示変更など、必要ならアニメーションも追加可能
-    // 例: characters["noa_negative.png"].style.display = "block";
     setTimeout(() => {
       startArea3Game("A");
     }, 2000);
   });
 
-  // 選択肢Bを選んだ場合
   choiceBButton.addEventListener("click", () => {
     narrationTextContainer.innerHTML = "<p>選択肢Bが選ばれました。4択クイズが始まります。</p>";
-    // 例: characters["roberia_negative.png"].style.display = "block";
     setTimeout(() => {
       startArea3Game("B");
     }, 2000);
@@ -483,13 +477,9 @@ driveArea2.addEventListener("click", () => {
 }
 
 function startArea3Game(choice) {
-  // ここに選択肢に応じたゲームシーンへの遷移処理を記述します。
-  // 例：alert として表示する
   alert("エリア3ゲーム開始: 選択肢 " + choice);
-  // 実際のゲーム開始処理へ遷移するコードをここに追加してください
+  // 選択肢に応じたゲームシーンへの遷移処理を追加
 }
-    }
-  }
 
   // ----- タイトル画面のタップイベント（デバッグ用） -----
   const titleScreen = document.getElementById("title-screen");

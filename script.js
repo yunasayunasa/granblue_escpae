@@ -192,7 +192,7 @@ deskOverlay.style.top = "50%";
 deskOverlay.style.left = "50%";
 deskOverlay.style.transform = "translate(-50%, -50%)";
 deskOverlay.style.width = "200%";
-deskOverlay.style.height = "200";
+deskOverlay.style.height = "200%";
 deskArea2.appendChild(deskOverlay);
 
   // タップ領域 (ドライブ)
@@ -214,7 +214,7 @@ driveOverlay.style.top = "50%";
 driveOverlay.style.left = "50%";
 driveOverlay.style.transform = "translate(-50%, -50%)";
 driveOverlay.style.width = "200%";
-driveOverlay.style.height = "200";
+driveOverlay.style.height = "200%";
 driveArea2.appendChild(driveOverlay);
 
   // フラグ管理（エリア2シルエットクイズ用）

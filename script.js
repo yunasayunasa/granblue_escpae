@@ -187,7 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const deskOverlay = document.createElement("img");
 deskOverlay.src = "images/bg2_desk.png";
-deskOverlay.style.position = "relative";
+deskOverlay.style.position = "absolute";
 deskOverlay.style.top = "50%";
 deskOverlay.style.left = "50%";
 deskOverlay.style.transform = "translate(-50%, -50%)";

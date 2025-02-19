@@ -165,82 +165,78 @@ document.addEventListener("DOMContentLoaded", () => {
    エリア2ゲームシーン (動的生成)
 ============================= */
 
-// 1) エリア2の「scene」コンテナ
+// 親コンテナ (scene)
 const gameScreen2 = document.createElement("div");
 gameScreen2.id = "game-screen2";
 gameScreen2.className = "scene";
-// 位置とサイズは全画面
 gameScreen2.style.position = "absolute";
 gameScreen2.style.width = "100%";
 gameScreen2.style.height = "100%";
 document.body.appendChild(gameScreen2);
 
-// 2) エリア2の「コンテナ」(例: game-container2)を用意し、背景や透過画像を配置
+// 内側のコンテナ（相対座標系）
 const gameContainer2 = document.createElement("div");
 gameContainer2.id = "game-container2";
-gameContainer2.style.position = "relative"; // 子要素の絶対配置の基準にする
+gameContainer2.style.position = "relative";
 gameContainer2.style.width = "100%";
 gameContainer2.style.height = "100%";
 gameScreen2.appendChild(gameContainer2);
 
-// 3) 背景画像 (bg2.jpg) を <img> で配置
+// 背景画像
 const bg2 = document.createElement("img");
 bg2.src = "images/bg2.jpg";
 bg2.id = "background2";
 bg2.style.position = "absolute";
-bg2.style.top = "50%";
-bg2.style.left = "50%";
-bg2.style.transform = "translate(-50%, -50%)";
+bg2.style.top = "0";
+bg2.style.left = "0";
 bg2.style.width = "100%";
-bg2.style.height = "auto";
-// オプション: 背景の比率を保ちつつ全体に収めるなら objectFit + parentOverflowHidden なども検討
-// bg2.style.objectFit = "contain";
+bg2.style.height = "100%";
+bg2.style.objectFit = "cover";
 bg2.style.zIndex = "0";
 gameContainer2.appendChild(bg2);
 
-// 4) デスク透過画像 (bg2_desk.png)
+// デスク透過画像
 const deskOverlay = document.createElement("img");
 deskOverlay.src = "images/bg2_desk.png";
 deskOverlay.id = "desk-overlay";
 deskOverlay.style.position = "absolute";
-deskOverlay.style.top = "50%";
-deskOverlay.style.left = "50%";
-deskOverlay.style.transform = "translate(-50%, -50%)";
+deskOverlay.style.top = "0";
+deskOverlay.style.left = "0";
 deskOverlay.style.width = "100%";
-deskOverlay.style.height = "auto";
+deskOverlay.style.height = "100%";
+deskOverlay.style.objectFit = "cover";
+// 光らせたい画像は zIndex=1 で背景より前面
 deskOverlay.style.zIndex = "1";
 gameContainer2.appendChild(deskOverlay);
 
-// 5) ドライブ透過画像 (bg2_drive.png)
+// ドライブ透過画像
 const driveOverlay = document.createElement("img");
 driveOverlay.src = "images/bg2_drive.png";
 driveOverlay.id = "drive-overlay";
 driveOverlay.style.position = "absolute";
-driveOverlay.style.top = "50%";
-driveOverlay.style.left = "50%";
-driveOverlay.style.transform = "translate(-50%, -50%)";
+driveOverlay.style.top = "0";
+driveOverlay.style.left = "0";
 driveOverlay.style.width = "100%";
-driveOverlay.style.height = "auto";
+driveOverlay.style.height = "100%";
+driveOverlay.style.objectFit = "cover";
 driveOverlay.style.zIndex = "1";
 gameContainer2.appendChild(driveOverlay);
 
-// 6) タップ領域 (deskArea2, driveArea2) を配置
-//   透過画像と同じコンテナ (gameContainer2) の上に絶対配置
+// デスク領域（半透明タップ範囲）
 const deskArea2 = document.createElement("div");
 deskArea2.id = "desk-area2";
 deskArea2.style.position = "absolute";
-// 背景画像の中央基準で座標指定する例:
-//   たとえば、(top: 50%, left: 30%) は適宜調整が必要
 deskArea2.style.top = "40%";
 deskArea2.style.left = "30%";
-// 幅・高さは実際の画像上のクリック範囲に合わせて
 deskArea2.style.width = "15%";
 deskArea2.style.height = "15%";
+// 半透明色を前面に見せるため zIndex=2
+deskArea2.style.zIndex = "2";
+deskArea2.style.backgroundColor = "rgba(255,0,0,0.3)";
 deskArea2.style.cursor = "pointer";
-deskArea2.style.zIndex = "999";
 gameContainer2.appendChild(deskArea2);
 
-// 同様に driveArea2
+// ドライブ領域
 const driveArea2 = document.createElement("div");
 driveArea2.id = "drive-area2";
 driveArea2.style.position = "absolute";
@@ -248,11 +244,12 @@ driveArea2.style.top = "40%";
 driveArea2.style.left = "60%";
 driveArea2.style.width = "15%";
 driveArea2.style.height = "15%";
+driveArea2.style.zIndex = "2";
+driveArea2.style.backgroundColor = "rgba(0,0,255,0.3)";
 driveArea2.style.cursor = "pointer";
-driveArea2.style.zIndex = "999";
 gameContainer2.appendChild(driveArea2);
 
-// 7) あとはデスク・ドライブのタップ処理
+// タップイベント
 deskArea2.addEventListener("click", () => {
   showSilhouetteQuiz("desk");
 });
@@ -266,12 +263,7 @@ driveArea2.addEventListener("click", () => {
   let deskQuizCleared = false;
   let driveQuizCleared = false;
 
-  deskArea2.addEventListener("click", () => {
-    showSilhouetteQuiz("desk");
-  });
-  driveArea2.addEventListener("click", () => {
-    showSilhouetteQuiz("drive");
-  });
+  
 
   /* =============================
      シルエットクイズ機能（エリア2用）

@@ -187,7 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const deskOverlay = document.createElement("img");
 deskOverlay.src = "images/bg2_desk.png";
-deskOverlay.style.position = "absolute";
+deskOverlay.style.position = "relative";
 deskOverlay.style.top = "50%";
 deskOverlay.style.left = "50%";
 deskOverlay.style.transform = "translate(-50%, -50%)";
@@ -209,7 +209,7 @@ deskArea2.appendChild(deskOverlay);
 
   const driveOverlay = document.createElement("img");
 driveOverlay.src = "images/bg2_drive.png";
-driveOverlay.style.position = "absolute";
+driveOverlay.style.position = "relative";
 driveOverlay.style.top = "50%";
 driveOverlay.style.left = "50%";
 driveOverlay.style.transform = "translate(-50%, -50%)";

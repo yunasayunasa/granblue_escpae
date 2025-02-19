@@ -42,7 +42,7 @@ body {
   border-radius: 8px;
 }
 
-/* ナレーションシーン 
+/* ナレーションシーン */
 #narration-screen {
   z-index: 100;
 }
@@ -229,7 +229,7 @@ body {
   width: 100%; height: 100%;
   border: 1px dashed #aaa;
   cursor: pointer; /* セルをタップで配置 */
-}
+
 
 /* ピーストレイ 
 #puzzle-tray {
@@ -281,4 +281,3 @@ body {
   background-color: #ccc;
   border: 1px solid #999;
   border-radius: 4px;*/
-}

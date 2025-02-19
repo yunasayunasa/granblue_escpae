@@ -230,7 +230,7 @@ document.addEventListener("DOMContentLoaded", () => {
      パズルモーダル (タップ式)
      ============================= */
   const puzzleModal = document.getElementById("puzzle-modal");
-  let selectedPiece = null; // 現在選択中のピース
+  let selectedContainer = null; // 現在選択中のピース
 
   function showPuzzleModal(puzzleType) {
     puzzleModal.innerHTML = "";

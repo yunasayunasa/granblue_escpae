@@ -156,6 +156,37 @@ window.checkBoardCompletion = function(puzzleType) {
   }
 };
 
+ // フラグ管理
+  let puzzleDeskCleared = false;
+  let puzzleDriveCleared = false;
+
+  deskArea2.addEventListener("click", () => {
+    showPuzzleModal("desk");
+  });
+  driveArea2.addEventListener("click", () => {
+    showPuzzleModal("drive");
+  });
+
+     // フラグ立て
+      if (puzzleType === "desk") {
+        puzzleDeskCleared = true;
+      } else {
+        puzzleDriveCleared = true;
+      }
+      selectedPiece = null;
+      checkAllPuzzlesCleared();
+    }
+  }
+  function checkAllPuzzlesCleared() {
+    if (puzzleDeskCleared && puzzleDriveCleared) {
+      console.log("エリア2クリア!");
+      // ここでエリア3ナレーションへ移行
+      alert("エリア2クリア！ エリア3へ…");
+    }
+  }
+});
+
+
 window.checkAllPuzzlesCleared = function() {
   if (window.puzzleDeskCleared && window.puzzleDriveCleared) {
     console.log("エリア2クリア!");

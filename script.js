@@ -252,13 +252,6 @@ driveArea2.style.cursor = "pointer";
 driveArea2.style.zIndex = "2";
 gameContainer2.appendChild(driveArea2);
 
-// タップイベント登録（そのまま）
-deskArea2.addEventListener("click", () => {
-  showSilhouetteQuiz("desk");
-});
-driveArea2.addEventListener("click", () => {
-  showSilhouetteQuiz("drive");
-});
 
 // タップイベント
 deskArea2.addEventListener("click", () => {

@@ -265,7 +265,7 @@ driveArea2.style.top = "48%";
 driveArea2.style.left = "23%";
 driveArea2.style.width = "10%";
 driveArea2.style.height = "10%";
-driveArea2.style.backgroundColor = "rgba(0,0,255,0.3)";
+driveArea2.style.backgroundColor = "rgba(0,0,0,0.0)";
 driveArea2.style.cursor = "pointer";
 driveArea2.style.zIndex = "2";
 gameContainer2.appendChild(driveArea2);

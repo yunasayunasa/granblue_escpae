@@ -169,7 +169,6 @@ document.addEventListener("DOMContentLoaded", () => {
 const gameScreen2 = document.createElement("div");
 gameScreen2.id = "game-screen2";
 gameScreen2.className = "scene";
-// 画面全体にフィット
 gameScreen2.style.position = "absolute";
 gameScreen2.style.top = "0";
 gameScreen2.style.left = "0";
@@ -183,14 +182,14 @@ gameContainer2.id = "game-container2";
 gameContainer2.style.position = "relative";  // 子要素の絶対配置の基準
 gameContainer2.style.width = "100%";
 gameContainer2.style.height = "100%";
-// 背景画像を CSS 背景として設定（object-fit: contain で全体表示）
+// 背景画像はここで CSS 背景として設定
 gameContainer2.style.backgroundImage = "url('images/bg2.jpg')";
-gameContainer2.style.backgroundSize = "contain";
+gameContainer2.style.backgroundSize = "contain"; // 画像全体を表示
 gameContainer2.style.backgroundPosition = "center";
 gameContainer2.style.backgroundRepeat = "no-repeat";
 gameScreen2.appendChild(gameContainer2);
 
-// 3) デスク透過画像（bg2_desk.png）を配置
+// 3) デスク透過画像 (bg2_desk.png) を配置
 const deskOverlay = document.createElement("img");
 deskOverlay.src = "images/bg2_desk.png";
 deskOverlay.id = "desk-overlay";
@@ -199,12 +198,11 @@ deskOverlay.style.top = "0";
 deskOverlay.style.left = "0";
 deskOverlay.style.width = "100%";
 deskOverlay.style.height = "100%";
-deskOverlay.style.objectFit = "contain";  // 背景画像と同じ表示方法にする
-// 透過画像は背景より前面（z-index: 1）
-deskOverlay.style.zIndex = "1";
+deskOverlay.style.objectFit = "cover";
+deskOverlay.style.zIndex = "1"; // 背景より前面
 gameContainer2.appendChild(deskOverlay);
 
-// 4) ドライブ透過画像（bg2_drive.png）を配置
+// 4) ドライブ透過画像 (bg2_drive.png) を配置
 const driveOverlay = document.createElement("img");
 driveOverlay.src = "images/bg2_drive.png";
 driveOverlay.id = "drive-overlay";
@@ -213,42 +211,38 @@ driveOverlay.style.top = "0";
 driveOverlay.style.left = "0";
 driveOverlay.style.width = "100%";
 driveOverlay.style.height = "100%";
-driveOverlay.style.objectFit = "contain";
+driveOverlay.style.objectFit = "cover";
 driveOverlay.style.zIndex = "1";
 gameContainer2.appendChild(driveOverlay);
 
-// ※ 透過画像は CSS 側で glow アニメーションが適用される前提です。
-
-// 5) タップ領域の配置
-// ここでは、タップ領域は背景や透過画像より前面に表示（z-index: 2）し、サイズ・位置はパーセント指定で調整します。
-
-// デスク領域
+// 5) タップ領域 (デスク領域とドライブ領域) を配置
 const deskArea2 = document.createElement("div");
 deskArea2.id = "desk-area2";
 deskArea2.style.position = "absolute";
-deskArea2.style.top = "40%";     // この数値は必要に応じて調整してください
-deskArea2.style.left = "30%";    // この数値も調整可能
-deskArea2.style.width = "15%";   // クリック範囲の幅（例）
-deskArea2.style.height = "15%";  // クリック範囲の高さ（例）
-deskArea2.style.backgroundColor = "rgba(255,0,0,0.3)";  // 半透明の赤
+// 位置は親コンテナ内の割合で設定（必要に応じて調整）
+deskArea2.style.top = "40%";
+deskArea2.style.left = "30%";
+// サイズはパーセンテージ（例: 幅15%, 高さ15%）
+deskArea2.style.width = "15%";
+deskArea2.style.height = "15%";
+deskArea2.style.backgroundColor = "rgba(255,0,0,0.3)";
 deskArea2.style.cursor = "pointer";
-deskArea2.style.zIndex = "2";    // 透過画像より前面
+deskArea2.style.zIndex = "2"; // 透過画像より前面
 gameContainer2.appendChild(deskArea2);
 
-// ドライブ領域
 const driveArea2 = document.createElement("div");
 driveArea2.id = "drive-area2";
 driveArea2.style.position = "absolute";
-driveArea2.style.top = "40%";    // 調整可能
-driveArea2.style.left = "60%";   // 調整可能
+driveArea2.style.top = "40%";
+driveArea2.style.left = "60%";
 driveArea2.style.width = "15%";
 driveArea2.style.height = "15%";
-driveArea2.style.backgroundColor = "rgba(0,0,255,0.3)";  // 半透明の青
+driveArea2.style.backgroundColor = "rgba(0,0,255,0.3)";
 driveArea2.style.cursor = "pointer";
 driveArea2.style.zIndex = "2";
 gameContainer2.appendChild(driveArea2);
 
-// 6) タップ領域のイベント登録（シルエットクイズの表示）
+// 6) タップ領域のイベント登録（シルエットクイズ表示）
 deskArea2.addEventListener("click", () => {
   showSilhouetteQuiz("desk");
 });

@@ -23,11 +23,10 @@ body {
 
 /* タイトル画面 */
 #title-screen {
-  z-index: 110;
+  z-index: 100;
   display: block; /* 最初に表示 */
 }
 #title-screen .background {
-    pointer-events: auto;
   position: absolute;
   width: 100%; height: 100%;
   object-fit: cover;

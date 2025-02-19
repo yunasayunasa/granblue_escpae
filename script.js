@@ -186,13 +186,14 @@ document.addEventListener("DOMContentLoaded", () => {
   gameScreen2.appendChild(deskArea2);
 
   const deskOverlay = document.createElement("img");
-  deskOverlay.src = "images/bg2_desk.png";
-  deskOverlay.style.position = "absolute";
-  deskOverlay.style.top = "0";
-  deskOverlay.style.left = "0";
-  deskOverlay.style.width = "100%";
-  deskOverlay.style.height = "100%";
-  deskArea2.appendChild(deskOverlay);
+deskOverlay.src = "images/bg2_desk.png";
+deskOverlay.style.position = "absolute";
+deskOverlay.style.top = "50%";
+deskOverlay.style.left = "50%";
+deskOverlay.style.transform = "translate(-50%, -50%)";
+deskOverlay.style.width = "100%";
+deskOverlay.style.height = "auto";
+deskArea2.appendChild(deskOverlay);
 
   // タップ領域 (ドライブ)
   const driveArea2 = document.createElement("div");

@@ -210,8 +210,7 @@ deskOverlay.style.left = "0";
 deskOverlay.style.width = "100%";
 deskOverlay.style.height = "100%";
 deskOverlay.style.objectFit = "cover";
-// 光らせたい画像は zIndex=1 で背景より前面
-deskOverlay.style.zIndex = "1";
+deskOverlay.style.zIndex = "1"; // 背景より前面
 gameContainer2.appendChild(deskOverlay);
 
 // ドライブ透過画像
@@ -227,7 +226,7 @@ driveOverlay.style.objectFit = "cover";
 driveOverlay.style.zIndex = "1";
 gameContainer2.appendChild(driveOverlay);
 
-// デスク領域（半透明タップ範囲）
+// デスク領域
 const deskArea2 = document.createElement("div");
 deskArea2.id = "desk-area2";
 deskArea2.style.position = "absolute";
@@ -235,10 +234,9 @@ deskArea2.style.top = "40%";
 deskArea2.style.left = "30%";
 deskArea2.style.width = "15%";
 deskArea2.style.height = "15%";
-// 半透明色を前面に見せるため zIndex=2
-deskArea2.style.zIndex = "2";
 deskArea2.style.backgroundColor = "rgba(255,0,0,0.3)";
 deskArea2.style.cursor = "pointer";
+deskArea2.style.zIndex = "2"; // 透過画像より前面
 gameContainer2.appendChild(deskArea2);
 
 // ドライブ領域
@@ -249,10 +247,18 @@ driveArea2.style.top = "40%";
 driveArea2.style.left = "60%";
 driveArea2.style.width = "15%";
 driveArea2.style.height = "15%";
-driveArea2.style.zIndex = "2";
 driveArea2.style.backgroundColor = "rgba(0,0,255,0.3)";
 driveArea2.style.cursor = "pointer";
+driveArea2.style.zIndex = "2";
 gameContainer2.appendChild(driveArea2);
+
+// タップイベント登録（そのまま）
+deskArea2.addEventListener("click", () => {
+  showSilhouetteQuiz("desk");
+});
+driveArea2.addEventListener("click", () => {
+  showSilhouetteQuiz("drive");
+});
 
 // タップイベント
 deskArea2.addEventListener("click", () => {

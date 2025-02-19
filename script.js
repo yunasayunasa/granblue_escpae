@@ -191,7 +191,7 @@ bg2.style.top = "0";
 bg2.style.left = "0";
 bg2.style.width = "100%";
 bg2.style.height = "100%";
-bg2.style.objectFit = "cover";
+bg2.style.objectFit = "contain";
 bg2.style.zIndex = "0";
 gameContainer2.appendChild(bg2);
 

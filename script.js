@@ -165,7 +165,7 @@ document.addEventListener("DOMContentLoaded", () => {
    エリア2ゲームシーン (動的生成)
 ============================= */
 
-// 親コンテナ (scene)
+// 1) エリア2の「scene」コンテナ
 const gameScreen2 = document.createElement("div");
 gameScreen2.id = "game-screen2";
 gameScreen2.className = "scene";
@@ -174,14 +174,19 @@ gameScreen2.style.width = "100%";
 gameScreen2.style.height = "100%";
 document.body.appendChild(gameScreen2);
 
-// 内側のコンテナ（相対座標系）
+// 2) エリア2の「コンテナ」(gameContainer2)を用意し、背景とオブジェクトを配置
 const gameContainer2 = document.createElement("div");
 gameContainer2.id = "game-container2";
-gameContainer2.style.position = "relative";
+gameContainer2.style.position = "relative";  // 子要素の絶対配置の基準
 gameContainer2.style.width = "100%";
 gameContainer2.style.height = "100%";
-gameScreen2.appendChild(gameContainer2);
 
+// ← ここで背景画像を CSS 背景として設定します
+gameContainer2.style.backgroundImage = "url('images/bg2.jpg')";
+gameContainer2.style.backgroundSize = "cover";      // 全体を覆う
+gameContainer2.style.backgroundPosition = "center";   // 中央寄せ
+gameContainer2.style.backgroundRepeat = "no-repeat";
+gameScreen2.appendChild(gameContainer2);
 // 背景画像
 const bg2 = document.createElement("img");
 bg2.src = "images/bg2.jpg";

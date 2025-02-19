@@ -194,14 +194,14 @@ body {
   display: none;
 }
 
-/* エリア2ゲームシーン (動的生成) */
+/* エリア2ゲームシーン (動的生成) 
 #game-screen2 {
   background-image: url('images/bg2.jpg');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
 }
-
+*/
 /* パズルモーダル (白背景) */
 #puzzle-modal {
   display: none;

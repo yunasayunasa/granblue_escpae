@@ -247,19 +247,30 @@ document.addEventListener("DOMContentLoaded", () => {
       cell.className = "puzzle-cell";
       cell.dataset.cellIndex = i.toString();
       // セルをタップすると、選択中のピースがあれば配置
-      cell.addEventListener("click", () => {
-        if (selectedPiece) {
-          cell.appendChild(selectedPiece);
-          selectedPiece.style.position = "relative";
-          selectedPiece.style.left = "0";
-          selectedPiece.style.top = "0";
-          selectedPiece.style.width = "100%";
-          selectedPiece.style.height = "100%";
-          selectedPiece.classList.remove("selected");
-          checkBoardCompletion(puzzleType);
-          selectedPiece = null;
-        }
-      });
+     cell.addEventListener("click", () => {
+  if (selectedPiece) {
+    if (cell.firstElementChild && cell.firstElementChild !== selectedPiece) {
+      // すでにパネルが配置されている場合は、交換（スワップ）する
+      let existing = cell.firstElementChild;
+      let parentOfSelected = selectedPiece.parentNode;
+      cell.replaceChild(selectedPiece, existing);
+      parentOfSelected.appendChild(existing);
+      selectedPiece.classList.remove("selected");
+      selectedPiece = null;
+    } else {
+      // セルが空の場合は、そのまま配置
+      cell.appendChild(selectedPiece);
+      selectedPiece.style.position = "relative";
+      selectedPiece.style.left = "0";
+      selectedPiece.style.top = "0";
+      selectedPiece.style.width = "100%";
+      selectedPiece.style.height = "100%";
+      selectedPiece.classList.remove("selected");
+      checkBoardCompletion(puzzleType);
+      selectedPiece = null;
+    }
+  }
+});
       board.appendChild(cell);
     }
 
@@ -359,9 +370,19 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
     });
-    if (isComplete) {
-      alert(`${puzzleType}パズルクリア！`);
-      puzzleModal.style.display = "none";
+   if (isComplete) {
+  alert(`${puzzleType}パズルクリア！`);
+  // 完成時、パズルボード内をクリアして完成画像を表示する
+  board.innerHTML = "";
+  const finalImg = document.createElement("img");
+  finalImg.style.width = "200px";
+  finalImg.style.height = "200px";
+  // 例：puzzleType が "desk" の場合は "images/noa.png"、"drive" の場合は "images/roberia.png"
+  finalImg.src = (puzzleType === "desk") ? "images/noa.png" : "images/roberia.png";
+  board.appendChild(finalImg);
+  document.getElementById("puzzle-modal").style.display = "none";
+  selectedPiece = null;
+}
       // フラグ立て
       if (puzzleType === "desk") {
         puzzleDeskCleared = true;

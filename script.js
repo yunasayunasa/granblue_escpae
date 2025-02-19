@@ -248,9 +248,9 @@ deskArea2.id = "desk-area2";
 deskArea2.style.position = "absolute";
 // 背景画像を中央基準 (top=50%, left=50%) にするなら transform する or パーセント指定
 // ここでは例として top=40%, left=30%
-deskArea2.style.top = "40%";
-deskArea2.style.left = "30%";
-deskArea2.style.width = "15%";
+deskArea2.style.top = "50%";
+deskArea2.style.left = "60%";
+deskArea2.style.width = "30%";
 deskArea2.style.height = "15%";
 deskArea2.style.backgroundColor = "rgba(255,0,0,0.3)";
 deskArea2.style.cursor = "pointer";
@@ -262,7 +262,7 @@ const driveArea2 = document.createElement("div");
 driveArea2.id = "drive-area2";
 driveArea2.style.position = "absolute";
 driveArea2.style.top = "40%";
-driveArea2.style.left = "60%";
+driveArea2.style.left = "40%";
 driveArea2.style.width = "15%";
 driveArea2.style.height = "15%";
 driveArea2.style.backgroundColor = "rgba(0,0,255,0.3)";
@@ -290,76 +290,85 @@ driveArea2.addEventListener("click", () => {
      シルエットクイズ機能（エリア2用）
      ============================= */
   function showSilhouetteQuiz(area) {
-    const quizModal = document.getElementById("puzzle-modal");
-    quizModal.innerHTML = "";
-    quizModal.style.display = "flex";
+  const quizModal = document.getElementById("puzzle-modal");
+  if (!quizModal) return;
+  quizModal.innerHTML = "";
+  quizModal.style.display = "flex";
+  quizModal.style.flexDirection = "column";
+  quizModal.style.justifyContent = "center";
+  quizModal.style.alignItems = "center";
 
-    // ① シルエット画像の表示
-    const silhouetteImg = document.createElement("img");
-    silhouetteImg.style.width = "80%";
-    silhouetteImg.style.height = "auto";
-    if (area === "desk") {
-      silhouetteImg.src = "images/noa_puzzle.png"; // デスク領域の場合
-    } else if (area === "drive") {
-      silhouetteImg.src = "images/roberia_puzzle.png"; // ドライブ領域の場合
-    }
-    quizModal.appendChild(silhouetteImg);
+  // ★ ここでテキストを追加
+  const questionText = document.createElement("p");
+  questionText.textContent = "ここに封印されているのは誰？";
+  questionText.style.marginBottom = "10px"; // 余白を少し入れる
+  quizModal.appendChild(questionText);
 
-    // ② 「回答する」ボタン
-    const answerButton = document.createElement("button");
-    answerButton.textContent = "回答する";
-    answerButton.style.marginTop = "10px";
-    quizModal.appendChild(answerButton);
-
-    answerButton.addEventListener("click", () => {
-      // 入力欄がまだない場合、作成
-      if (!quizModal.querySelector("input")) {
-        const inputField = document.createElement("input");
-        inputField.type = "text";
-        inputField.placeholder = "カタカナで入力";
-        inputField.style.marginTop = "10px";
-        quizModal.appendChild(inputField);
-
-        const submitButton = document.createElement("button");
-        submitButton.textContent = "送信";
-        submitButton.style.marginTop = "10px";
-        quizModal.appendChild(submitButton);
-
-        submitButton.addEventListener("click", () => {
-          const answer = inputField.value.trim();
-          if (area === "desk") {
-            if (answer === "ノア") {
-              alert("正解！");
-              deskQuizCleared = true;
-              quizModal.style.display = "none";
-              checkSilhouetteQuizCleared();
-            } else {
-              alert("不正解。再入力してください。");
-            }
-          } else if (area === "drive") {
-            if (answer === "ロベリア") {
-              alert("正解！");
-              driveQuizCleared = true;
-              quizModal.style.display = "none";
-              checkSilhouetteQuizCleared();
-            } else {
-              alert("不正解。再入力してください。");
-            }
-          }
-        });
-      }
-    });
-
-    // ③ 閉じるボタン
-    const closeBtn = document.createElement("button");
-    closeBtn.textContent = "閉じる";
-    closeBtn.className = "close-btn";
-    closeBtn.style.marginTop = "10px";
-    closeBtn.addEventListener("click", () => {
-      quizModal.style.display = "none";
-    });
-    quizModal.appendChild(closeBtn);
+  // ① シルエット画像の表示
+  const silhouetteImg = document.createElement("img");
+  silhouetteImg.style.width = "80%";
+  silhouetteImg.style.height = "auto";
+  if (area === "desk") {
+    silhouetteImg.src = "images/noa_puzzle.png";
+  } else if (area === "drive") {
+    silhouetteImg.src = "images/roberia_puzzle.png";
   }
+  quizModal.appendChild(silhouetteImg);
+
+  // ② 「回答する」ボタン
+  const answerButton = document.createElement("button");
+  answerButton.textContent = "回答する";
+  answerButton.style.marginTop = "10px";
+  quizModal.appendChild(answerButton);
+
+  answerButton.addEventListener("click", () => {
+    if (!quizModal.querySelector("input")) {
+      const inputField = document.createElement("input");
+      inputField.type = "text";
+      inputField.placeholder = "カタカナで入力";
+      inputField.style.marginTop = "10px";
+      quizModal.appendChild(inputField);
+
+      const submitButton = document.createElement("button");
+      submitButton.textContent = "送信";
+      submitButton.style.marginTop = "10px";
+      quizModal.appendChild(submitButton);
+
+      submitButton.addEventListener("click", () => {
+        const answer = inputField.value.trim();
+        if (area === "desk") {
+          if (answer === "ノア") {
+            alert("正解！");
+            deskQuizCleared = true;
+            quizModal.style.display = "none";
+            checkSilhouetteQuizCleared();
+          } else {
+            alert("不正解。再入力してください。");
+          }
+        } else if (area === "drive") {
+          if (answer === "ロベリア") {
+            alert("正解！");
+            driveQuizCleared = true;
+            quizModal.style.display = "none";
+            checkSilhouetteQuizCleared();
+          } else {
+            alert("不正解。再入力してください。");
+          }
+        }
+      });
+    }
+  });
+
+  // ③ 閉じるボタン
+  const closeBtn = document.createElement("button");
+  closeBtn.textContent = "閉じる";
+  closeBtn.className = "close-btn";
+  closeBtn.style.marginTop = "10px";
+  closeBtn.addEventListener("click", () => {
+    quizModal.style.display = "none";
+  });
+  quizModal.appendChild(closeBtn);
+}
 
   function checkSilhouetteQuizCleared() {
     if (deskQuizCleared && driveQuizCleared) {

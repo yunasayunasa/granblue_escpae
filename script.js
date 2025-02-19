@@ -222,11 +222,18 @@ function handleTitleTap(e) {
   showScene("narration-screen");
 }
 
+// 親要素に登録
 titleScreen.addEventListener("click", handleTitleTap);
 titleScreen.addEventListener("touchstart", handleTitleTap);
 
-// さらに、子要素にも追加
-document.querySelector("#title-screen .background").addEventListener("click", handleTitleTap);
-document.querySelector("#title-screen .background").addEventListener("touchstart", handleTitleTap);
-document.querySelector("#title-screen .overlay").addEventListener("click", handleTitleTap);
-document.querySelector("#title-screen .overlay").addEventListener("touchstart", handleTitleTap);
+// 子要素にも登録（デバッグ用）
+const bg = document.querySelector("#title-screen .background");
+const overlay = document.querySelector("#title-screen .overlay");
+if(bg) {
+  bg.addEventListener("click", handleTitleTap);
+  bg.addEventListener("touchstart", handleTitleTap);
+}
+if(overlay) {
+  overlay.addEventListener("click", handleTitleTap);
+  overlay.addEventListener("touchstart", handleTitleTap);
+}

@@ -216,11 +216,17 @@ document.addEventListener("DOMContentLoaded", () => {
   driveArea2.appendChild(driveOverlay);
 
  const titleScreen = document.getElementById("title-screen");
-titleScreen.addEventListener("click", () => {
-  alert("タイトルタップ (click)");
+
+function handleTitleTap(e) {
+  alert("タイトルタップ発生");
   showScene("narration-screen");
-});
-titleScreen.addEventListener("touchstart", () => {
-  alert("タイトルタップ (touchstart)");
-  showScene("narration-screen");
-});
+}
+
+titleScreen.addEventListener("click", handleTitleTap);
+titleScreen.addEventListener("touchstart", handleTitleTap);
+
+// さらに、子要素にも追加
+document.querySelector("#title-screen .background").addEventListener("click", handleTitleTap);
+document.querySelector("#title-screen .background").addEventListener("touchstart", handleTitleTap);
+document.querySelector("#title-screen .overlay").addEventListener("click", handleTitleTap);
+document.querySelector("#title-screen .overlay").addEventListener("touchstart", handleTitleTap);

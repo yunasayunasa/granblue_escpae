@@ -283,13 +283,7 @@ body {
   border-radius: 4px;
 }
 
-/* エリア2の透過画像にも glow アニメーションを適用 */
-#desk-area2 img,
-#drive-area2 img {
+#desk-overlay,
+#drive-overlay {
   animation: glow 2s infinite alternate;
-}
-
-/* もしドライブ側に少し遅延させたい場合（例:1秒） */
-#drive-area2 img {
-  animation-delay: 1s;
 }

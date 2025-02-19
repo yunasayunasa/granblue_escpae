@@ -1,3 +1,8 @@
+document.addEventListener("DOMContentLoaded", () => {
+  // ここにパズル関連のコードをすべて記述する
+  // 例：グローバル変数、showPuzzleModal、checkBoardCompletion など
+});
+
 // --- パズル関連グローバル変数 ---
 window.selectedContainer = null;  // 現在選択中のパネル（ピースコンテナ）
 window.puzzleDeskCleared = false;   // デスクパズルクリアフラグ（必要に応じて）

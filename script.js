@@ -165,10 +165,11 @@ document.addEventListener("DOMContentLoaded", () => {
    エリア2ゲームシーン (動的生成)
 ============================= */
 
-// 1) エリア2の「scene」コンテナを作成
+// 1) エリア2の「scene」コンテナ
 const gameScreen2 = document.createElement("div");
 gameScreen2.id = "game-screen2";
 gameScreen2.className = "scene";
+// 全画面に配置
 gameScreen2.style.position = "absolute";
 gameScreen2.style.top = "0";
 gameScreen2.style.left = "0";
@@ -176,60 +177,87 @@ gameScreen2.style.width = "100%";
 gameScreen2.style.height = "100%";
 document.body.appendChild(gameScreen2);
 
-// 2) エリア2の「コンテナ」(gameContainer2)を作成（背景およびオブジェクトの配置基準）
+// 2) エリア2のコンテナ (gameContainer2)
 const gameContainer2 = document.createElement("div");
 gameContainer2.id = "game-container2";
-gameContainer2.style.position = "relative";  // 子要素の絶対配置の基準
+// ここを relative にして、子要素を絶対配置で重ねる
+gameContainer2.style.position = "relative";
 gameContainer2.style.width = "100%";
 gameContainer2.style.height = "100%";
-// 背景画像はここで CSS 背景として設定
-gameContainer2.style.backgroundImage = "url('images/bg2.jpg')";
-gameContainer2.style.backgroundSize = "contain"; // 画像全体を表示
-gameContainer2.style.backgroundPosition = "center";
-gameContainer2.style.backgroundRepeat = "no-repeat";
 gameScreen2.appendChild(gameContainer2);
 
-// 3) デスク透過画像 (bg2_desk.png) を配置
+/* 
+   (A) 背景画像 (bg2.jpg) を <img> で配置
+   (B) 透過画像 (bg2_desk.png, bg2_drive.png) も同じ座標系で重ねる
+   → 3枚とも width=100%, height=auto でアスペクト比を保つ
+   → 親要素のサイズに合わせて表示し、余白が出ても「全体が映る」ようにしたい場合は objectFit=contain
+*/
+
+// (A) 背景画像
+const bg2 = document.createElement("img");
+bg2.src = "images/bg2.jpg";
+bg2.id = "background2";
+bg2.style.position = "absolute";
+bg2.style.top = "50%";
+bg2.style.left = "50%";
+bg2.style.transform = "translate(-50%, -50%)";
+bg2.style.width = "100%";
+bg2.style.height = "auto";
+// 画像全体を表示しつつ余白が出る場合はしょうがない (contain)
+bg2.style.objectFit = "contain";
+bg2.style.zIndex = "0";
+gameContainer2.appendChild(bg2);
+
+// (B1) デスク透過画像
 const deskOverlay = document.createElement("img");
 deskOverlay.src = "images/bg2_desk.png";
 deskOverlay.id = "desk-overlay";
 deskOverlay.style.position = "absolute";
-deskOverlay.style.top = "0";
-deskOverlay.style.left = "0";
+deskOverlay.style.top = "50%";
+deskOverlay.style.left = "50%";
+deskOverlay.style.transform = "translate(-50%, -50%)";
 deskOverlay.style.width = "100%";
-deskOverlay.style.height = "100%";
-deskOverlay.style.objectFit = "cover";
-deskOverlay.style.zIndex = "1"; // 背景より前面
+deskOverlay.style.height = "auto";
+deskOverlay.style.objectFit = "contain";
+deskOverlay.style.zIndex = "1"; // 背景より前
 gameContainer2.appendChild(deskOverlay);
 
-// 4) ドライブ透過画像 (bg2_drive.png) を配置
+// (B2) ドライブ透過画像
 const driveOverlay = document.createElement("img");
 driveOverlay.src = "images/bg2_drive.png";
 driveOverlay.id = "drive-overlay";
 driveOverlay.style.position = "absolute";
-driveOverlay.style.top = "0";
-driveOverlay.style.left = "0";
+driveOverlay.style.top = "50%";
+driveOverlay.style.left = "50%";
+driveOverlay.style.transform = "translate(-50%, -50%)";
 driveOverlay.style.width = "100%";
-driveOverlay.style.height = "100%";
-driveOverlay.style.objectFit = "cover";
+driveOverlay.style.height = "auto";
+driveOverlay.style.objectFit = "contain";
 driveOverlay.style.zIndex = "1";
 gameContainer2.appendChild(driveOverlay);
 
-// 5) タップ領域 (デスク領域とドライブ領域) を配置
+/*
+   (C) タップ領域 (deskArea2, driveArea2)
+   → 親要素と同じ座標系(absolute) で、前面(zIndex=2) に配置
+   → 半透明色が見えるようにする
+*/
+
+// デスク領域
 const deskArea2 = document.createElement("div");
 deskArea2.id = "desk-area2";
 deskArea2.style.position = "absolute";
-// 位置は親コンテナ内の割合で設定（必要に応じて調整）
+// 背景画像を中央基準 (top=50%, left=50%) にするなら transform する or パーセント指定
+// ここでは例として top=40%, left=30%
 deskArea2.style.top = "40%";
 deskArea2.style.left = "30%";
-// サイズはパーセンテージ（例: 幅15%, 高さ15%）
 deskArea2.style.width = "15%";
 deskArea2.style.height = "15%";
 deskArea2.style.backgroundColor = "rgba(255,0,0,0.3)";
 deskArea2.style.cursor = "pointer";
-deskArea2.style.zIndex = "2"; // 透過画像より前面
+deskArea2.style.zIndex = "2";
 gameContainer2.appendChild(deskArea2);
 
+// ドライブ領域
 const driveArea2 = document.createElement("div");
 driveArea2.id = "drive-area2";
 driveArea2.style.position = "absolute";
@@ -242,7 +270,7 @@ driveArea2.style.cursor = "pointer";
 driveArea2.style.zIndex = "2";
 gameContainer2.appendChild(driveArea2);
 
-// 6) タップ領域のイベント登録（シルエットクイズ表示）
+// タップイベント (シルエットクイズ)
 deskArea2.addEventListener("click", () => {
   showSilhouetteQuiz("desk");
 });

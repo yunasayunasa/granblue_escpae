@@ -224,7 +224,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* =============================
      パズルモーダル (タップ式)
-     ============================= */
+     ============================= 
   const puzzleModal = document.getElementById("puzzle-modal");
   let selectedContainer = null; // 現在選択中のピース
 
@@ -393,7 +393,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (puzzleDeskCleared && puzzleDriveCleared) {
       console.log("エリア2クリア!");
       // ここでエリア3ナレーションへ移行
-      alert("エリア2クリア！ エリア3へ…");
+      alert("エリア2クリア！ エリア3へ…");*/
     }
   }
 });

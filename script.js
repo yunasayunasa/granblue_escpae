@@ -179,7 +179,7 @@ document.addEventListener("DOMContentLoaded", () => {
   deskArea2.style.position = "absolute";
   deskArea2.style.width = "200px";
   deskArea2.style.height = "200px";
-  deskArea2.style.top = "40%";
+  deskArea2.style.top = "30%";
   deskArea2.style.left = "30%";
   deskArea2.style.backgroundColor = "rgba(255,0,0,0.3)";
   deskArea2.style.cursor = "pointer";
@@ -193,7 +193,7 @@ deskOverlay.style.left = "50%";
 deskOverlay.style.transform = "translate(-50%, -50%)";
 deskOverlay.style.width = "100%";
 deskOverlay.style.height = "100%";
-deskOverlay.style.objectFit = "contain";
+deskOverlay.style.objectFit = "cover";
 deskArea2.appendChild(deskOverlay);
 
   // タップ領域 (ドライブ)
@@ -202,8 +202,8 @@ deskArea2.appendChild(deskOverlay);
   driveArea2.style.position = "absolute";
   driveArea2.style.width = "200px";
   driveArea2.style.height = "200px";
-  driveArea2.style.top = "40%";
-  driveArea2.style.left = "60%";
+  driveArea2.style.top = "30%";
+  driveArea2.style.left = "20%";
   driveArea2.style.backgroundColor = "rgba(0,0,255,0.3)";
   driveArea2.style.cursor = "pointer";
   gameScreen2.appendChild(driveArea2);
@@ -216,7 +216,7 @@ driveOverlay.style.left = "50%";
 driveOverlay.style.transform = "translate(-50%, -50%)";
 driveOverlay.style.width = "100%";
 driveOverlay.style.height = "100%";
-driveOverlay.style.objectFit = "contain";
+driveOverlay.style.objectFit = "covee";
 driveArea2.appendChild(driveOverlay);
 
   // フラグ管理（エリア2シルエットクイズ用）

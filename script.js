@@ -374,7 +374,117 @@ driveArea2.addEventListener("click", () => {
     if (deskQuizCleared && driveQuizCleared) {
       alert("正解！ エリア2クリア！ ");
       // ここでエリア3ナレーション開始処理を呼び出す
-      // 例: startArea3Narration();
+     function startArea3Narration() {
+  // エリア3ナレーションシーンを動的に作成
+  const narrationScreen3 = document.createElement("div");
+  narrationScreen3.id = "narration-screen3";
+  narrationScreen3.className = "scene";
+  narrationScreen3.style.position = "absolute";
+  narrationScreen3.style.top = "0";
+  narrationScreen3.style.left = "0";
+  narrationScreen3.style.width = "100%";
+  narrationScreen3.style.height = "100%";
+  document.body.appendChild(narrationScreen3);
+
+  // 背景設定（必要に応じて背景画像パスを調整）
+  narrationScreen3.style.backgroundImage = "url('images/bg3.jpg')";
+  narrationScreen3.style.backgroundSize = "contain";
+  narrationScreen3.style.backgroundPosition = "center";
+  narrationScreen3.style.backgroundRepeat = "no-repeat";
+
+  // キャラクター表示用コンテナ
+  const characterContainer = document.createElement("div");
+  characterContainer.id = "character-container";
+  characterContainer.style.position = "absolute";
+  characterContainer.style.top = "10%";
+  characterContainer.style.left = "0";
+  characterContainer.style.width = "100%";
+  characterContainer.style.height = "40%";
+  characterContainer.style.display = "flex";
+  characterContainer.style.justifyContent = "center";
+  characterContainer.style.alignItems = "center";
+  narrationScreen3.appendChild(characterContainer);
+
+  // 4キャラクターの作成（初期状態では、例として noa.png と roberia.png を表示）
+  const characters = {};
+  const characterFiles = ["noa.png", "roberia.png", "noa_negative.png", "roberia_negative.png"];
+  characterFiles.forEach(filename => {
+    const img = document.createElement("img");
+    img.src = "images/" + filename;
+    img.style.maxWidth = "30%";
+    img.style.margin = "0 10px";
+    img.style.display = "none"; // 初期は非表示
+    characterContainer.appendChild(img);
+    characters[filename] = img;
+  });
+  // 例：初期表示では noa.png と roberia.png を表示
+  characters["noa.png"].style.display = "block";
+  characters["roberia.png"].style.display = "block";
+
+  // ナレーションテキストのコンテナ
+  const narrationTextContainer = document.createElement("div");
+  narrationTextContainer.id = "narration-text3";
+  narrationTextContainer.style.position = "absolute";
+  narrationTextContainer.style.bottom = "20%";
+  narrationTextContainer.style.left = "50%";
+  narrationTextContainer.style.transform = "translateX(-50%)";
+  narrationTextContainer.style.width = "80%";
+  narrationTextContainer.style.color = "#fff";
+  narrationTextContainer.style.fontSize = "1.5rem";
+  narrationTextContainer.style.textAlign = "center";
+  narrationScreen3.appendChild(narrationTextContainer);
+
+  // 初期ナレーションテキスト
+  narrationTextContainer.innerHTML = "<p>ここに封印されているのは誰？</p>";
+
+  // 選択肢ボタンを配置するコンテナ
+  const choiceContainer = document.createElement("div");
+  choiceContainer.id = "choice-container";
+  choiceContainer.style.position = "absolute";
+  choiceContainer.style.bottom = "5%";
+  choiceContainer.style.left = "50%";
+  choiceContainer.style.transform = "translateX(-50%)";
+  choiceContainer.style.display = "flex";
+  choiceContainer.style.justifyContent = "center";
+  choiceContainer.style.gap = "20px";
+  narrationScreen3.appendChild(choiceContainer);
+
+  // 選択肢Aボタン
+  const choiceAButton = document.createElement("button");
+  choiceAButton.textContent = "選択肢A";
+  choiceContainer.appendChild(choiceAButton);
+
+  // 選択肢Bボタン
+  const choiceBButton = document.createElement("button");
+  choiceBButton.textContent = "選択肢B";
+  choiceContainer.appendChild(choiceBButton);
+
+  // 選択肢Aを選んだ場合
+  choiceAButton.addEventListener("click", () => {
+    narrationTextContainer.innerHTML = "<p>選択肢Aが選ばれました。パズルゲームが始まります。</p>";
+    // ここでキャラクターの表示変更など、必要ならアニメーションも追加可能
+    // 例: characters["noa_negative.png"].style.display = "block";
+    setTimeout(() => {
+      startArea3Game("A");
+    }, 2000);
+  });
+
+  // 選択肢Bを選んだ場合
+  choiceBButton.addEventListener("click", () => {
+    narrationTextContainer.innerHTML = "<p>選択肢Bが選ばれました。4択クイズが始まります。</p>";
+    // 例: characters["roberia_negative.png"].style.display = "block";
+    setTimeout(() => {
+      startArea3Game("B");
+    }, 2000);
+  });
+}
+
+function startArea3Game(choice) {
+  // ここに選択肢に応じたゲームシーンへの遷移処理を記述します。
+  // 例：alert として表示する
+  alert("エリア3ゲーム開始: 選択肢 " + choice);
+  // 実際のゲーム開始処理へ遷移するコードをここに追加してください
+}
     }
   }
 

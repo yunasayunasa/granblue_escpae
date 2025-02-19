@@ -374,7 +374,9 @@ driveArea2.addEventListener("click", () => {
     if (deskQuizCleared && driveQuizCleared) {
       alert("正解！ エリア2クリア！ ");
       // ここでエリア3ナレーション開始処理を呼び出す
-     function startArea3Narration() {
+     startArea3Narration(); 
+    
+    function startArea3Narration() {
   // エリア3ナレーションシーンを動的に作成
   const narrationScreen3 = document.createElement("div");
   narrationScreen3.id = "narration-screen3";

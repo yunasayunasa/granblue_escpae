@@ -359,7 +359,21 @@ document.addEventListener("DOMContentLoaded", () => {
   // area3MainLines, linesAfterChoiceA, linesAfterChoiceB, endingLines はすでにコードに含まれている
 
 function startArea3Narration() {
-  // エリア2の透過画像を非表示にする
+ //テスト用クリック二重処理を防ぐ
+let lastInteractionTime = 0;
+
+function onUserInteraction(e) {
+  // タッチ操作の場合、デフォルトの動作をキャンセル
+  e.preventDefault();
+  const now = Date.now();
+  // 直前の実行から500ミリ秒以内なら処理しない（値は調整可能）
+  if (now - lastInteractionTime < 500) return;
+  lastInteractionTime = now;
+  showNextLine();
+}
+  //ここまでがテスト範囲
+  
+   // エリア2の透過画像を非表示にする
   const deskOverlay = document.getElementById("desk-overlay");
   if (deskOverlay) {
     deskOverlay.style.display = "none";
@@ -465,7 +479,7 @@ if (driveArea2) {
       }
       const line = lines[currentLineIndex++];
       console.log("テストテキスト",line.text);  
-currentLineIndex++;
+
       updateCharacters(line.characters);
       textContainer.innerHTML = `<p>${line.text}</p>`;
     }

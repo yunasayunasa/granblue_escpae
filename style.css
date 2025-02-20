@@ -386,3 +386,11 @@ body {
   text-align: center;
   z-index: 3100;
 }
+
+@keyframes glow {
+  0% { filter: brightness(1); }
+  100% { filter: brightness(1.5); }
+}
+.glow {
+  animation: glow 2s infinite alternate;
+}

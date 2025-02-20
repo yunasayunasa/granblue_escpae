@@ -426,6 +426,8 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
       const line = lines[currentLineIndex++];
+      console.log("テストテキスト",line.text);  /*デバッグログ*/
+currentLineIndex++;
       updateCharacters(line.characters);
       textContainer.innerHTML = `<p>${line.text}</p>`;
     }

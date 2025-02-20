@@ -497,9 +497,9 @@ if (driveArea2) {
         const c1 = createCharacterElement(charDefs[0]);
         const c2 = createCharacterElement(charDefs[1]);
         c1.style.position = "absolute";
-        c1.style.left = "80%";
+        c1.style.left = "50%";
         c2.style.position = "absolute";
-        c2.style.right = "80%";
+        c2.style.right = "50%";
         characterContainer.appendChild(c1);
         characterContainer.appendChild(c2);
       }
@@ -678,7 +678,7 @@ const area3MainLines = [
       { name: "ロベリア", role: "話者", anim: "jump" },
       { name: "ノア", role: "非話者", anim: "" }
     ],
-    text: "くっは！助かったよ、団長さん。メルシィ！"
+    text: "くっは！助かったよ、団長。メルシィ！"
   },
   {
     characters: [

@@ -194,21 +194,13 @@ body {
   display: none;
 }
 
-/* エリア2ゲームシーン (動的生成) 
-#game-screen2 {
-  background-image: url('images/bg2.jpg');
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-*/
 /* パズルモーダル (白背景) */
 #puzzle-modal {
   display: none;
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  background-color: #fff; /* 白背景でシルエットが見やすい */
+  background-color: #fff;
   z-index: 3000;
   flex-direction: column;
   justify-content: center;
@@ -228,7 +220,7 @@ body {
   position: relative;
   width: 100%; height: 100%;
   border: 1px dashed #aaa;
-  cursor: pointer; /* セルをタップで配置 */
+  cursor: pointer;
 }
 
 /* ピーストレイ */
@@ -257,11 +249,11 @@ body {
   width: 100%; height: 100%;
   background-size: 200% 200%;
   background-position: center center;
-  cursor: pointer; /* タップで選択 */
+  cursor: pointer;
   transition: outline 0.2s;
 }
 .puzzle-piece.selected {
-  outline: 2px solid red; /* 選択中の視覚効果 */
+  outline: 2px solid red;
 }
 
 /* 回転ボタン (ピースコンテナに固定) */
@@ -283,11 +275,6 @@ body {
   border-radius: 4px;
 }
 
-#desk-overlay,
-#drive-overlay {
-  animation: glow 2s infinite alternate;
-}
-
 /* エリア3ナレーションシーン */
 #narration-screen3 {
   position: absolute;
@@ -295,12 +282,12 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #000; /* 仮背景色。背景画像がない場合に備えて */
+  background-color: #000;
 }
 
 #character-container {
   position: absolute;
-  bottom: 20%; /* gran.png の配置に合わせる */
+  bottom: 20%;
   left: 0;
   width: 100%;
   height: 50%;
@@ -333,8 +320,7 @@ body {
   z-index: 12;
 }
 
-
-
+/* アニメーション */
 @keyframes jump {
   0% { transform: translateY(0); }
   50% { transform: translateY(-10px); }

@@ -501,9 +501,9 @@ if (driveArea2) {
         const c1 = createCharacterElement(charDefs[0]);
         const c2 = createCharacterElement(charDefs[1]);
         c1.style.position = "absolute";
-        c1.style.left = "60%";
+        c1.style.left = "40%";
         c2.style.position = "absolute";
-        c2.style.right = "60%";
+        c2.style.right = "40%";
         characterContainer.appendChild(c1);
         characterContainer.appendChild(c2);
       }
@@ -653,10 +653,10 @@ if (charDef.name === "グラン") {
       endText.style.top = "50%";
       endText.style.left = "50%";
       endText.style.transform = "translate(-50%, -50%)";
-      endText.style.color = "#fff";
+      endText.style.color = "#000";
       endText.style.fontSize = "2rem";
       endText.style.textAlign = "center";
-      endText.innerHTML = "THANK YOU FOR PLAYING!";
+      endText.innerHTML = "Thank You for PLAYING!";
       scene.appendChild(endText);
     }
 

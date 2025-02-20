@@ -423,7 +423,7 @@ if (driveArea2) {
     scene.style.width = "100%";
     scene.style.height = "100%";
     scene.style.backgroundImage = "url('images/bg3.jpg')";
-    scene.style.backgroundSize = "contain";
+    scene.style.backgroundSize = "cover";
     scene.style.backgroundPosition = "center";
     scene.style.backgroundRepeat = "no-repeat";
     document.body.appendChild(scene);

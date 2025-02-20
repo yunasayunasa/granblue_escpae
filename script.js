@@ -508,7 +508,7 @@ if (driveArea2) {
     function createCharacterElement(charDef) {
       const img = document.createElement("img");
       const fileMap = {
-        "グラン": "gran.png",
+        "グラン": "gran2.png",
         "ロベリア": "roberia.png",
         "ノア": "noa.png",
         "ロベリアネガ": "roberia_negative.png",
@@ -540,8 +540,7 @@ if (charDef.name === "グラン") {
   }
 
 
-      img.style.maxWidth = "100%";
-      img.style.bottom = "0";
+      
 
       if (charDef.role === "話者") {
         img.style.filter = "brightness(1)";

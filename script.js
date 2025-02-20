@@ -456,7 +456,7 @@ if (driveArea2) {
     characterContainer.id = "character-container";
     characterContainer.style.position = "absolute";
     characterContainer.style.bottom = "50%";
-    characterContainer.style.left = "50%";
+    characterContainer.style.left = "0";
     characterContainer.style.width = "100%";
     characterContainer.style.height = "50%";
     characterContainer.style.zIndex = "9";
@@ -497,7 +497,7 @@ if (driveArea2) {
         const c1 = createCharacterElement(charDefs[0]);
         const c2 = createCharacterElement(charDefs[1]);
         c1.style.position = "absolute";
-        c1.style.left = "30%";
+        c1.style.left = "10%";
         c2.style.position = "absolute";
         c2.style.right = "95%";
         characterContainer.appendChild(c1);

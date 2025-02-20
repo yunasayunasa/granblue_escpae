@@ -360,14 +360,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function startArea3Narration() {
   // エリア2の透過画像を非表示にする
-  /*const deskOverlay = document.getElementById("desk-overlay");
+  const deskOverlay = document.getElementById("desk-overlay");
   if (deskOverlay) {
     deskOverlay.style.display = "none";
   }
   const driveOverlay = document.getElementById("drive-overlay");
   if (driveOverlay) {
     driveOverlay.style.display = "none";
-  }*/
+  }
   // 以下、既存のエリア3ナレーションシーンの生成処理
   /*const scene = document.createElement("div");
   scene.id = "narration-screen3";

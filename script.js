@@ -230,6 +230,7 @@ document.addEventListener("DOMContentLoaded", () => {
   gameContainer2.appendChild(driveOverlay);
 
 //オーバーレイ光るかテスト
+element.classList.add("glow");
 deskOverlay.classList.add("glow");
 driveOverlay.classList.add("glow");
 
@@ -309,7 +310,7 @@ driveOverlay.classList.add("glow");
         quizModal.appendChild(inputField);
 
         const submitButton = document.createElement("button");
-        submitButton.textContent = "送信";
+        submitButton.textContent = "封印を解く";
         submitButton.style.marginTop = "10px";
         quizModal.appendChild(submitButton);
 
@@ -317,21 +318,21 @@ driveOverlay.classList.add("glow");
           const answer = inputField.value.trim();
           if (area === "desk") {
             if (answer === "ノア") {
-              alert("正解！");
+              alert("封印が解けた！");
               deskQuizCleared = true;
               quizModal.style.display = "none";
               checkSilhouetteQuizCleared();
             } else {
-              alert("不正解。再入力してください。");
+              alert("解けない...間違っている様だ。");
             }
           } else {
             if (answer === "ロベリア") {
-              alert("正解！");
+              alert("封印が解けた！");
               driveQuizCleared = true;
               quizModal.style.display = "none";
               checkSilhouetteQuizCleared();
             } else {
-              alert("不正解。再入力してください。");
+              alert("封印が解けない...間違っている様だ。");
             }
           }
         });

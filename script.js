@@ -677,7 +677,7 @@ if (charDef.name === "グラン") {
 //==============================
 // エリア3シナリオデータ（外部ファイルを使わず、ここに定義）
 // ==============================
-const area3MainLines = [
+/*const area3MainLines = [
   {
     characters: [
       { name: "ロベリア", role: "話者", anim: "jump" },

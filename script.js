@@ -431,7 +431,7 @@ if (driveArea2) {
     const logFrame = document.createElement("img");
     logFrame.src = "images/log.png";
     logFrame.style.position = "absolute";
-    logFrame.style.bottom = "-40%";
+    logFrame.style.bottom = "-30%";
     logFrame.style.left = "50%";
     logFrame.style.transform = "translateX(-50%)";
     logFrame.style.width = "100%";
@@ -497,9 +497,9 @@ if (driveArea2) {
         const c1 = createCharacterElement(charDefs[0]);
         const c2 = createCharacterElement(charDefs[1]);
         c1.style.position = "absolute";
-        c1.style.left = "10%";
+        c1.style.left = "30%";
         c2.style.position = "absolute";
-        c2.style.right = "90%";
+        c2.style.right = "95%";
         characterContainer.appendChild(c1);
         characterContainer.appendChild(c2);
       }
@@ -520,16 +520,16 @@ if (driveArea2) {
       //ここで各キャラのサイズを設定
 if (charDef.name === "グラン") {
   // 例えば、グランは少し大きめに表示
-  img.style.maxWidth = "60%";
+  img.style.maxWidth = "50%";
 } else if (charDef.name === "ロベリア") {
-  img.style.maxWidth = "80%";
+  img.style.maxWidth = "120%";
 } else if (charDef.name === "ノア") {
-  img.style.maxWidth ="80%";
+  img.style.maxWidth ="120%";
 } else if (charDef.name === "ロベリアネガ" || charDef.name === "ノアネガ") {
   // 敵キャラの場合、ここで設定
-  img.style.maxWidth = "80%";
+  img.style.maxWidth = "120%";
 } else {
-  img.style.maxWidth = "80%";
+  img.style.maxWidth = "120%";
 }
 
       img.style.maxWidth = "100%";

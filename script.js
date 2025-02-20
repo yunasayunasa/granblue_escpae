@@ -359,19 +359,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // area3MainLines, linesAfterChoiceA, linesAfterChoiceB, endingLines はすでにコードに含まれている
 
 function startArea3Narration() {
-  // エリア2の透過画像を DOM から削除する
-  /*const deskOverlay = document.getElementById("desk-overlay");
-  if (deskOverlay) {
-    deskOverlay.remove();
-  }
-  const driveOverlay = document.getElementById("drive-overlay");
-  if (driveOverlay) {
-    driveOverlay.remove();
-  }*/
   
-  // 以下、エリア3ナレーションシーンの生成処理…
-  // ...
-}
     // シーン生成
       const scene = document.createElement("div");
   scene.id = "narration-screen3";

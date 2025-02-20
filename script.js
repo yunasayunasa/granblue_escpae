@@ -360,9 +360,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function startArea3Narration() {
     // シーン生成
-    const scene = document.createElement("div");
-    scene.id = "narration-screen3";
-    scene.className = "scene";
+      const scene = document.createElement("div");
+  scene.id = "narration-screen3";
+  scene.className = "scene";
+  scene.style.display = "block"; // ← これを追加
+  // ...以降、シーンのスタイル設定
     scene.style.position = "absolute";
     scene.style.top = "0";
     scene.style.left = "0";

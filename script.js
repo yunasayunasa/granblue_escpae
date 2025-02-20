@@ -457,7 +457,7 @@ if (driveArea2) {
     characterContainer.style.position = "absolute";
     characterContainer.style.bottom = "20%";
     characterContainer.style.left = "0";
-    characterContainer.style.width = "50%";
+    characterContainer.style.width = "100%";
     characterContainer.style.height = "50%";
     characterContainer.style.zIndex = "9";
     scene.appendChild(characterContainer);
@@ -499,7 +499,7 @@ if (driveArea2) {
         c1.style.position = "absolute";
         c1.style.left = "10%";
         c2.style.position = "absolute";
-        c2.style.right = "10%";
+        c2.style.right = "90%";
         characterContainer.appendChild(c1);
         characterContainer.appendChild(c2);
       }

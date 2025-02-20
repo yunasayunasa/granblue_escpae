@@ -442,7 +442,7 @@ if (driveArea2) {
     const textContainer = document.createElement("div");
     textContainer.id = "narration-text3";
     textContainer.style.position = "absolute";
-    textContainer.style.bottom = "10%";
+    textContainer.style.bottom = "20%";
     textContainer.style.left = "50%";
     textContainer.style.transform = "translateX(-50%)";
     textContainer.style.width = "80%";
@@ -455,10 +455,10 @@ if (driveArea2) {
     const characterContainer = document.createElement("div");
     characterContainer.id = "character-container";
     characterContainer.style.position = "absolute";
-    characterContainer.style.bottom = "20%";
-    characterContainer.style.left = "0";
+    characterContainer.style.bottom = "50%";
+    characterContainer.style.left = "50%";
     characterContainer.style.width = "100%";
-    characterContainer.style.height = "50%";
+    characterContainer.style.height = "100%";
     characterContainer.style.zIndex = "9";
     scene.appendChild(characterContainer);
 

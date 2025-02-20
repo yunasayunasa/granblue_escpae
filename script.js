@@ -230,9 +230,9 @@ document.addEventListener("DOMContentLoaded", () => {
   gameContainer2.appendChild(driveOverlay);
 
 //オーバーレイ光るかテスト
-/*element.classList.add("glow");*/
+/*element.classList.add("glow");
 deskOverlay.classList.add("glow");
-driveOverlay.classList.add("glow");
+driveOverlay.classList.add("glow");*/
 
   // タップ領域
   const deskArea2 = document.createElement("div");
@@ -310,7 +310,7 @@ driveOverlay.classList.add("glow");
         quizModal.appendChild(inputField);
 
         const submitButton = document.createElement("button");
-        submitButton.textContent = "封印を解く";
+        submitButton.textContent = "送信";
         submitButton.style.marginTop = "10px";
         quizModal.appendChild(submitButton);
 
@@ -323,7 +323,7 @@ driveOverlay.classList.add("glow");
               quizModal.style.display = "none";
               checkSilhouetteQuizCleared();
             } else {
-              alert("解けない...間違っている様だ。");
+              alert("解けない、間違っている様だ。");
             }
           } else {
             if (answer === "ロベリア") {
@@ -332,7 +332,7 @@ driveOverlay.classList.add("glow");
               quizModal.style.display = "none";
               checkSilhouetteQuizCleared();
             } else {
-              alert("封印が解けない...間違っている様だ。");
+              alert("封印が解けない、間違っている様だ。");
             }
           }
         });

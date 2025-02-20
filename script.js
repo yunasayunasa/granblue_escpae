@@ -229,6 +229,10 @@ document.addEventListener("DOMContentLoaded", () => {
   driveOverlay.style.zIndex = "1";
   gameContainer2.appendChild(driveOverlay);
 
+//オーバーレイ光るかテスト
+deskOverlay.classList.add("glow");
+driveOverlay.classList.add("glow");
+
   // タップ領域
   const deskArea2 = document.createElement("div");
   deskArea2.id = "desk-area2";

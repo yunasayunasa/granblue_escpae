@@ -358,7 +358,243 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // area3MainLines, linesAfterChoiceA, linesAfterChoiceB, endingLines はすでにコードに含まれている
 
-  // ==============================
+  function startArea3Narration() {
+    // シーン生成
+      const scene = document.createElement("div");
+  scene.id = "narration-screen3";
+  scene.className = "scene";
+  scene.style.display = "block"; // ← これを追加
+  // ...以降、シーンのスタイル設定
+    scene.style.position = "absolute";
+    scene.style.top = "0";
+    scene.style.left = "0";
+    scene.style.width = "100%";
+    scene.style.height = "100%";
+    scene.style.backgroundImage = "url('images/bg3.jpg')";
+    scene.style.backgroundSize = "contain";
+    scene.style.backgroundPosition = "center";
+    scene.style.backgroundRepeat = "no-repeat";
+    document.body.appendChild(scene);
+
+    const logFrame = document.createElement("img");
+    logFrame.src = "images/log.png";
+    logFrame.style.position = "absolute";
+    logFrame.style.bottom = "0";
+    logFrame.style.left = "50%";
+    logFrame.style.transform = "translateX(-50%)";
+    logFrame.style.width = "100%";
+    logFrame.style.height = "auto";
+    logFrame.style.zIndex = "10";
+    scene.appendChild(logFrame);
+
+    const textContainer = document.createElement("div");
+    textContainer.id = "narration-text3";
+    textContainer.style.position = "absolute";
+    textContainer.style.bottom = "10%";
+    textContainer.style.left = "50%";
+    textContainer.style.transform = "translateX(-50%)";
+    textContainer.style.width = "80%";
+    textContainer.style.color = "#fff";
+    textContainer.style.fontSize = "1.2rem";
+    textContainer.style.textAlign = "center";
+    textContainer.style.zIndex = "11";
+    scene.appendChild(textContainer);
+
+    const characterContainer = document.createElement("div");
+    characterContainer.id = "character-container";
+    characterContainer.style.position = "absolute";
+    characterContainer.style.bottom = "20%";
+    characterContainer.style.left = "0";
+    characterContainer.style.width = "100%";
+    characterContainer.style.height = "50%";
+    characterContainer.style.zIndex = "9";
+    scene.appendChild(characterContainer);
+
+    let currentLineIndex = 0;
+    const lines = area3MainLines.slice();
+
+    scene.addEventListener("click", onClickNext);
+    function onClickNext(e) {
+      e.stopPropagation();
+      showNextLine();
+    }
+
+    function showNextLine() {
+      if (currentLineIndex >= lines.length) {
+        scene.removeEventListener("click", onClickNext);
+        showChoice();
+        return;
+      }
+      const line = lines[currentLineIndex++];
+      console.log("テストテキスト",line.text);  /*デバッグログ*/
+currentLineIndex++;
+      updateCharacters(line.characters);
+      textContainer.innerHTML = `<p>${line.text}</p>`;
+    }
+
+    function updateCharacters(charDefs) {
+      characterContainer.innerHTML = "";
+      if (!charDefs || charDefs.length === 0) return;
+      if (charDefs.length === 1) {
+        const c = createCharacterElement(charDefs[0]);
+        c.style.position = "absolute";
+        c.style.left = "50%";
+        c.style.transform = "translateX(-50%)";
+        characterContainer.appendChild(c);
+      } else if (charDefs.length === 2) {
+        const c1 = createCharacterElement(charDefs[0]);
+        const c2 = createCharacterElement(charDefs[1]);
+        c1.style.position = "absolute";
+        c1.style.left = "15%";
+        c2.style.position = "absolute";
+        c2.style.right = "15%";
+        characterContainer.appendChild(c1);
+        characterContainer.appendChild(c2);
+      }
+    }
+
+    function createCharacterElement(charDef) {
+      const img = document.createElement("img");
+      const fileMap = {
+        "グラン": "gran.png",
+        "ロベリア": "roberia.png",
+        "ノア": "noa.png",
+        "ロベリアネガ": "roberia_negative.png",
+        "ノアネガ": "noa_negative.png"
+      };
+      const fileName = fileMap[charDef.name] || "gran.png";
+      img.src = `images/${fileName}`;
+      img.style.maxWidth = "40%";
+      img.style.bottom = "0";
+
+      if (charDef.role === "話者") {
+        img.style.filter = "brightness(1)";
+      } else {
+        img.style.filter = "brightness(0.5)";
+      }
+      if (charDef.anim === "jump") {
+        img.classList.add("jump");
+      } else if (charDef.anim === "shake") {
+        img.classList.add("shake");
+      } else if (charDef.anim === "fadeout") {
+        img.classList.add("fadeout");
+      }
+      return img;
+    }
+
+    function showChoice() {
+      scene.removeEventListener("click", onClickNext);
+      textContainer.innerHTML = `<p>君はどちらと戦う？</p>`;
+      const choiceModal = document.createElement("div");
+      choiceModal.id = "choice-modal";
+      choiceModal.style.position = "absolute";
+      choiceModal.style.top = "0";
+      choiceModal.style.left = "0";
+      choiceModal.style.width = "100%";
+      choiceModal.style.height = "100%";
+      choiceModal.style.backgroundColor = "rgba(0,0,0,0.5)";
+      choiceModal.style.zIndex = "999";
+      scene.appendChild(choiceModal);
+
+      const choiceContainer = document.createElement("div");
+      choiceContainer.id = "choice-container";
+      choiceContainer.style.position = "absolute";
+      choiceContainer.style.top = "50%";
+      choiceContainer.style.left = "50%";
+      choiceContainer.style.transform = "translate(-50%, -50%)";
+      choiceContainer.style.display = "flex";
+      choiceContainer.style.flexDirection = "column";
+      choiceContainer.style.gap = "20px";
+      choiceModal.appendChild(choiceContainer);
+
+      const btnA = document.createElement("button");
+      btnA.textContent = "ロベリアネガと戦う(クイズ)";
+      choiceContainer.appendChild(btnA);
+      btnA.addEventListener("click", () => {
+        scene.removeEventListener("click", onClickNext);
+        choiceModal.remove();
+        showBranchLines(linesAfterChoiceA, () => {
+          startArea3Game("A");
+        });
+      });
+
+      const btnB = document.createElement("button");
+      btnB.textContent = "ノアネガと戦う(謎解き)";
+      choiceContainer.appendChild(btnB);
+      btnB.addEventListener("click", () => {
+        scene.removeEventListener("click", onClickNext);
+        choiceModal.remove();
+        showBranchLines(linesAfterChoiceB, () => {
+          startArea3Game("B");
+        });
+      });
+    }
+
+    function showBranchLines(branchLines, onFinish) {
+      let idx = 0;
+      const branchClickHandler = () => {
+        if (idx >= branchLines.length) {
+          scene.removeEventListener("click", branchClickHandler);
+          if (onFinish) onFinish();
+          return;
+        }
+        const line = branchLines[idx++];
+        updateCharacters(line.characters);
+        textContainer.innerHTML = `<p>${line.text}</p>`;
+      };
+      scene.addEventListener("click", branchClickHandler);
+      branchClickHandler();
+    }
+
+    function showEndingLines() {
+      let idx = 0;
+      const endClickHandler = () => {
+        if (idx >= endingLines.length) {
+          scene.removeEventListener("click", endClickHandler);
+          showEndingImage();
+          return;
+        }
+        const line = endingLines[idx++];
+        updateCharacters(line.characters);
+        textContainer.innerHTML = `<p>${line.text}</p>`;
+      };
+      scene.addEventListener("click", endClickHandler);
+      endClickHandler();
+    }
+
+    function showEndingImage() {
+      scene.innerHTML = "";
+      scene.style.backgroundImage = "url('images/title.jpg')";
+      scene.style.backgroundSize = "contain";
+      scene.style.backgroundPosition = "center";
+      scene.style.backgroundRepeat = "no-repeat";
+      const endText = document.createElement("div");
+      endText.className = "end-text";
+      endText.style.position = "absolute";
+      endText.style.top = "50%";
+      endText.style.left = "50%";
+      endText.style.transform = "translate(-50%, -50%)";
+      endText.style.color = "#fff";
+      endText.style.fontSize = "2rem";
+      endText.style.textAlign = "center";
+      endText.innerHTML = "THANK YOU FOR PLAYING!";
+      scene.appendChild(endText);
+    }
+
+    function startArea3Game(choice) {
+      alert("エリア3ゲーム開始: 選択肢 " + choice);
+      // 後ほどゲームシーンへ遷移
+      // ここではエンディングへ直接行く場合
+      showEndingLines();
+    }
+
+    // 最初の行を表示
+    showNextLine();
+  }
+ 
+});
+
+// ==============================
 // エリア3シナリオデータ（外部ファイルを使わず、ここに定義）
 // ==============================
 const area3MainLines = [

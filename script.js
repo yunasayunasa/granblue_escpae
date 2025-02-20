@@ -230,9 +230,9 @@ document.addEventListener("DOMContentLoaded", () => {
   gameContainer2.appendChild(driveOverlay);
 
 //オーバーレイ光るかテスト
-/*element.classList.add("glow");
+element.classList.add("glow");
 deskOverlay.classList.add("glow");
-driveOverlay.classList.add("glow");*/
+driveOverlay.classList.add("glow");
 
   // タップ領域
   const deskArea2 = document.createElement("div");

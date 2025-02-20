@@ -497,7 +497,7 @@ if (driveArea2) {
         const c1 = createCharacterElement(charDefs[0]);
         const c2 = createCharacterElement(charDefs[1]);
         c1.style.position = "absolute";
-        c1.style.left = "10%";
+        c1.style.left = "50%";
         c2.style.position = "absolute";
         c2.style.right = "80%";
         characterContainer.appendChild(c1);
@@ -520,16 +520,16 @@ if (driveArea2) {
       //ここで各キャラのサイズを設定
 if (charDef.name === "グラン") {
   // 例えば、グランは少し大きめに表示
-  img.style.maxWidth = "10%";
+  img.style.maxWidth = "80%";
 } else if (charDef.name === "ロベリア") {
-  img.style.maxWidth = "100%";
+  img.style.maxWidth = "80%";
 } else if (charDef.name === "ノア") {
-  img.style.maxWidth ="100%";
+  img.style.maxWidth ="40%";
 } else if (charDef.name === "ロベリアネガ" || charDef.name === "ノアネガ") {
   // 敵キャラの場合、ここで設定
-  img.style.maxWidth = "100%";
+  img.style.maxWidth = "80%";
 } else {
-  img.style.maxWidth = "100%";
+  img.style.maxWidth = "40%";
 }
 
  // グランだけ位置が高すぎる場合、追加で下にずらす

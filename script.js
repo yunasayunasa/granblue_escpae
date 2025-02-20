@@ -648,3 +648,196 @@ function startArea3Narration() {
   // 最初の行を表示
   showNextLine();
 }
+
+
+// ==============================
+// データ構造
+// ==============================
+
+// area3MainLines: エリア3の導入ナレーション
+// 各要素は { characters: [...], text: "..." } の形
+// characters は [ { name: "ロベリア", role: "話者", anim: "1回ぴょんと跳ねる" }, ... ]
+// text は 「」内のセリフ部分
+const area3MainLines = [
+  {
+    characters: [
+      { name: "ロベリア", role: "話者", anim: "jump" },
+      { name: "ノア", role: "非話者", anim: "" }
+    ],
+    text: "くっは！助かったよ、団長さん。メルシィ！"
+  },
+  {
+    characters: [
+      { name: "ロベリア", role: "非話者", anim: "" },
+      { name: "ノア", role: "話者", anim: "" }
+    ],
+    text: "信じていたよ。団長さんが必ず助けてくれるってね。"
+  },
+  {
+    characters: [
+      { name: "グラン", role: "話者", anim: "" }
+    ],
+    text: "君は助け出した2人から話を聞くことにした。"
+  },
+  {
+    characters: [],
+    text: "どうやら何者かにあの場所に封印されていたらしい。"
+  },
+  {
+    characters: [],
+    text: "そんなことができるのは、星晶獣しかありえない。"
+  },
+  {
+    characters: [],
+    text: "その時、甲板に２つの影が降り立った。"
+  },
+  {
+    characters: [
+      { name: "ロベリアネガ", role: "話者", anim: "" },
+      { name: "ノアネガ", role: "話者", anim: "" }
+    ],
+    text: "..."
+  },
+  {
+    characters: [
+      { name: "ロベリアネガ", role: "非話者", anim: "" },
+      { name: "ノアネガ", role: "話者", anim: "" }
+    ],
+    text: "まさかあの封印を解かれるなんてね...意外...かな"
+  },
+  {
+    characters: [
+      { name: "ロベリアネガ", role: "話者", anim: "" },
+      { name: "ノアネガ", role: "非話者", anim: "" }
+    ],
+    text: "くはっ！頭を捻らせる時の苦悶の声...最高だっ！"
+  },
+  {
+    characters: [],
+    text: "ロベリアとノアによく似た雰囲気の、だが絶対に違う確信が持てる何者かが現れた。"
+  },
+  {
+    characters: [],
+    text: "君は問う、お前達は何者だ。"
+  },
+  {
+    characters: [
+      { name: "ロベリアネガ", role: "話者", anim: "" }
+    ],
+    text: "答えよう、クイズの星晶獣、ロベリアネガ。"
+  },
+  {
+    characters: [
+      { name: "ノアネガ", role: "話者", anim: "" }
+    ],
+    text: "謎解きの星晶獣、ノアネガ。"
+  },
+  {
+    characters: [
+      { name: "ロベリアネガ", role: "話者", anim: "" },
+      { name: "ノアネガ", role: "話者", anim: "" }
+    ],
+    text: "君達にはもう一度謎解きパズルの一部になってもらう。"
+  },
+  {
+    characters: [
+      { name: "ノア", role: "話者", anim: "" }
+    ],
+    text: "団長さん！来るよ！僕とロベリアで片方はなんとかする！"
+  },
+  {
+    characters: [
+      { name: "ロベリア", role: "話者", anim: "" }
+    ],
+    text: "くっは！謎を壊すとどんな音がするんだろうね！アンテレサーント！"
+  },
+  {
+    characters: [
+      { name: "グラン", role: "話者", anim: "" }
+    ],
+    text: "君はどちらと戦う？"  // ← ここで選択肢を出す
+  }
+];
+
+// 選択肢Aを選んだ場合の分岐ナレーション
+const linesAfterChoiceA = [
+  {
+    characters: [
+      { name: "ロベリアネガ", role: "話者", anim: "" }
+    ],
+    text: "クイズで勝負だ！"
+  },
+  // ゲーム開始（後ほど実装）→ エンディングへ
+];
+
+// 選択肢Bを選んだ場合の分岐ナレーション
+const linesAfterChoiceB = [
+  {
+    characters: [
+      { name: "ノアネガ", role: "話者", anim: "" }
+    ],
+    text: "僕は謎解きの星晶獣...謎解きで勝負！"
+  },
+  // ゲーム開始（後ほど実装）→ エンディングへ
+];
+
+// エンディングナレーション
+const endingLines = [
+  {
+    characters: [
+      { name: "ロベリアネガ", role: "話者", anim: "shake" },
+      { name: "ノアネガ", role: "話者", anim: "shake" }
+    ],
+    text: "ぐっ！そんな、まさか...！"
+  },
+  {
+    characters: [
+      { name: "ロベリアネガ", role: "話者", anim: "" },
+      { name: "ノアネガ", role: "話者", anim: "" }
+    ],
+    text: "もう少しで...！あと少しで...！"
+  },
+  {
+    characters: [
+      { name: "ロベリアネガ", role: "話者", anim: "fadeout" },
+      { name: "ノアネガ", role: "話者", anim: "fadeout" }
+    ],
+    text: "馬鹿なああああああああ！"
+  },
+  {
+    characters: [
+      { name: "ロベリア", role: "非話者", anim: "" },
+      { name: "ノア", role: "話者", anim: "jump" }
+    ],
+    text: "やった！団長さんも大丈夫かな？"
+  },
+  {
+    characters: [
+      { name: "ロベリア", role: "話者", anim: "" },
+      { name: "ノア", role: "非話者", anim: "" }
+    ],
+    text: "くっは！なかなか楽しかったよ、さぁ行こうか！次なる謎を探しに！"
+  },
+  {
+    characters: [
+      { name: "グラン", role: "話者", anim: "" }
+    ],
+    text: "君は無事事件を解決し、船を取り戻した。"
+  },
+  {
+    characters: [],
+    text: "この広い空にはまだまだ謎が隠されている。"
+  },
+  {
+    characters: [],
+    text: "行こう、全ての謎を解き、遥かなる地平線"
+  },
+  {
+    characters: [],
+    text: "ナゾタルシアへ━"
+  },
+  {
+    characters: [],
+    text: "グランブルーエスケープ〜完〜"
+  }
+];

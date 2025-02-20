@@ -423,7 +423,7 @@ if (driveArea2) {
     scene.style.width = "100%";
     scene.style.height = "100%";
     scene.style.backgroundImage = "url('images/bg3.jpg')";
-    scene.style.backgroundSize = "cover";
+    scene.style.backgroundSize = "contain";
     scene.style.backgroundPosition = "center";
     scene.style.backgroundRepeat = "no-repeat";
     document.body.appendChild(scene);
@@ -442,7 +442,7 @@ if (driveArea2) {
     const textContainer = document.createElement("div");
     textContainer.id = "narration-text3";
     textContainer.style.position = "absolute";
-    textContainer.style.bottom = "20%";
+    textContainer.style.bottom = "15%";
     textContainer.style.left = "50%";
     textContainer.style.transform = "translateX(-50%)";
     textContainer.style.width = "80%";
@@ -458,7 +458,7 @@ if (driveArea2) {
     characterContainer.style.bottom = "50%";
     characterContainer.style.left = "50%";
     characterContainer.style.width = "100%";
-    characterContainer.style.height = "100%";
+    characterContainer.style.height = "50%";
     characterContainer.style.zIndex = "9";
     scene.appendChild(characterContainer);
 
@@ -531,6 +531,14 @@ if (charDef.name === "グラン") {
 } else {
   img.style.maxWidth = "120%";
 }
+
+ // グランだけ位置が高すぎる場合、追加で下にずらす
+  if (charDef.name === "グラン") {
+    // 例：translateY で下に20pxずらす（調整値はお好みで）
+    // すでに左右中央に配置している場合は transform に追記します
+    img.style.transform = "translate(-50%, 20px)";
+  }
+
 
       img.style.maxWidth = "100%";
       img.style.bottom = "0";

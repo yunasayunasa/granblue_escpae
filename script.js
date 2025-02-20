@@ -379,7 +379,7 @@ function startArea3Narration() {
     const logFrame = document.createElement("img");
     logFrame.src = "images/log.png";
     logFrame.style.position = "absolute";
-    logFrame.style.bottom = "0";
+    logFrame.style.bottom = "-30%";
     logFrame.style.left = "50%";
     logFrame.style.transform = "translateX(-50%)";
     logFrame.style.width = "100%";

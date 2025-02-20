@@ -359,6 +359,36 @@ document.addEventListener("DOMContentLoaded", () => {
   // area3MainLines, linesAfterChoiceA, linesAfterChoiceB, endingLines はすでにコードに含まれている
 
 function startArea3Narration() {
+  // エリア2の透過画像を非表示にする
+  const deskOverlay = document.getElementById("desk-overlay");
+  if (deskOverlay) {
+    deskOverlay.style.display = "none";
+  }
+  const driveOverlay = document.getElementById("drive-overlay");
+  if (driveOverlay) {
+    driveOverlay.style.display = "none";
+  }
+  
+  // 以下、既存のエリア3ナレーションシーンの生成処理
+  /*const scene = document.createElement("div");
+  scene.id = "narration-screen3";
+  scene.className = "scene";
+  scene.style.position = "absolute";
+  scene.style.top = "0";
+  scene.style.left = "0";
+  scene.style.width = "100%";
+  scene.style.height = "100%";
+  scene.style.backgroundImage = "url('images/bg3.jpg')";
+  scene.style.backgroundSize = "contain";
+  scene.style.backgroundPosition = "center";
+  scene.style.backgroundRepeat = "no-repeat";
+  // display を "block" に設定して見えるように
+  scene.style.display = "block";
+  document.body.appendChild(scene);*/
+
+  // 以降、テキストフレーム、キャラクターコンテナなどの処理…
+  // ...
+}
   
     // シーン生成
       const scene = document.createElement("div");
@@ -491,7 +521,7 @@ currentLineIndex++;
       choiceModal.style.position = "absolute";
       choiceModal.style.top = "0";
       choiceModal.style.left = "0";
-      choiceModal.style.width = "100%";
+      choiceModal.style.width = "50%";
       choiceModal.style.height = "100%";
       choiceModal.style.backgroundColor = "rgba(0,0,0,0.5)";
       choiceModal.style.zIndex = "999";

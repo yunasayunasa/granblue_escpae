@@ -287,3 +287,126 @@ body {
 #drive-overlay {
   animation: glow 2s infinite alternate;
 }
+
+/* エリア3ナレーションシーン */
+#narration-screen3 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000; /* 仮背景色。背景画像がない場合に備えて */
+}
+
+#character-container {
+  position: absolute;
+  bottom: 20%; /* gran.png の配置に合わせる */
+  left: 0;
+  width: 100%;
+  height: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9;
+}
+
+#narration-text3 {
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  color: #fff;
+  font-size: 1.2rem;
+  text-align: center;
+  z-index: 11;
+}
+
+#choice-container {
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  z-index: 12;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  padding: 5px 10px;
+  background-color: #ccc;
+  border: 1px solid #999;
+  border-radius: 4px;
+  z-index: 20;
+}
+
+@keyframes jump {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
+}
+.jump {
+  animation: jump 0.5s;
+}
+
+@keyframes shake {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(2px, -2px); }
+  50% { transform: translate(0, 0); }
+  75% { transform: translate(-2px, 2px); }
+  100% { transform: translate(0, 0); }
+}
+.shake {
+  animation: shake 0.5s;
+}
+
+@keyframes fadeout {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+.fadeout {
+  animation: fadeout 1s forwards;
+}
+
+/* 選択肢用モーダル */
+#choice-modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* エンディング画面 */
+#ending-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('images/title.jpg');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 3000;
+}
+#ending-screen .end-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 2rem;
+  text-align: center;
+  z-index: 3100;
+}

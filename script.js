@@ -358,7 +358,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // area3MainLines, linesAfterChoiceA, linesAfterChoiceB, endingLines はすでにコードに含まれている
 
-/*function startArea3Narration() {
+function startArea3Narration() {
     // シーン生成
       const scene = document.createElement("div");
   scene.id = "narration-screen3";
@@ -594,10 +594,10 @@ currentLineIndex++;
  
 });
 
-// ==============================
+//==============================
 // エリア3シナリオデータ（外部ファイルを使わず、ここに定義）
 // ==============================
-const area3MainLines = [
+/*const area3MainLines = [
   {
     characters: [
       { name: "ロベリア", role: "話者", anim: "jump" },

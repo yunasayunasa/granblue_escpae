@@ -392,7 +392,7 @@ function startArea3Narration() {
     const logFrame = document.createElement("img");
     logFrame.src = "images/log.png";
     logFrame.style.position = "absolute";
-    logFrame.style.bottom = "-30%";
+    logFrame.style.bottom = "-40%";
     logFrame.style.left = "50%";
     logFrame.style.transform = "translateX(-50%)";
     logFrame.style.width = "100%";
@@ -477,7 +477,7 @@ currentLineIndex++;
       };
       const fileName = fileMap[charDef.name] || "gran.png";
       img.src = `images/${fileName}`;
-      img.style.maxWidth = "40%";
+      img.style.maxWidth = "100%";
       img.style.bottom = "0";
 
       if (charDef.role === "話者") {

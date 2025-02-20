@@ -852,7 +852,7 @@ const endingLines = [
   },
   {
     characters: [],
-    text: "グランブルーエスケープ〜完〜"
+    text: "GRAN BLUE ESCAPE〜完〜"
   }
 ];
 

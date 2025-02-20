@@ -501,9 +501,9 @@ if (driveArea2) {
         const c1 = createCharacterElement(charDefs[0]);
         const c2 = createCharacterElement(charDefs[1]);
         c1.style.position = "absolute";
-        c1.style.left = "40%";
+        c1.style.left = "35%";
         c2.style.position = "absolute";
-        c2.style.right = "40%";
+        c2.style.right = "35%";
         characterContainer.appendChild(c1);
         characterContainer.appendChild(c2);
       }
@@ -533,7 +533,7 @@ if (charDef.name === "グラン") {
   // 敵キャラの場合、ここで設定
   img.style.maxWidth = "80%";
 } else {
-  img.style.maxWidth = "20%";
+  img.style.maxWidth = "15%";
 }
 
  // グランだけ位置が高すぎる場合、追加で下にずらす

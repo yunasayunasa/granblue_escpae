@@ -455,7 +455,7 @@ if (driveArea2) {
     const characterContainer = document.createElement("div");
     characterContainer.id = "character-container";
     characterContainer.style.position = "absolute";
-    characterContainer.style.bottom = "50%";
+    characterContainer.style.bottom = "30%";
     characterContainer.style.left = "0";
     characterContainer.style.width = "100%";
     characterContainer.style.height = "50%";
@@ -497,9 +497,9 @@ if (driveArea2) {
         const c1 = createCharacterElement(charDefs[0]);
         const c2 = createCharacterElement(charDefs[1]);
         c1.style.position = "absolute";
-        c1.style.left = "10%";
+        c1.style.left = "30%";
         c2.style.position = "absolute";
-        c2.style.right = "95%";
+        c2.style.right = "100%";
         characterContainer.appendChild(c1);
         characterContainer.appendChild(c2);
       }
@@ -520,23 +520,23 @@ if (driveArea2) {
       //ここで各キャラのサイズを設定
 if (charDef.name === "グラン") {
   // 例えば、グランは少し大きめに表示
-  img.style.maxWidth = "50%";
+  img.style.maxWidth = "30%";
 } else if (charDef.name === "ロベリア") {
-  img.style.maxWidth = "120%";
+  img.style.maxWidth = "150%";
 } else if (charDef.name === "ノア") {
-  img.style.maxWidth ="120%";
+  img.style.maxWidth ="150%";
 } else if (charDef.name === "ロベリアネガ" || charDef.name === "ノアネガ") {
   // 敵キャラの場合、ここで設定
-  img.style.maxWidth = "120%";
+  img.style.maxWidth = "150%";
 } else {
-  img.style.maxWidth = "120%";
+  img.style.maxWidth = "150%";
 }
 
  // グランだけ位置が高すぎる場合、追加で下にずらす
   if (charDef.name === "グラン") {
     // 例：translateY で下に20pxずらす（調整値はお好みで）
     // すでに左右中央に配置している場合は transform に追記します
-    img.style.transform = "translate(-50%, 20px)";
+    img.style.transform = "translate(-50%, 30px)";
   }
 
 

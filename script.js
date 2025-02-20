@@ -368,6 +368,15 @@ function startArea3Narration() {
   if (driveOverlay) {
     driveOverlay.style.display = "none";
   }
+  const deskArea2 = document.getElementById("desk-area2");
+if (deskArea2) {
+  deskArea2.style.pointerEvents = "none";
+}
+
+const driveArea2 = document.getElementById("drive-area2");
+if (driveArea2) {
+  driveArea2.style.pointerEvents = "none";
+}
   // 以下、既存のエリア3ナレーションシーンの生成処理
   /*const scene = document.createElement("div");
   scene.id = "narration-screen3";

@@ -358,7 +358,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // area3MainLines, linesAfterChoiceA, linesAfterChoiceB, endingLines はすでにコードに含まれている
 
-  function startArea3Narration() {
+/*function startArea3Narration() {
     // シーン生成
       const scene = document.createElement("div");
   scene.id = "narration-screen3";
@@ -426,7 +426,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
       const line = lines[currentLineIndex++];
-      console.log("テストテキスト",line.text);  /*デバッグログ*/
+      console.log("テストテキスト",line.text);  
 currentLineIndex++;
       updateCharacters(line.characters);
       textContainer.innerHTML = `<p>${line.text}</p>`;
@@ -1111,4 +1111,4 @@ const endingLines = [
     characters: [],
     text: "グランブルーエスケープ〜完〜"
   }
-];
+];*/

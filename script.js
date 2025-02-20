@@ -597,7 +597,7 @@ currentLineIndex++;
 //==============================
 // エリア3シナリオデータ（外部ファイルを使わず、ここに定義）
 // ==============================
-/*const area3MainLines = [
+const area3MainLines = [
   {
     characters: [
       { name: "ロベリア", role: "話者", anim: "jump" },
@@ -779,7 +779,7 @@ const endingLines = [
 // ==============================
 // エリア3ナレーション実装
 // ==============================
-function startArea3Narration() {
+/*function startArea3Narration() {
   // シーン生成
   const scene = document.createElement("div");
   scene.id = "narration-screen3";

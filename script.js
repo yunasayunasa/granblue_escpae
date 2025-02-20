@@ -387,7 +387,6 @@ function startArea3Narration() {
 
   // 以降、テキストフレーム、キャラクターコンテナなどの処理…
   // ...
-}
   
     // シーン生成
       const scene = document.createElement("div");

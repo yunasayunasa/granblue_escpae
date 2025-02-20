@@ -442,7 +442,7 @@ if (driveArea2) {
     const textContainer = document.createElement("div");
     textContainer.id = "narration-text3";
     textContainer.style.position = "absolute";
-    textContainer.style.bottom = "15%";
+    textContainer.style.top = "70%";
     textContainer.style.left = "50%";
     textContainer.style.transform = "translateX(-50%)";
     textContainer.style.width = "80%";
@@ -497,9 +497,9 @@ if (driveArea2) {
         const c1 = createCharacterElement(charDefs[0]);
         const c2 = createCharacterElement(charDefs[1]);
         c1.style.position = "absolute";
-        c1.style.left = "50%";
+        c1.style.left = "60%";
         c2.style.position = "absolute";
-        c2.style.right = "50%";
+        c2.style.right = "60%";
         characterContainer.appendChild(c1);
         characterContainer.appendChild(c2);
       }

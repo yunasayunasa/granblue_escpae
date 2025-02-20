@@ -377,287 +377,9 @@ driveArea2.addEventListener("click", () => {
   }
 }
 
-// エリア3ナレーションシーンを生成する関数（checkSilhouetteQuizCleared() の外に定義）
-function startArea3Narration() {
-  // シーン生成
-  const scene = document.createElement("div");
-  scene.id = "narration-screen3";
-  scene.className = "scene";
-  scene.style.position = "absolute";
-  scene.style.top = "0";
-  scene.style.left = "0";
-  scene.style.width = "100%";
-  scene.style.height = "100%";
-  scene.style.background = "#000"; // 背景色（後でbg3.jpgを貼る場合は下記で設定）
-  // 背景画像（例: bg3.jpg）
-  scene.style.backgroundImage = "url('images/bg3.jpg')";
-  scene.style.backgroundSize = "contain";
-  scene.style.backgroundPosition = "center";
-  scene.style.backgroundRepeat = "no-repeat";
-  document.body.appendChild(scene);
-
-  // テキストフレーム (log.png) を下部に配置（例）
-  const logFrame = document.createElement("img");
-  logFrame.src = "images/log.png"; // 今まで使っている会話フレーム
-  logFrame.style.position = "absolute";
-  logFrame.style.bottom = "0";
-  logFrame.style.left = "50%";
-  logFrame.style.transform = "translateX(-50%)";
-  logFrame.style.width = "100%"; // 画面幅に合わせる
-  logFrame.style.height = "auto";
-  logFrame.style.zIndex = "10";
-  scene.appendChild(logFrame);
-
-  // テキスト表示領域
-  const textContainer = document.createElement("div");
-  textContainer.style.position = "absolute";
-  textContainer.style.bottom = "10%";
-  textContainer.style.left = "50%";
-  textContainer.style.transform = "translateX(-50%)";
-  textContainer.style.width = "80%";
-  textContainer.style.color = "#fff";
-  textContainer.style.fontSize = "1.2rem";
-  textContainer.style.zIndex = "11";
-  textContainer.style.textAlign = "center";
-  scene.appendChild(textContainer);
-
-  // キャラ表示用コンテナ
-  const characterContainer = document.createElement("div");
-  characterContainer.style.position = "absolute";
-  characterContainer.style.bottom = "20%"; // 今までgran.pngを配置していた高さに合わせる
-  characterContainer.style.left = "0";
-  characterContainer.style.width = "100%";
-  characterContainer.style.height = "50%"; // 適宜調整
-  characterContainer.style.zIndex = "9";
-  scene.appendChild(characterContainer);
-
-  // 現在の行インデックス
-  let currentLineIndex = 0;
-  // メインシナリオをコピーして扱う
-  const lines = [...area3MainLines];
-
-  // クリックで次へ進む
-  scene.addEventListener("click", onClickNext);
-
-  function onClickNext(e) {
-    e.stopPropagation();
-    showNextLine();
-  }
-
-  function showNextLine() {
-    if (currentLineIndex >= lines.length) {
-      // ここで選択肢を出す
-      showChoice();
-      return;
-    }
-    const line = lines[currentLineIndex];
-    currentLineIndex++;
-
-    // キャラ表示を更新
-    updateCharacters(line.characters);
-    // テキストを更新
-    textContainer.innerHTML = `<p>${line.text}</p>`;
-  }
-
-  // キャラクター表示更新
-  function updateCharacters(charDefs) {
-    // まずコンテナ内をクリア
-    characterContainer.innerHTML = "";
-    if (!charDefs || charDefs.length === 0) {
-      // キャラなしの背景のみ
-      return;
-    }
-
-    if (charDefs.length === 1) {
-      // 1人 → 中央表示
-      const c = createCharacterElement(charDefs[0]);
-      c.style.position = "absolute";
-      c.style.left = "50%";
-      c.style.transform = "translateX(-50%)";
-      characterContainer.appendChild(c);
-    } else if (charDefs.length === 2) {
-      // 2人 → 左右に表示
-      const c1 = createCharacterElement(charDefs[0]);
-      const c2 = createCharacterElement(charDefs[1]);
-      c1.style.position = "absolute";
-      c1.style.left = "15%";
-      c2.style.position = "absolute";
-      c2.style.right = "15%";
-      characterContainer.appendChild(c1);
-      characterContainer.appendChild(c2);
-    }
-    // 3人以上は今回ない想定
-  }
-
-  // キャラクター要素を作る
-  function createCharacterElement(charDef) {
-    const img = document.createElement("img");
-    // 画像ファイル名を name に合わせる（例: "ロベリア" → "roberia.png" など）
-    // ただし今回はユーザーがシナリオで name に "ロベリアネガ" と書いているので
-    // そのまま "roberia_negative.png" に対応するマッピングが必要。
-    // ここでは簡単のため、 name をファイル名にしている想定にします:
-    const fileMap = {
-      "グラン": "gran.png",
-      "ロベリア": "roberia.png",
-      "ノア": "noa.png",
-      "ロベリアネガ": "roberia_negative.png",
-      "ノアネガ": "noa_negative.png"
-    };
-    const fileName = fileMap[charDef.name] || "gran.png";
-    img.src = `images/${fileName}`;
-    img.style.maxWidth = "40%";
-    img.style.bottom = "0";
-
-    // 役割(話者 or 非話者) → brightness 切り替え
-    if (charDef.role === "話者") {
-      img.style.filter = "brightness(1)";
-    } else {
-      img.style.filter = "brightness(0.5)";
-    }
-
-    // アニメーション指定
-    if (charDef.anim === "jump") {
-      // CSS 側に .jump { animation: jump 0.5s; } など用意しておき、classList.add("jump") する
-      img.classList.add("jump");
-    } else if (charDef.anim === "shake") {
-      img.classList.add("shake");
-    } else if (charDef.anim === "fadeout") {
-      img.classList.add("fadeout");
-    }
-    // など、アニメーションに応じてクラスを付与
-
-    return img;
-  }
-
-  // 選択肢を出す
-  function showChoice() {
-    scene.removeEventListener("click", onClickNext);
-
-    // テキストを表示
-    textContainer.innerHTML = `<p>君はどちらと戦う？</p>`;
-
-    // 半透明モーダルを作成
-    const choiceModal = document.createElement("div");
-    choiceModal.style.position = "absolute";
-    choiceModal.style.top = "0";
-    choiceModal.style.left = "0";
-    choiceModal.style.width = "100%";
-    choiceModal.style.height = "100%";
-    choiceModal.style.backgroundColor = "rgba(0,0,0,0.5)";
-    choiceModal.style.zIndex = "999";
-    scene.appendChild(choiceModal);
-
-    // 中央にボタンを配置
-    const choiceContainer = document.createElement("div");
-    choiceContainer.style.position = "absolute";
-    choiceContainer.style.top = "50%";
-    choiceContainer.style.left = "50%";
-    choiceContainer.style.transform = "translate(-50%, -50%)";
-    choiceContainer.style.display = "flex";
-    choiceContainer.style.flexDirection = "column";
-    choiceContainer.style.gap = "20px";
-    choiceModal.appendChild(choiceContainer);
-
-    // ボタンA
-    const btnA = document.createElement("button");
-    btnA.textContent = "ロベリアネガと戦う(クイズ)";
-    choiceContainer.appendChild(btnA);
-    btnA.addEventListener("click", () => {
-      scene.removeEventListener("click", onClickNext);
-      choiceModal.remove();
-      // 分岐ナレーションを表示して、ゲームへ
-      showBranchLines(linesAfterChoiceA, () => {
-        // ここでゲーム実装 or すぐエンディングへ
-        showEndingLines();
-      });
-    });
-
-    // ボタンB
-    const btnB = document.createElement("button");
-    btnB.textContent = "ノアネガと戦う(謎解き)";
-    choiceContainer.appendChild(btnB);
-    btnB.addEventListener("click", () => {
-      scene.removeEventListener("click", onClickNext);
-      choiceModal.remove();
-      // 分岐ナレーションを表示して、ゲームへ
-      showBranchLines(linesAfterChoiceB, () => {
-        // ここでゲーム実装 or すぐエンディングへ
-        showEndingLines();
-      });
-    });
-  }
-
-  // 分岐ナレーションを順番に表示
-  function showBranchLines(branchLines, onFinish) {
-    let idx = 0;
-    const branchClickHandler = () => {
-      if (idx >= branchLines.length) {
-        scene.removeEventListener("click", branchClickHandler);
-        if (onFinish) onFinish();
-        return;
-      }
-      const line = branchLines[idx++];
-      updateCharacters(line.characters);
-      textContainer.innerHTML = `<p>${line.text}</p>`;
-    };
-    scene.addEventListener("click", branchClickHandler);
-    branchClickHandler(); // 最初の呼び出し
-  }
-
-  // エンディングナレーションを表示
-  function showEndingLines() {
-    let idx = 0;
-    const endClickHandler = () => {
-      if (idx >= endingLines.length) {
-        scene.removeEventListener("click", endClickHandler);
-        // 最後にエンディング画像を表示する
-        showEndingImage();
-        return;
-      }
-      const line = endingLines[idx++];
-      updateCharacters(line.characters);
-      textContainer.innerHTML = `<p>${line.text}</p>`;
-    };
-    scene.addEventListener("click", endClickHandler);
-    endClickHandler();
-  }
-
-  // エンディング画像(THANK YOU FOR PLAYING)を表示
-  function showEndingImage() {
-    // 画面をクリアしてエンディング画面に遷移
-    scene.innerHTML = "";
-    // 背景画像を切り替える or 新規要素で表示
-    scene.style.backgroundImage = "url('images/title.jpg')"; 
-    scene.style.backgroundSize = "contain";
-    scene.style.backgroundPosition = "center";
-    scene.style.backgroundRepeat = "no-repeat";
-
-    // テキストを表示（左側 or 中央寄せなど）
-    const endText = document.createElement("div");
-    endText.style.position = "absolute";
-    endText.style.top = "50%";
-    endText.style.left = "50%";
-    endText.style.transform = "translate(-50%, -50%)";
-    endText.style.color = "#fff";
-    endText.style.fontSize = "2rem";
-    endText.style.textAlign = "center";
-    endText.innerHTML = "THANK YOU FOR PLAYING!";
-    scene.appendChild(endText);
-  }
-
-  // 最初の行を表示
-  showNextLine();
-}
-
-
 // ==============================
-// データ構造
+// エリア3シナリオデータ
 // ==============================
-
-// area3MainLines: エリア3の導入ナレーション
-// 各要素は { characters: [...], text: "..." } の形
-// characters は [ { name: "ロベリア", role: "話者", anim: "1回ぴょんと跳ねる" }, ... ]
-// text は 「」内のセリフ部分
 const area3MainLines = [
   {
     characters: [
@@ -755,33 +477,28 @@ const area3MainLines = [
     characters: [
       { name: "グラン", role: "話者", anim: "" }
     ],
-    text: "君はどちらと戦う？"  // ← ここで選択肢を出す
+    text: "君はどちらと戦う？"
   }
 ];
 
-// 選択肢Aを選んだ場合の分岐ナレーション
 const linesAfterChoiceA = [
   {
     characters: [
       { name: "ロベリアネガ", role: "話者", anim: "" }
     ],
     text: "クイズで勝負だ！"
-  },
-  // ゲーム開始（後ほど実装）→ エンディングへ
+  }
 ];
 
-// 選択肢Bを選んだ場合の分岐ナレーション
 const linesAfterChoiceB = [
   {
     characters: [
       { name: "ノアネガ", role: "話者", anim: "" }
     ],
     text: "僕は謎解きの星晶獣...謎解きで勝負！"
-  },
-  // ゲーム開始（後ほど実装）→ エンディングへ
+  }
 ];
 
-// エンディングナレーション
 const endingLines = [
   {
     characters: [
@@ -841,3 +558,247 @@ const endingLines = [
     text: "グランブルーエスケープ〜完〜"
   }
 ];
+
+// ==============================
+// エリア3ナレーション実装
+// ==============================
+function startArea3Narration() {
+  // シーン生成
+  var scene = document.createElement("div");
+  scene.id = "narration-screen3";
+  scene.className = "scene";
+  scene.style.position = "absolute";
+  scene.style.top = "0";
+  scene.style.left = "0";
+  scene.style.width = "100%";
+  scene.style.height = "100%";
+  // 背景画像（bg3.jpg）設定
+  scene.style.backgroundImage = "url('images/bg3.jpg')";
+  scene.style.backgroundSize = "contain";
+  scene.style.backgroundPosition = "center";
+  scene.style.backgroundRepeat = "no-repeat";
+  document.body.appendChild(scene);
+  
+  // テキストフレーム (log.png) を下部に配置
+  var logFrame = document.createElement("img");
+  logFrame.src = "images/log.png";
+  logFrame.style.position = "absolute";
+  logFrame.style.bottom = "0";
+  logFrame.style.left = "50%";
+  logFrame.style.transform = "translateX(-50%)";
+  logFrame.style.width = "100%";
+  logFrame.style.height = "auto";
+  logFrame.style.zIndex = "10";
+  scene.appendChild(logFrame);
+  
+  // テキスト表示領域
+  var textContainer = document.createElement("div");
+  textContainer.id = "narration-text3";
+  textContainer.style.position = "absolute";
+  textContainer.style.bottom = "10%";
+  textContainer.style.left = "50%";
+  textContainer.style.transform = "translateX(-50%)";
+  textContainer.style.width = "80%";
+  textContainer.style.color = "#fff";
+  textContainer.style.fontSize = "1.2rem";
+  textContainer.style.textAlign = "center";
+  textContainer.style.zIndex = "11";
+  scene.appendChild(textContainer);
+  
+  // キャラクター表示用コンテナ
+  var characterContainer = document.createElement("div");
+  characterContainer.id = "character-container";
+  characterContainer.style.position = "absolute";
+  characterContainer.style.bottom = "20%";  // gran.png の配置に合わせる
+  characterContainer.style.left = "0";
+  characterContainer.style.width = "100%";
+  characterContainer.style.height = "50%";
+  characterContainer.style.zIndex = "9";
+  scene.appendChild(characterContainer);
+  
+  // 現在の行インデックス
+  var currentLineIndex = 0;
+  // コピーしたシナリオデータを使用
+  var lines = area3MainLines.slice();
+  
+  // クリックで次へ進む
+  scene.addEventListener("click", onClickNext);
+  function onClickNext(e) {
+    e.stopPropagation();
+    showNextLine();
+  }
+  function showNextLine() {
+    if (currentLineIndex >= lines.length) {
+      scene.removeEventListener("click", onClickNext);
+      showChoice();
+      return;
+    }
+    var line = lines[currentLineIndex];
+    currentLineIndex++;
+    updateCharacters(line.characters);
+    textContainer.innerHTML = "<p>" + line.text + "</p>";
+  }
+  
+  // キャラクター表示更新
+  function updateCharacters(charDefs) {
+    characterContainer.innerHTML = "";
+    if (!charDefs || charDefs.length === 0) return;
+    if (charDefs.length === 1) {
+      var c = createCharacterElement(charDefs[0]);
+      c.style.position = "absolute";
+      c.style.left = "50%";
+      c.style.transform = "translateX(-50%)";
+      characterContainer.appendChild(c);
+    } else if (charDefs.length === 2) {
+      var c1 = createCharacterElement(charDefs[0]);
+      var c2 = createCharacterElement(charDefs[1]);
+      c1.style.position = "absolute";
+      c1.style.left = "15%";
+      c2.style.position = "absolute";
+      c2.style.right = "15%";
+      characterContainer.appendChild(c1);
+      characterContainer.appendChild(c2);
+    }
+  }
+  
+  // キャラクター要素生成
+  function createCharacterElement(charDef) {
+    var img = document.createElement("img");
+    var fileMap = {
+      "グラン": "gran.png",
+      "ロベリア": "roberia.png",
+      "ノア": "noa.png",
+      "ロベリアネガ": "roberia_negative.png",
+      "ノアネガ": "noa_negative.png"
+    };
+    var fileName = fileMap[charDef.name] || "gran.png";
+    img.src = "images/" + fileName;
+    img.style.maxWidth = "40%";
+    img.style.bottom = "0";
+    if (charDef.role === "話者") {
+      img.style.filter = "brightness(1)";
+    } else {
+      img.style.filter = "brightness(0.5)";
+    }
+    if (charDef.anim === "jump") {
+      img.classList.add("jump");
+    } else if (charDef.anim === "shake") {
+      img.classList.add("shake");
+    } else if (charDef.anim === "fadeout") {
+      img.classList.add("fadeout");
+    }
+    return img;
+  }
+  
+  // 選択肢表示
+  function showChoice() {
+    scene.removeEventListener("click", onClickNext);
+    textContainer.innerHTML = "<p>君はどちらと戦う？</p>";
+    var choiceModal = document.createElement("div");
+    choiceModal.id = "choice-modal";
+    choiceModal.style.position = "absolute";
+    choiceModal.style.top = "0";
+    choiceModal.style.left = "0";
+    choiceModal.style.width = "100%";
+    choiceModal.style.height = "100%";
+    choiceModal.style.backgroundColor = "rgba(0,0,0,0.5)";
+    choiceModal.style.zIndex = "999";
+    scene.appendChild(choiceModal);
+    
+    var choiceContainer = document.createElement("div");
+    choiceContainer.id = "choice-container";
+    choiceContainer.style.position = "absolute";
+    choiceContainer.style.top = "50%";
+    choiceContainer.style.left = "50%";
+    choiceContainer.style.transform = "translate(-50%, -50%)";
+    choiceContainer.style.display = "flex";
+    choiceContainer.style.flexDirection = "column";
+    choiceContainer.style.gap = "20px";
+    choiceModal.appendChild(choiceContainer);
+    
+    var btnA = document.createElement("button");
+    btnA.textContent = "ロベリアネガと戦う(クイズ)";
+    choiceContainer.appendChild(btnA);
+    btnA.addEventListener("click", function() {
+      scene.removeEventListener("click", onClickNext);
+      choiceModal.remove();
+      showBranchLines(linesAfterChoiceA, function() {
+        startArea3Game("A");
+      });
+    });
+    
+    var btnB = document.createElement("button");
+    btnB.textContent = "ノアネガと戦う(謎解き)";
+    choiceContainer.appendChild(btnB);
+    btnB.addEventListener("click", function() {
+      scene.removeEventListener("click", onClickNext);
+      choiceModal.remove();
+      showBranchLines(linesAfterChoiceB, function() {
+        startArea3Game("B");
+      });
+    });
+  }
+  
+  // 分岐ナレーション表示
+  function showBranchLines(branchLines, onFinish) {
+    var idx = 0;
+    var branchClickHandler = function() {
+      if (idx >= branchLines.length) {
+        scene.removeEventListener("click", branchClickHandler);
+        if (onFinish) onFinish();
+        return;
+      }
+      var line = branchLines[idx++];
+      updateCharacters(line.characters);
+      textContainer.innerHTML = "<p>" + line.text + "</p>";
+    };
+    scene.addEventListener("click", branchClickHandler);
+    branchClickHandler();
+  }
+  
+  // エンディングナレーション表示
+  function showEndingLines() {
+    var idx = 0;
+    var endClickHandler = function() {
+      if (idx >= endingLines.length) {
+        scene.removeEventListener("click", endClickHandler);
+        showEndingImage();
+        return;
+      }
+      var line = endingLines[idx++];
+      updateCharacters(line.characters);
+      textContainer.innerHTML = "<p>" + line.text + "</p>";
+    };
+    scene.addEventListener("click", endClickHandler);
+    endClickHandler();
+  }
+  
+  // エンディング画像とテキスト表示
+  function showEndingImage() {
+    scene.innerHTML = "";
+    scene.style.backgroundImage = "url('images/title.jpg')";
+    scene.style.backgroundSize = "contain";
+    scene.style.backgroundPosition = "center";
+    scene.style.backgroundRepeat = "no-repeat";
+    var endText = document.createElement("div");
+    endText.className = "end-text";
+    endText.style.position = "absolute";
+    endText.style.top = "50%";
+    endText.style.left = "50%";
+    endText.style.transform = "translate(-50%, -50%)";
+    endText.style.color = "#fff";
+    endText.style.fontSize = "2rem";
+    endText.style.textAlign = "center";
+    endText.innerHTML = "THANK YOU FOR PLAYING!";
+    scene.appendChild(endText);
+  }
+  
+  // ゲームシーン開始処理（後ほど実装予定）
+  function startArea3Game(choice) {
+    alert("エリア3ゲーム開始: 選択肢 " + choice);
+    // ここに選択肢に応じたゲームシーンへの遷移処理を追加
+  }
+  
+  // 最初の行を表示
+  showNextLine();
+});

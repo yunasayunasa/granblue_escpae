@@ -727,7 +727,7 @@ function startQuizGame(modal) {
   function showQuizQuestion() {
     modal.innerHTML = ""; // 前の内容をクリア
     if (currentQuizIndex >= quizQuestions.length) {
-      alert("全問正解！ エリア3ゲームクリア！");
+      alert("全問正解！ エリア3クリア！");
       document.body.removeChild(modal);
       showEndingLines(); // エンディングナレーションへ遷移
       return;
@@ -768,15 +768,15 @@ function startRiddleGame(modal) {
   const riddleQuestions = [
     {
       type: "text",
-      question: "アナグラム、以下の言葉を正しく並べ替えよ：またごきや",
+      question: "以下の言葉を正しく並べ替えよ：/nまたごきや",
       answer: "たまごやき"
     },
     {
       type: "image",
-      question: "次の画像をよく見よ。画像がゆっくり変化した後、今の画像から増えた(消えた)物は？",
+      question: "今の画像から増えた(消えた)物は？",
       imageStart: "images/ten.jpg",
       imageEnd: "images/ten_alt.jpg",
-      transitionTime: 15000, // 15秒
+      transitionTime: 10000, // 10秒
       answer: "ゴリラ"
     },
     {
@@ -856,7 +856,7 @@ function startRiddleGame(modal) {
   function createRiddleAnswerInput() {
     const inputField = document.createElement("input");
     inputField.type = "text";
-    inputField.placeholder = "カタカナで入力";
+    inputField.placeholder = "答えを入力";
     inputField.style.marginTop = "10px";
     inputField.style.fontSize = "1rem";
     modal.appendChild(inputField);

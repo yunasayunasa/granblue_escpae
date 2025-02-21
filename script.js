@@ -885,7 +885,7 @@ function startRiddleGame(modal) {
       }, 0);
 
       // 15秒後＋余裕500msで画像コンテナを削除して問題文を表示
-      setTimeout(() => {
+      /*setTimeout(() => {
         imgContainer.remove();
         questionText.textContent = currentRiddle.question;
         createRiddleAnswerInput();

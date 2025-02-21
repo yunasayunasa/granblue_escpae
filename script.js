@@ -879,7 +879,7 @@ function startRiddleGame(modal) {
 }
 
       // 強制リフローしてからフェードイン開始
-      /*endImg.offsetHeight;
+      endImg.offsetHeight;
       setTimeout(() => {
         endImg.style.opacity = "1";
       }, 0);

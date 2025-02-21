@@ -662,11 +662,199 @@ if (charDef.name === "グラン") {
     }
 
     function startArea3Game(choice) {
-      alert("エリア3ゲーム開始: 選択肢 " + choice);
-      // 後ほどゲームシーンへ遷移
-      // ここではエンディングへ直接行く場合
-      showEndingLines();
+  // 黒の半透明モーダルを作成（ゲーム部分用）
+  const gameModal = document.createElement("div");
+  gameModal.id = "area3-game-modal";
+  gameModal.style.position = "fixed";
+  gameModal.style.top = "0";
+  gameModal.style.left = "0";
+  gameModal.style.width = "100%";
+  gameModal.style.height = "100%";
+  gameModal.style.backgroundColor = "rgba(0,0,0,0.8)";
+  gameModal.style.zIndex = "4000";
+  gameModal.style.display = "flex";
+  gameModal.style.flexDirection = "column";
+  gameModal.style.justifyContent = "center";
+  gameModal.style.alignItems = "center";
+  document.body.appendChild(gameModal);
+
+  if (choice === "A") {
+    startQuizGame(gameModal);
+  } else if (choice === "B") {
+    startRiddleGame(gameModal);
+  }
+}
+
+function startQuizGame(modal) {
+  // クイズ問題の定義
+  const quizQuestions = [
+    {
+      question: "オレの名前は？",
+      options: ["ロベリア", "ロペリアネガ", "ロベリアネガ", "バレンタインロベリア"],
+      correct: 2
+    },
+    {
+      question: "部屋の鍵の番号は？",
+      options: ["4593", "9354", "5493", "9435"],
+      correct: 0
+    },
+    {
+      question: "グッドエンドを見る為には誰からチョコを貰えばいい？",
+      options: ["アンスリア", "ニーア", "クラリス", "ディアンサ"],
+      correct: 1
+    },
+    {
+      question: "十天衆について間違っているのはどれ？",
+      options: ["150になると奥義が極大になる", "150になると4アビが再使用可能になる", "150になるとリミサポが増える", "150になるとアビリティが1T短縮される"],
+      correct: 3
+    },
+    {
+      question: "このゲームの作者は？",
+      options: ["ゆなまよ", "ゆなさ", "ゆなゆな", "ゆなんさ"],
+      correct: 1
     }
+  ];
+  let currentQuizIndex = 0;
+
+  function showQuizQuestion() {
+    modal.innerHTML = ""; // 前の内容をクリア
+    if (currentQuizIndex >= quizQuestions.length) {
+      alert("全問正解！ エリア3ゲームクリア！");
+      document.body.removeChild(modal);
+      // エンディングナレーションへ遷移（既存の showEndingLines() を呼ぶ）
+      showEndingLines();
+      return;
+    }
+    const currentQuestion = quizQuestions[currentQuizIndex];
+
+    const questionText = document.createElement("p");
+    questionText.textContent = currentQuestion.question;
+    questionText.style.color = "#fff";
+    questionText.style.fontSize = "1.5rem";
+    questionText.style.marginBottom = "20px";
+    modal.appendChild(questionText);
+
+    // 選択肢ボタンを作成
+    currentQuestion.options.forEach((option, index) => {
+      const btn = document.createElement("button");
+      btn.textContent = option;
+      btn.style.margin = "10px";
+      btn.style.padding = "10px 20px";
+      btn.style.fontSize = "1rem";
+      btn.addEventListener("click", () => {
+        if (index === currentQuestion.correct) {
+          alert("正解！");
+          currentQuizIndex++;
+          showQuizQuestion();
+        } else {
+          alert("間違いだ！もう一度選びたまえ！");
+        }
+      });
+      modal.appendChild(btn);
+    });
+  }
+  showQuizQuestion();
+}
+
+function startRiddleGame(modal) {
+  // 謎解き問題の定義
+  const riddleQuestions = [
+    {
+      type: "text",
+      question: "アナグラム、以下の言葉を正しく並べ替えよ：またごきや",
+      answer: "たまごやき"
+    },
+    {
+      type: "image",
+      question: "次の画像をよく見よ。画像がゆっくり変化した後、今の画像から増えた(消えた)物は？",
+      imageStart: "images/ten.jpg",
+      imageEnd: "images/ten_alt.jpg",
+      transitionTime: 15000, // 15秒
+      answer: "ゴリラ"
+    },
+    {
+      type: "text",
+      question: "数字パズル: １＋４＝５　２＋５＝１２　３＋６＝２１　８＋１１＝□　答えは？",
+      answer: "96"
+    }
+  ];
+  let currentRiddleIndex = 0;
+
+  function showRiddleQuestion() {
+    modal.innerHTML = "";
+    if (currentRiddleIndex >= riddleQuestions.length) {
+      alert("全問正解！ エリア3ゲームクリア！");
+      document.body.removeChild(modal);
+      showEndingLines();
+      return;
+    }
+    const currentRiddle = riddleQuestions[currentRiddleIndex];
+
+    const questionText = document.createElement("p");
+    questionText.style.color = "#fff";
+    questionText.style.fontSize = "1.5rem";
+    questionText.style.marginBottom = "20px";
+    modal.appendChild(questionText);
+
+    if (currentRiddle.type === "text") {
+      questionText.textContent = currentRiddle.question;
+      createRiddleAnswerInput();
+    } else if (currentRiddle.type === "image") {
+      // 画像を表示して、15秒かけて徐々に画像を切り替え
+      const img = document.createElement("img");
+      img.src = currentRiddle.imageStart;
+      img.style.width = "80%";
+      img.style.height = "auto";
+      modal.appendChild(img);
+      setTimeout(() => {
+        img.src = currentRiddle.imageEnd;
+        // 少し待ってから画像を削除して問題文を表示
+        setTimeout(() => {
+          modal.removeChild(img);
+          questionText.textContent = currentRiddle.question;
+          createRiddleAnswerInput();
+        }, 500);
+      }, currentRiddle.transitionTime);
+    }
+  }
+
+  function createRiddleAnswerInput() {
+    const inputField = document.createElement("input");
+    inputField.type = "text";
+    inputField.placeholder = "カタカナで入力";
+    inputField.style.marginTop = "10px";
+    inputField.style.fontSize = "1rem";
+    modal.appendChild(inputField);
+
+    const submitButton = document.createElement("button");
+    submitButton.textContent = "送信";
+    submitButton.style.marginTop = "10px";
+    submitButton.style.fontSize = "1rem";
+    modal.appendChild(submitButton);
+
+    submitButton.addEventListener("click", () => {
+      const answer = inputField.value.trim();
+      if (riddleQuestions[currentRiddleIndex].type === "image") {
+        if (answer.indexOf("ゴリラ") !== -1) {
+          alert("正解！");
+          currentRiddleIndex++;
+          showRiddleQuestion();
+        } else {
+          alert("間違いだよ、もう一度考えなよ");
+        }
+      } else {
+        if (answer === riddleQuestions[currentRiddleIndex].answer) {
+          alert("正解！");
+          currentRiddleIndex++;
+          showRiddleQuestion();
+        } else {
+          alert("間違いだよ、もう一度考えなよ");
+        }
+      }
+    });
+  }
+  showRiddleQuestion();
+}
 
     // 最初の行を表示
     showNextLine();

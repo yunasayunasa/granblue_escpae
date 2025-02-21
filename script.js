@@ -661,8 +661,11 @@ if (charDef.name === "グラン") {
       scene.appendChild(endText);
     }
 
-    function startArea3Game(choice) {
-  // 黒の半透明モーダルを作成（ゲーム部分用）
+    //===============================
+// 第3エリアゲーム部分の統合コード
+//===============================
+function startArea3Game(choice) {
+  // 黒の半透明モーダル（ゲーム部分用）を作成
   const gameModal = document.createElement("div");
   gameModal.id = "area3-game-modal";
   gameModal.style.position = "fixed";
@@ -685,8 +688,8 @@ if (charDef.name === "グラン") {
   }
 }
 
+// ----- クイズゲーム（ロベリアネガ戦） -----
 function startQuizGame(modal) {
-  // クイズ問題の定義
   const quizQuestions = [
     {
       question: "オレの名前は？",
@@ -705,7 +708,12 @@ function startQuizGame(modal) {
     },
     {
       question: "十天衆について間違っているのはどれ？",
-      options: ["150になると奥義が極大になる", "150になると4アビが再使用可能になる", "150になるとリミサポが増える", "150になるとアビリティが1T短縮される"],
+      options: [
+        "150になると奥義が極大になる",
+        "150になると4アビが再使用可能になる",
+        "150になるとリミサポが増える",
+        "150になるとアビリティが1T短縮される"
+      ],
       correct: 3
     },
     {
@@ -721,8 +729,7 @@ function startQuizGame(modal) {
     if (currentQuizIndex >= quizQuestions.length) {
       alert("全問正解！ エリア3ゲームクリア！");
       document.body.removeChild(modal);
-      // エンディングナレーションへ遷移（既存の showEndingLines() を呼ぶ）
-      showEndingLines();
+      showEndingLines(); // エンディングナレーションへ遷移
       return;
     }
     const currentQuestion = quizQuestions[currentQuizIndex];
@@ -734,7 +741,7 @@ function startQuizGame(modal) {
     questionText.style.marginBottom = "20px";
     modal.appendChild(questionText);
 
-    // 選択肢ボタンを作成
+    // 選択肢ボタンの生成
     currentQuestion.options.forEach((option, index) => {
       const btn = document.createElement("button");
       btn.textContent = option;
@@ -756,8 +763,8 @@ function startQuizGame(modal) {
   showQuizQuestion();
 }
 
+// ----- 謎解きゲーム（ノアネガ戦） -----
 function startRiddleGame(modal) {
-  // 謎解き問題の定義
   const riddleQuestions = [
     {
       type: "text",
@@ -799,55 +806,52 @@ function startRiddleGame(modal) {
     if (currentRiddle.type === "text") {
       questionText.textContent = currentRiddle.question;
       createRiddleAnswerInput();
-    } 
-    if (currentRiddle.type === "image") {
-  // 画像切替用コンテナを作成
-  const imgContainer = document.createElement("div");
-  imgContainer.style.position = "relative";
-  imgContainer.style.width = "80%";  // 必要に応じて調整
-  imgContainer.style.height = "auto";
-  modal.appendChild(imgContainer);
+    } else if (currentRiddle.type === "image") {
+      // 画像フェードイン切替処理
+      const imgContainer = document.createElement("div");
+      imgContainer.style.position = "relative";
+      imgContainer.style.width = "80%";  // 調整可能
+      imgContainer.style.height = "auto";
+      modal.appendChild(imgContainer);
 
-  // スタート画像の生成
-  const startImg = document.createElement("img");
-  startImg.src = currentRiddle.imageStart;
-  startImg.style.position = "absolute";
-  startImg.style.top = "0";
-  startImg.style.left = "0";
-  startImg.style.width = "100%";
-  startImg.style.height = "auto";
-  startImg.style.objectFit = "contain";
-  startImg.style.zIndex = "1";
-  imgContainer.appendChild(startImg);
+      const startImg = document.createElement("img");
+      startImg.src = currentRiddle.imageStart;
+      startImg.style.position = "absolute";
+      startImg.style.top = "0";
+      startImg.style.left = "0";
+      startImg.style.width = "100%";
+      startImg.style.height = "auto";
+      startImg.style.objectFit = "contain";
+      startImg.style.zIndex = "1";
+      imgContainer.appendChild(startImg);
 
-  // エンド画像の生成（初期は透明）
-  const endImg = document.createElement("img");
-  endImg.src = currentRiddle.imageEnd;
-  endImg.style.position = "absolute";
-  endImg.style.top = "0";
-  endImg.style.left = "0";
-  endImg.style.width = "100%";
-  endImg.style.height = "auto";
-  endImg.style.objectFit = "contain";
-  endImg.style.zIndex = "2";
-  endImg.style.opacity = "0";
-  // opacityを transitionTime ミリ秒かけて線形で変化させる
-  endImg.style.transition = "opacity " + currentRiddle.transitionTime + "ms linear";
-  imgContainer.appendChild(endImg);
+      const endImg = document.createElement("img");
+      endImg.src = currentRiddle.imageEnd;
+      endImg.style.position = "absolute";
+      endImg.style.top = "0";
+      endImg.style.left = "0";
+      endImg.style.width = "100%";
+      endImg.style.height = "auto";
+      endImg.style.objectFit = "contain";
+      endImg.style.zIndex = "2";
+      endImg.style.opacity = "0";
+      endImg.style.transition = "opacity " + currentRiddle.transitionTime + "ms linear";
+      imgContainer.appendChild(endImg);
 
-  // リフローを強制してから、endImg の opacity を 1 にする
-  endImg.offsetHeight; // ※これで再描画が促される
-  setTimeout(() => {
-    endImg.style.opacity = "1";
-  }, 0);
+      // 強制リフローしてからフェードイン開始
+      endImg.offsetHeight;
+      setTimeout(() => {
+        endImg.style.opacity = "1";
+      }, 0);
 
-  // transitionTime + 500ms後に、画像切替用コンテナを削除し、問題文を表示
-  setTimeout(() => {
-    imgContainer.remove();
-    questionText.textContent = currentRiddle.question;
-    createRiddleAnswerInput();
-  }, currentRiddle.transitionTime + 500);
-}
+      // 15秒後＋余裕500msで画像コンテナを削除して問題文を表示
+      setTimeout(() => {
+        imgContainer.remove();
+        questionText.textContent = currentRiddle.question;
+        createRiddleAnswerInput();
+      }, currentRiddle.transitionTime + 500);
+    }
+  }
 
   function createRiddleAnswerInput() {
     const inputField = document.createElement("input");
@@ -865,21 +869,24 @@ function startRiddleGame(modal) {
 
     submitButton.addEventListener("click", () => {
       const answer = inputField.value.trim();
-      if (riddleQuestions[currentRiddleIndex].type === "image") {
-        if (answer.indexOf("ゴリラ") !== -1) {
-          alert("正解！");
-          currentRiddleIndex++;
-          showRiddleQuestion();
+      if (currentRiddleIndex < riddleQuestions.length) {
+        const current = riddleQuestions[currentRiddleIndex];
+        if (current.type === "image") {
+          if (answer.indexOf("ゴリラ") !== -1) {
+            alert("正解！");
+            currentRiddleIndex++;
+            showRiddleQuestion();
+          } else {
+            alert("間違いだよ、もう一度考えなよ");
+          }
         } else {
-          alert("間違いだよ、もう一度考えなよ");
-        }
-      } else {
-        if (answer === riddleQuestions[currentRiddleIndex].answer) {
-          alert("正解！");
-          currentRiddleIndex++;
-          showRiddleQuestion();
-        } else {
-          alert("間違いだよ、もう一度考えなよ");
+          if (answer === current.answer) {
+            alert("正解！");
+            currentRiddleIndex++;
+            showRiddleQuestion();
+          } else {
+            alert("間違いだよ、もう一度考えなよ");
+          }
         }
       }
     });

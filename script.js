@@ -712,7 +712,7 @@ function startQuizGame(modal) {
         "150になると奥義が極大になる",
         "150になると4アビが再使用可能になる",
         "150になるとリミサポが増える",
-        "150になるとアビリティが1T短縮される"
+        "150になると全てのアビリティが1T短縮される"
       ],
       correct: 3
     },
@@ -768,20 +768,20 @@ function startRiddleGame(modal) {
   const riddleQuestions = [
     {
       type: "text",
-      question: "アナグラム、以下の言葉を正しく並べ替えよ：またごきや",
+      question: "アナグラム問題:以下の言葉を正しく並べ替えよ：またごきや",
       answer: "たまごやき"
     },
     {
       type: "image",
-      question: "次の画像をよく見よ。画像がゆっくり変化した後、今の画像から増えた(消えた)物は？",
+      question: "画像がゆっくり変化した後、今の画像から増えた(消えた)物は？",
       imageStart: "images/ten.jpg",
       imageEnd: "images/ten_alt.jpg",
-      transitionTime: 15000, // 15秒
+      transitionTime: 10000, // 15秒
       answer: "ゴリラ"
     },
     {
       type: "text",
-      question: "数字パズル: １＋４＝５　２＋５＝１２　３＋６＝２１　８＋１１＝□　答えは？",
+      question: "数字パズル: １＋４＝５　２＋５＝１２　３＋６＝２１　８＋１１＝□　□に入る答えは？",
       answer: "96"
     }
   ];
@@ -849,14 +849,14 @@ function startRiddleGame(modal) {
         imgContainer.remove();
         questionText.textContent = currentRiddle.question;
         createRiddleAnswerInput();
-      }, currentRiddle.transitionTime + 500);
+      }, currentRiddle.transitionTime + 600);
     }
   }
 
   function createRiddleAnswerInput() {
     const inputField = document.createElement("input");
     inputField.type = "text";
-    inputField.placeholder = "カタカナで入力";
+    inputField.placeholder = "答えを入力";
     inputField.style.marginTop = "10px";
     inputField.style.fontSize = "1rem";
     modal.appendChild(inputField);

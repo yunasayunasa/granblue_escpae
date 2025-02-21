@@ -800,23 +800,52 @@ function startRiddleGame(modal) {
       questionText.textContent = currentRiddle.question;
       createRiddleAnswerInput();
     } else if (currentRiddle.type === "image") {
-      // 画像を表示して、15秒かけて徐々に画像を切り替え
-      const img = document.createElement("img");
-      img.src = currentRiddle.imageStart;
-      img.style.width = "80%";
-      img.style.height = "auto";
-      modal.appendChild(img);
-      setTimeout(() => {
-        img.src = currentRiddle.imageEnd;
-        // 少し待ってから画像を削除して問題文を表示
-        setTimeout(() => {
-          modal.removeChild(img);
-          questionText.textContent = currentRiddle.question;
-          createRiddleAnswerInput();
-        }, 500);
-      }, currentRiddle.transitionTime);
-    }
-  }
+  // 画像切替用コンテナを作成
+  const imgContainer = document.createElement("div");
+  imgContainer.style.position = "relative";
+  imgContainer.style.width = "80%"; // 必要に応じて調整
+  imgContainer.style.height = "auto";
+  modal.appendChild(imgContainer);
+
+  // スタート画像
+  const startImg = document.createElement("img");
+  startImg.src = currentRiddle.imageStart;
+  startImg.style.position = "absolute";
+  startImg.style.top = "0";
+  startImg.style.left = "0";
+  startImg.style.width = "100%";
+  startImg.style.height = "auto";
+  startImg.style.objectFit = "contain";
+  startImg.style.zIndex = "1";
+  imgContainer.appendChild(startImg);
+
+  // エンド画像（初期は透明）
+  const endImg = document.createElement("img");
+  endImg.src = currentRiddle.imageEnd;
+  endImg.style.position = "absolute";
+  endImg.style.top = "0";
+  endImg.style.left = "0";
+  endImg.style.width = "100%";
+  endImg.style.height = "auto";
+  endImg.style.objectFit = "contain";
+  endImg.style.zIndex = "2";
+  endImg.style.opacity = "0";
+  // opacity を15秒かけて線形で変化させる
+  endImg.style.transition = "opacity " + currentRiddle.transitionTime + "ms linear";
+  imgContainer.appendChild(endImg);
+
+  // すぐに endImg の opacity を 1 にする（徐々にフェードイン）
+  setTimeout(() => {
+    endImg.style.opacity = "1";
+  }, 0);
+
+  // 15秒後＋余裕（例:500ms）経過後にコンテナを削除して、問題文を表示
+  setTimeout(() => {
+    imgContainer.remove();
+    questionText.textContent = currentRiddle.question;
+    createRiddleAnswerInput();
+  }, currentRiddle.transitionTime + 500);
+}
 
   function createRiddleAnswerInput() {
     const inputField = document.createElement("input");

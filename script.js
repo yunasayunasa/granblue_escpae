@@ -844,7 +844,7 @@ function startRiddleGame(modal) {
     imgContainer.remove();
     questionText.textContent = currentRiddle.question;
     createRiddleAnswerInput();
-  }, currentRiddle.transitionTime + 500);
+  }, currentRiddle.transitionTime + 15000);
 }
 
   function createRiddleAnswerInput() {

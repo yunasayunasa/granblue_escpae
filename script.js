@@ -799,7 +799,8 @@ function startRiddleGame(modal) {
     if (currentRiddle.type === "text") {
       questionText.textContent = currentRiddle.question;
       createRiddleAnswerInput();
-    } else if (currentRiddle.type === "image") {
+    } 
+    if (currentRiddle.type === "image") {
   // 画像切替用コンテナを作成
   const imgContainer = document.createElement("div");
   imgContainer.style.position = "relative";
@@ -830,21 +831,22 @@ function startRiddleGame(modal) {
   endImg.style.objectFit = "contain";
   endImg.style.zIndex = "2";
   endImg.style.opacity = "0";
-  // opacityを transitionTime ミリ秒かけて線形で変化
+  // opacityを transitionTime ミリ秒かけて線形で変化させる
   endImg.style.transition = "opacity " + currentRiddle.transitionTime + "ms linear";
   imgContainer.appendChild(endImg);
 
-  // すぐにendImgのopacityを1に（フェードイン開始）
+  // リフローを強制してから、endImg の opacity を 1 にする
+  endImg.offsetHeight; // ※これで再描画が促される
   setTimeout(() => {
     endImg.style.opacity = "1";
   }, 0);
 
-  // transitionTime + 500ms後に、画像切替用コンテナを削除して問題文表示へ
+  // transitionTime + 500ms後に、画像切替用コンテナを削除し、問題文を表示
   setTimeout(() => {
     imgContainer.remove();
     questionText.textContent = currentRiddle.question;
     createRiddleAnswerInput();
-  }, currentRiddle.transitionTime + 15000);
+  }, currentRiddle.transitionTime + 500);
 }
 
   function createRiddleAnswerInput() {

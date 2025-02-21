@@ -768,7 +768,7 @@ function startRiddleGame(modal) {
   const riddleQuestions = [
     {
       type: "text",
-      question: "以下の言葉を正しく並べ替えよ：/nまたごきや",
+      question: "以下の言葉を正しく並べ替えよ： またごきや",
       answer: "たまごやき"
     },
     {

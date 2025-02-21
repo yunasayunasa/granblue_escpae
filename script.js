@@ -879,7 +879,7 @@ function startRiddleGame(modal) {
 }
 
       // 強制リフローしてからフェードイン開始
-      endImg.offsetHeight;
+      /*endImg.offsetHeight;
       setTimeout(() => {
         endImg.style.opacity = "1";
       }, 0);
@@ -891,7 +891,7 @@ function startRiddleGame(modal) {
         createRiddleAnswerInput();
       }, currentRiddle.transitionTime + 500);
     }
-  }
+  }*/
 
   function createRiddleAnswerInput() {
     const inputField = document.createElement("input");

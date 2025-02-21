@@ -727,7 +727,7 @@ function startQuizGame(modal) {
   function showQuizQuestion() {
     modal.innerHTML = ""; // 前の内容をクリア
     if (currentQuizIndex >= quizQuestions.length) {
-      alert("全問正解！ エリア3クリア！");
+      alert("全問正解！ エリア3ゲームクリア！");
       document.body.removeChild(modal);
       showEndingLines(); // エンディングナレーションへ遷移
       return;
@@ -768,15 +768,15 @@ function startRiddleGame(modal) {
   const riddleQuestions = [
     {
       type: "text",
-      question: "以下の言葉を正しく並べ替えよ： またごきや",
+      question: "アナグラム、以下の言葉を正しく並べ替えよ：またごきや",
       answer: "たまごやき"
     },
     {
       type: "image",
-      question: "今の画像から増えた(消えた)物は？",
+      question: "次の画像をよく見よ。画像がゆっくり変化した後、今の画像から増えた(消えた)物は？",
       imageStart: "images/ten.jpg",
       imageEnd: "images/ten_alt.jpg",
-      transitionTime: 10000, // 10秒
+      transitionTime: 15000, // 15秒
       answer: "ゴリラ"
     },
     {
@@ -807,76 +807,36 @@ function startRiddleGame(modal) {
       questionText.textContent = currentRiddle.question;
       createRiddleAnswerInput();
     } else if (currentRiddle.type === "image") {
-  // 画像切替用コンテナを作成
-  const imgContainer = document.createElement("div");
-  imgContainer.style.position = "relative";
-  imgContainer.style.width = "80%";  // 必要に応じて調整
-  imgContainer.style.height = "auto";
-  modal.appendChild(imgContainer);
+      // 画像フェードイン切替処理
+      const imgContainer = document.createElement("div");
+      imgContainer.style.position = "relative";
+      imgContainer.style.width = "80%";  // 調整可能
+      imgContainer.style.height = "auto";
+      modal.appendChild(imgContainer);
 
-  // スタート画像の生成
-  const startImg = document.createElement("img");
-  startImg.src = currentRiddle.imageStart;
-  startImg.style.position = "absolute";
-  startImg.style.top = "0";
-  startImg.style.left = "0";
-  startImg.style.width = "100%";
-  startImg.style.height = "auto";
-  startImg.style.objectFit = "contain";
-  startImg.style.zIndex = "1";
-  imgContainer.appendChild(startImg);
+      const startImg = document.createElement("img");
+      startImg.src = currentRiddle.imageStart;
+      startImg.style.position = "absolute";
+      startImg.style.top = "0";
+      startImg.style.left = "0";
+      startImg.style.width = "100%";
+      startImg.style.height = "auto";
+      startImg.style.objectFit = "contain";
+      startImg.style.zIndex = "1";
+      imgContainer.appendChild(startImg);
 
-  // エンド画像の生成（初期は透明）
-  const endImg = document.createElement("img");
-  endImg.src = currentRiddle.imageEnd;
-  endImg.style.position = "absolute";
-  endImg.style.top = "0";
-  endImg.style.left = "0";
-  endImg.style.width = "100%";
-  endImg.style.height = "auto";
-  endImg.style.objectFit = "contain";
-  endImg.style.zIndex = "2";
-  endImg.style.opacity = "0";
-  // opacity を transitionTime ミリ秒かけて線形で変化
-  endImg.style.transition = "opacity " + currentRiddle.transitionTime + "ms linear";
-  imgContainer.appendChild(endImg);
-
-  // 関数：画像切替（フェードイン）を開始する
-  function startTransition() {
-    // まず endImg を初期状態に戻す
-    endImg.style.transition = "none";
-    endImg.style.opacity = "0";
-    // 強制再描画（reflow）
-    void endImg.offsetWidth;
-    // transition を再設定してフェードイン開始
-    endImg.style.transition = "opacity " + currentRiddle.transitionTime + "ms linear";
-    setTimeout(() => {
-      endImg.style.opacity = "1";
-    }, 0);
-  }
-
-  // 初回実行
-  startTransition();
-
-  // transitionTime + 500ms 後に、問題文と解答欄、および「もう一度見る」ボタンを表示
-  setTimeout(() => {
-    // ここで画像切替用コンテナはそのまま残しておく（リプレイ可能にする）
-    questionText.textContent = currentRiddle.question;
-    createRiddleAnswerInput();
-
-    // 「もう一度見る」ボタンを作成
-    const replayButton = document.createElement("button");
-    replayButton.textContent = "もう一度見る";
-    replayButton.style.marginTop = "10px";
-    // replayButton を modal 内の適切な場所に追加（ここでは最後尾に追加）
-    modal.appendChild(replayButton);
-
-    replayButton.addEventListener("click", () => {
-      // 「もう一度見る」を押すと再度画像のフェードインを実行
-      startTransition();
-    });
-  }, currentRiddle.transitionTime + 500);
-}
+      const endImg = document.createElement("img");
+      endImg.src = currentRiddle.imageEnd;
+      endImg.style.position = "absolute";
+      endImg.style.top = "0";
+      endImg.style.left = "0";
+      endImg.style.width = "100%";
+      endImg.style.height = "auto";
+      endImg.style.objectFit = "contain";
+      endImg.style.zIndex = "2";
+      endImg.style.opacity = "0";
+      endImg.style.transition = "opacity " + currentRiddle.transitionTime + "ms linear";
+      imgContainer.appendChild(endImg);
 
       // 強制リフローしてからフェードイン開始
       endImg.offsetHeight;
@@ -885,18 +845,18 @@ function startRiddleGame(modal) {
       }, 0);
 
       // 15秒後＋余裕500msで画像コンテナを削除して問題文を表示
-      /*setTimeout(() => {
+      setTimeout(() => {
         imgContainer.remove();
         questionText.textContent = currentRiddle.question;
         createRiddleAnswerInput();
       }, currentRiddle.transitionTime + 500);
     }
-  }*/
+  }
 
   function createRiddleAnswerInput() {
     const inputField = document.createElement("input");
     inputField.type = "text";
-    inputField.placeholder = "答えを入力";
+    inputField.placeholder = "カタカナで入力";
     inputField.style.marginTop = "10px";
     inputField.style.fontSize = "1rem";
     modal.appendChild(inputField);

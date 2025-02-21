@@ -803,11 +803,11 @@ function startRiddleGame(modal) {
   // 画像切替用コンテナを作成
   const imgContainer = document.createElement("div");
   imgContainer.style.position = "relative";
-  imgContainer.style.width = "80%"; // 必要に応じて調整
+  imgContainer.style.width = "80%";  // 必要に応じて調整
   imgContainer.style.height = "auto";
   modal.appendChild(imgContainer);
 
-  // スタート画像
+  // スタート画像の生成
   const startImg = document.createElement("img");
   startImg.src = currentRiddle.imageStart;
   startImg.style.position = "absolute";
@@ -819,7 +819,7 @@ function startRiddleGame(modal) {
   startImg.style.zIndex = "1";
   imgContainer.appendChild(startImg);
 
-  // エンド画像（初期は透明）
+  // エンド画像の生成（初期は透明）
   const endImg = document.createElement("img");
   endImg.src = currentRiddle.imageEnd;
   endImg.style.position = "absolute";
@@ -830,16 +830,16 @@ function startRiddleGame(modal) {
   endImg.style.objectFit = "contain";
   endImg.style.zIndex = "2";
   endImg.style.opacity = "0";
-  // opacity を15秒かけて線形で変化させる
+  // opacityを transitionTime ミリ秒かけて線形で変化
   endImg.style.transition = "opacity " + currentRiddle.transitionTime + "ms linear";
   imgContainer.appendChild(endImg);
 
-  // すぐに endImg の opacity を 1 にする（徐々にフェードイン）
+  // すぐにendImgのopacityを1に（フェードイン開始）
   setTimeout(() => {
     endImg.style.opacity = "1";
   }, 0);
 
-  // 15秒後＋余裕（例:500ms）経過後にコンテナを削除して、問題文を表示
+  // transitionTime + 500ms後に、画像切替用コンテナを削除して問題文表示へ
   setTimeout(() => {
     imgContainer.remove();
     questionText.textContent = currentRiddle.question;

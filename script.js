@@ -588,7 +588,7 @@ if (charDef.name === "グラン") {
       choiceModal.appendChild(choiceContainer);
 
       const btnA = document.createElement("button");
-      btnA.textContent = "ロベリアネガと戦う(クイズ:難易度易)";
+      btnA.textContent = "ロベリアネガと戦う(クイズ)";
       choiceContainer.appendChild(btnA);
       btnA.addEventListener("click", () => {
         scene.removeEventListener("click", onClickNext);
@@ -599,7 +599,7 @@ if (charDef.name === "グラン") {
       });
 
       const btnB = document.createElement("button");
-      btnB.textContent = "ノアネガと戦う(謎解き:難易度高)";
+      btnB.textContent = "ノアネガと戦う(謎解き)";
       choiceContainer.appendChild(btnB);
       btnB.addEventListener("click", () => {
         scene.removeEventListener("click", onClickNext);
@@ -712,7 +712,7 @@ function startQuizGame(modal) {
         "150になると奥義が極大になる",
         "150になると4アビが再使用可能になる",
         "150になるとリミサポが増える",
-        "150になると全てのアビリティが1T短縮される"
+        "150になるとアビリティが1T短縮される"
       ],
       correct: 3
     },
@@ -776,7 +776,7 @@ function startRiddleGame(modal) {
       question: "画像がゆっくり変化した後、今の画像から増えた(消えた)物は？",
       imageStart: "images/ten.jpg",
       imageEnd: "images/ten_alt.jpg",
-      transitionTime: 10000, // 15秒
+      transitionTime: 10000, // 10秒
       answer: "ゴリラ"
     },
     {
@@ -807,10 +807,10 @@ function startRiddleGame(modal) {
       questionText.textContent = currentRiddle.question;
       createRiddleAnswerInput();
     } else if (currentRiddle.type === "image") {
-      // 画像フェードイン切替処理
+      // 画像コンテナ
       const imgContainer = document.createElement("div");
       imgContainer.style.position = "relative";
-      imgContainer.style.width = "80%";  // 調整可能
+      imgContainer.style.width = "80%";
       imgContainer.style.height = "auto";
       modal.appendChild(imgContainer);
 
@@ -838,17 +838,49 @@ function startRiddleGame(modal) {
       endImg.style.transition = "opacity " + currentRiddle.transitionTime + "ms linear";
       imgContainer.appendChild(endImg);
 
-      // 強制リフローしてからフェードイン開始
-      endImg.offsetHeight;
-      setTimeout(() => {
-        endImg.style.opacity = "1";
-      }, 0);
+      // 画像トランジションを再生する関数
+      function playImageTransition() {
+        endImg.style.opacity = "0"; // 初期状態に戻す
+        endImg.offsetHeight; // 強制リフロー
+        setTimeout(() => {
+          endImg.style.opacity = "1"; // フェードイン開始
+        }, 0);
+      }
 
-      // 15秒後＋余裕500msで画像コンテナを削除して問題文を表示
+      // 初回のトランジション再生
+      playImageTransition();
+
+      // トランジション後に問題文とボタンを表示
       setTimeout(() => {
         imgContainer.remove();
         questionText.textContent = currentRiddle.question;
-        createRiddleAnswerInput();
+
+        // 「もう一度見る」ボタンの追加
+        const replayButton = document.createElement("button");
+        replayButton.textContent = "もう一度見る";
+        replayButton.style.marginTop = "10px";
+        replayButton.style.padding = "10px 20px";
+        replayButton.style.fontSize = "1rem";
+        replayButton.style.backgroundColor = "#4CAF50"; // 緑色（任意で変更可）
+        replayButton.style.color = "#fff";
+        replayButton.style.border = "none";
+        replayButton.style.cursor = "pointer";
+        modal.appendChild(replayButton);
+
+        // 「もう一度見る」ボタンのクリックイベント
+        replayButton.addEventListener("click", () => {
+          modal.innerHTML = ""; // モーダルをクリア
+          modal.appendChild(imgContainer); // 画像コンテナを再追加
+          playImageTransition(); // トランジションを再実行
+          setTimeout(() => {
+            imgContainer.remove();
+            modal.appendChild(questionText); // 問題文を再表示
+            modal.appendChild(replayButton); // ボタンを再表示
+            createRiddleAnswerInput(); // 回答欄を再表示
+          }, currentRiddle.transitionTime + 600);
+        });
+
+        createRiddleAnswerInput(); // 初回表示時に回答欄を表示
       }, currentRiddle.transitionTime + 600);
     }
   }
@@ -891,9 +923,9 @@ function startRiddleGame(modal) {
       }
     });
   }
+
   showRiddleQuestion();
 }
-
     // 最初の行を表示
     showNextLine();
   }
@@ -959,11 +991,11 @@ const area3MainLines = [
   },
   {
     characters: [],
-    text: "ロベリアとノアによく似た雰囲気を持った、だが絶対に違うと確信が持てる何者かが現れた。"
+    text: "ロベリアとノアによく似た雰囲気の、だが絶対に違う確信が持てる何者かが現れた。"
   },
   {
     characters: [],
-    text: "君は問う、お前達は何者だ。と"
+    text: "君は問う、お前達は何者だ。"
   },
   {
     characters: [

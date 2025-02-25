@@ -588,7 +588,7 @@ if (charDef.name === "グラン") {
       choiceModal.appendChild(choiceContainer);
 
       const btnA = document.createElement("button");
-      btnA.textContent = "ロベリアネガと戦う(クイズ)";
+      btnA.textContent = "ロベリアネガと戦う(クイズ:難易度易)";
       choiceContainer.appendChild(btnA);
       btnA.addEventListener("click", () => {
         scene.removeEventListener("click", onClickNext);
@@ -599,7 +599,7 @@ if (charDef.name === "グラン") {
       });
 
       const btnB = document.createElement("button");
-      btnB.textContent = "ノアネガと戦う(謎解き)";
+      btnB.textContent = "ノアネガと戦う(謎解き:難易度高)";
       choiceContainer.appendChild(btnB);
       btnB.addEventListener("click", () => {
         scene.removeEventListener("click", onClickNext);
